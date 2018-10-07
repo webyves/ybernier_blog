@@ -1,4 +1,4 @@
-<!-- Vue de la page d'accueil -->
+<!-- view home page -->
 
 <!DOCTYPE html>
 <html>

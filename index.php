@@ -1,8 +1,7 @@
 <?php
 /***************************************************************** 
-Fichier Index.php 
-Point d'entrée du site
+file: index.php 
+Access point for website
 ******************************************************************/
 
 require ('view/home.php');
-?>
