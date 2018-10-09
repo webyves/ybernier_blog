@@ -1,5 +1,7 @@
 <?php
 /***************************************************************** 
-file: router.php 
-router of website
+file: controler.php 
+website controler
 ******************************************************************/
+
+require ('view/home.php');
