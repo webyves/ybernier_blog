@@ -1,19 +1,24 @@
 <?php
 /***************************************************************** 
-file: postCategory.php 
-model for post categories
+file: PostCategory.php 
+Class model for post categories
 ******************************************************************/
+namespace yBernier\Blog\Model;
+require_once("model/Manager.php");
+require_once("model/PostManager.php");
 
-
-/* get list of post categories */
-function getPostCategories()
+Class PostCategory extends PostManager 
 {
-    // return table with categories
-}
+    /* get list of post categories */
+    public function getPostCategories()
+    {
+        // return table with categories
+    }
 
 
-/* Set post categories information bloc of functions */
-function setPostCategoryText($idCat, $text)
-{
-    
+    /* Set post categories information bloc of functions */
+    public function setPostCategoryText($idCat, $text)
+    {
+        
+    }
 }
