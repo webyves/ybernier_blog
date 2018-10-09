@@ -11,7 +11,7 @@ try {
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'listPosts':
-                // lance la fonction du controlleur pour lister les posts
+                listPosts();
                 break;
             case 'post':
                 // check id
@@ -22,7 +22,7 @@ try {
                 break;
         }
     } else {
-        // affiche la liste des posts (par default)
+        listPosts();
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();
