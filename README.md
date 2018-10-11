@@ -20,6 +20,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.005 - 11/10/2018 10h30
+- Installation bibliotheque via composer (twig bootstrap jquery summernote)
+- premiere structure de page en bootstrap
+
 v0.004 - 09/10/2018 18h30
 - passage en POO
 
