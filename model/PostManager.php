@@ -22,7 +22,7 @@ Class PostManager extends Manager
                     image_top,
                     id_cat,
                     id_user
-                FROM posts 
+                FROM yb_blog_posts 
                 WHERE id_state = :id_state 
                 ORDER BY date DESC 
                 LIMIT 0, :limit';

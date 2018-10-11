@@ -6,7 +6,7 @@ Blog dev pour cours OC
 
 1) cloner le repository sur votre serveur
 2) executer le fichier SQL sur votre base de donnée
-3) Modifier la fonction dbConnect() le fichier model/db.php comme suit :
+3) Modifier la fonction dbConnect() le fichier model/Manager.php comme suit :
     - $dbUser = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
     - $dbUserPwd = ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
     - $dbHost = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
