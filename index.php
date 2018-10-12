@@ -3,15 +3,32 @@
 file: index.php 
 router and access point for website
 ******************************************************************/
+use \yBernier\Blog\Autoloader;
+use \yBernier\Blog\controller\frontoffice\PostController;
 
-require ('controller/frontoffice.php');
+//Autoload
+require ('Autoloader.php');
+Autoloader::register();
+
+//TWIG
+require_once ('vendor/autoload.php');
+$loader = new Twig_Loader_Filesystem('view/frontoffice');
+$twig = new Twig_Environment($loader, array(
+    'cache' => false, // 'view/frontend/cache',
+    'debug' => true,
+));
+$twig->addExtension(new Twig_Extension_Debug());
+
+
+
 
 try {
     
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'listPosts':
-                listPosts();
+                $controller = new PostController();
+                $controller->listPosts();
                 break;
             case 'post':
                 // check id
@@ -22,7 +39,8 @@ try {
                 break;
         }
     } else {
-        listPosts();
+        $controller = new PostController();
+        $controller->listPosts();
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();

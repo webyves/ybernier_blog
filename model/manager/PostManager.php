@@ -4,7 +4,8 @@ file: PostManager.php
 Class model for post
 ******************************************************************/
 namespace yBernier\Blog\model\manager;
-require_once("model/manager/Manager.php");
+
+use \yBernier\Blog\model\entities\Post;
 
 Class PostManager extends Manager 
 {
@@ -31,10 +32,9 @@ Class PostManager extends Manager
         $req->execute();
         $res = $req->fetchall();
 
-        require_once ('model/entities/Post.php');
         $tab = array();
         foreach ($res as $res_post){
-            $obj = new \yBernier\Blog\model\entities\Post($res_post);
+            $obj = new Post($res_post);
             array_push($tab,$obj);
         }
         return $tab;
