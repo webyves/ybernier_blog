@@ -9,87 +9,102 @@ Class Post
 {
     private $title;
     private $content;
-    private $date_fr;
-    private $image_top;
+    private $datefr;
+    private $imagetop;
     private $state;
     private $category;
     private $author;
     
-    public function __construct($db_post){
-        //penser a faire des set pour verfier les contenu
-        $this->title = $db_post['title'];
-        $this->content = $db_post['content'];
-        $this->date_fr = $db_post['date_fr'];
-        $this->image_top = $db_post['image_top'];
-        // a changer via jointure
-        $this->state = $db_post['id_state'];
-        $this->category = $db_post['id_cat'];
-        $this->author = $db_post['id_user'];
+    public function __construct($db_post)
+    {
+        if(!empty($db_post))
+            $this->hydrate($db_post);
+       
     }
     
+    public function hydrate($data)
+    {
+        foreach ($data as $attribut => $value)
+        {
+            $method = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $attribut)));
+                 
+            if (is_callable(array($this, $method)))
+            {
+                $this->$method($value);
+            }
+        }
+    }
 
     /* get posts information bloc of functions */
     public function getCategory()
     {
-        
+        return $this->category;
     }
 
-    public function getImage()
+    public function getImagetop()
     {
-        return $this->image_top;
+        return $this->imagetop;
     }
 
     public function getContent()
     {
-        
+        return $this->content;
     }
 
     public function getState()
     {
-        
+        return $this->state;
     }
 
     public function getTitle()
     {
-        
+        return $this->title;
     }
 
     public function getAuthor()
     {
-        
+        return $this->author;
     }
 
-    public function getDate_fr()
+    public function getDatefr()
     {
-        
+        return $this->datefr;
     }
-}
-/* pour faire l'hydratation.
-class Test
-{
-    protected $titre;
-     
-    public function __construct($valeurs = array())
+    /* Set posts information bloc of functions */
+    /* penser a faire des verif pour modif de value */
+    public function setCategory($value)
     {
-        if(!empty($valeurs))
-            $this->hydrate($valeurs);
+       $this->category = $value;
     }
- 
-    public function hydrate($donnees)
-        {
-            foreach ($donnees as $attribut => $valeur)
-            {
-            $methode = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $attribut)));
-                 
-            if (is_callable(array($this, $methode)))
-            {
-                $this->$methode($valeur);
-            }
-            }
-        }
- 
-    public function setTitre($titre)
+
+    public function setImagetop($value)
     {
-        $this->titre = $titre;
+       $this->imagetop = $value;
     }
+
+    public function setContent($value)
+    {
+       $this->content = $value;
+    }
+
+    public function setState($value)
+    {
+       $this->state = $value;
+    }
+
+    public function setTitle($value)
+    {
+       $this->title = $value;
+    }
+
+    public function setAuthor($value)
+    {
+       $this->author = $value;
+    }
+
+    public function setDatefr($value)
+    {
+       $this->datefr = $value;
+    }
+    
 }

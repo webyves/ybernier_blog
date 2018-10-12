@@ -13,13 +13,12 @@
     </div>
     <div class="row">
         {% for post in postList %}
-    <pre>{{ dump(post) }}</pre>
             <div class="col-4">
                 <div class='card'>
-                    <img class="card-img-top" src="public/img/{{ post.image_top }}" alt="image post top">
+                    <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <h6 class="card-subtitle text-muted">{{ post.date_fr }}</h6>
+                        <h6 class="card-subtitle text-muted">{{ post.datefr }}</h6>
                         <p>{{ post.content }}</p>
                         <a class="card-link" href="#"><em>{{ post.nb_comment }} Commentaires</a></em>
                     </div>
