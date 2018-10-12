@@ -4,7 +4,7 @@ file: index.php
 router and access point for website
 ******************************************************************/
 
-require ('controller/frontend.php');
+require ('controller/frontoffice.php');
 
 try {
     
@@ -26,5 +26,5 @@ try {
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();
-    require('view/frontend/errorView.php');
+    require('view/frontoffice/errorView.php');
 }

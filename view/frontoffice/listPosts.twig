@@ -13,6 +13,7 @@
     </div>
     <div class="row">
         {% for post in postList %}
+    <pre>{{ dump(post) }}</pre>
             <div class="col-4">
                 <div class='card'>
                     <img class="card-img-top" src="public/img/{{ post.image_top }}" alt="image post top">

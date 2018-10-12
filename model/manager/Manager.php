@@ -2,9 +2,9 @@
 /***************************************************************** 
 file: Manager.php 
 Model file
-Mother Class for post comment user
+Mother Class for manager class
 ******************************************************************/
-namespace yBernier\Blog\Model;
+namespace yBernier\Blog\model\manager;
 
 Class Manager {
     

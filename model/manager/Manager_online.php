@@ -4,7 +4,7 @@ file: Manager.php
 Model file
 Mother Class for post comment user
 ******************************************************************/
-namespace yBernier\Blog\Model;
+namespace yBernier\Blog\model\manager;
 
 Class Manager {
     

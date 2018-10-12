@@ -1,28 +1,27 @@
 <?php
 /***************************************************************** 
-file: frontend.php 
-website frontend controler
+file: frontoffice.php 
+website frontoffice controler
 ******************************************************************/
 
-//TWIG !!!!!
+//TWIG
 require_once ('vendor/autoload.php');
 
-$loader = new Twig_Loader_Filesystem('view/frontend');
+$loader = new Twig_Loader_Filesystem('view/frontoffice');
 $twig = new Twig_Environment($loader, array(
     'cache' => false, // 'view/frontend/cache',
+    'debug' => true,
 ));
+$twig->addExtension(new Twig_Extension_Debug());
 
-
-
-require ('model/Manager.php');
-// require ('model/User.php');
-// require ('model/Comment.php');
+//
+require ('model/manager/Manager.php');
 
 function listPosts()
 {
     global $twig;
-    require ('model/PostManager.php');
-    $postManager = new \yBernier\Blog\Model\PostManager();
+    require ('model/manager/PostManager.php');
+    $postManager = new \yBernier\Blog\model\manager\PostManager();
     $postList = $postManager->getPosts();
     // var_dump ($postList);
     echo $twig->render('listPosts.twig', array('postList' => $postList));

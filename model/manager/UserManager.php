@@ -3,8 +3,8 @@
 file: UserManager.php 
 model for users
 ******************************************************************/
-namespace yBernier\Blog\Model;
-require_once("model/Manager.php");
+namespace yBernier\Blog\model\manager;
+require_once("model/manager/Manager.php");
 
 Class UserManager extends Manager
 {

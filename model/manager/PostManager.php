@@ -3,8 +3,8 @@
 file: PostManager.php 
 Class model for post
 ******************************************************************/
-namespace yBernier\Blog\Model;
-require_once("model/Manager.php");
+namespace yBernier\Blog\model\manager;
+require_once("model/manager/Manager.php");
 
 Class PostManager extends Manager 
 {
@@ -12,7 +12,6 @@ Class PostManager extends Manager
     /* get list of post */
     public function getPosts($nbPosts = 5, $idState = 1)
     {
-        // return table with title date and small content
         $db = $this->dbConnect();
         $reqPostsList = 'SELECT 
                     id_post, 
@@ -20,6 +19,7 @@ Class PostManager extends Manager
                     content, 
                     DATE_FORMAT(date, \'%d/%m/%Y à %Hh%imin%ss\') as date_fr,
                     image_top,
+                    id_state,
                     id_cat,
                     id_user
                 FROM yb_blog_posts 
@@ -31,7 +31,21 @@ Class PostManager extends Manager
         $req->bindValue('id_state', $idState, \PDO::PARAM_INT);
         $req->execute();
         $res = $req->fetchall();
-        return $res;
+        // hydratation 
+        // foreach boucle
+        // tableau d'objet
+        
+        require_once ('model/entities/Post.php');
+        $tab = array();
+        foreach ($res as $res_post){
+            $obj = new \yBernier\Blog\model\entities\Post($res_post);
+            // echo "<pre>"; print_r($obj); echo "</pre>";
+            // echo $obj->getImage();
+            array_push($tab,$obj);
+            
+        }
+        // echo "<pre>"; var_dump($tab); echo "</pre>";
+        return $tab;
                     
     }
 
