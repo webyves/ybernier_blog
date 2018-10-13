@@ -20,8 +20,8 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.007 - 11/10/2018 12h
-- Nouvelle structure de page (menu et footer)
+v0.007 - 11/10/2018 19h20
+- Nouvelle structure de page (menu et footer et leftsidebar)
 - Creation/modification de view
 - Nouveau controller pour afficher les basic view
 
