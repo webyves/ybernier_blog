@@ -5,30 +5,40 @@ website frontoffice controler
 ******************************************************************/
 namespace yBernier\Blog\controller\frontoffice;
 
+use \yBernier\Blog\model\manager\PostManager;
+
 Class BasicPageController {
     
     function errorPage($errorText)
     {
         global $twig;
-        echo $twig->render('error.twig', array('errorText' => $errorText));
+        $postManager = new PostManager();
+        $postListMenu = $postManager->getPostsListMenu();
+        echo $twig->render('error.twig', array('errorText' => $errorText, 'postListMenu' => $postListMenu));
     }
     
     function contactPage()
     {
         global $twig;
-        echo $twig->render('contact.twig');
+        $postManager = new PostManager();
+        $postListMenu = $postManager->getPostsListMenu();
+        echo $twig->render('contact.twig', array('postListMenu' => $postListMenu));
     }
     
     function mentionsPage()
     {
         global $twig;
-        echo $twig->render('mentions.twig');
+        $postManager = new PostManager();
+        $postListMenu = $postManager->getPostsListMenu();
+        echo $twig->render('mentions.twig', array('postListMenu' => $postListMenu));
     }
     
     function confidentialitePage()
     {
         global $twig;
-        echo $twig->render('confidentialite.twig');
+        $postManager = new PostManager();
+        $postListMenu = $postManager->getPostsListMenu();
+        echo $twig->render('confidentialite.twig', array('postListMenu' => $postListMenu));
     }
     
 }
