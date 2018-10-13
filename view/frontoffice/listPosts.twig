@@ -1,14 +1,13 @@
 {% extends 'template.twig' %}
 
 {% block title %}
-    <title>Lite des posts by twig</title>
-{% endblock %}
+    <title>Liste des posts by twig</title>
+{% endblock title %}
 
 {% block content %}
     <div class="row">
         <div class="col text-center">
-            <h1>yBernier Blog</h1>
-            <p>Derniers posts :</p>
+            <h1>Les Derniers Posts</h1>
         </div>
     </div>
     <div class="row">
@@ -18,12 +17,14 @@
                     <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <h6 class="card-subtitle text-muted">{{ post.datefr }}</h6>
+                        <h6 class="card-subtitle text-muted">le : {{ post.datefr }}</h6>
+                        <h6 class="card-subtitle text-muted">par : {{ post.author }}</h6>
+                        <h6 class="card-subtitle text-muted">dans : {{ post.category }}</h6>
                         <p>{{ post.content }}</p>
-                        <a class="card-link" href="#"><em>{{ post.nb_comment }} Commentaires</a></em>
+                        <a class="card-link" href="index.php?p=post&i={{ post.idpost }}"><em>Lire le post</a></em>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-{% endblock %}
+{% endblock content %}

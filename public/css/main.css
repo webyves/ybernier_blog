@@ -1,3 +1,32 @@
 /******************************************************
 Fichier principal CSS
 *******************************************************/
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/********************************************
+MAIN CONTENT
+********************************************/
+#main_bloc {
+    flex: 1 0 auto;
+}
+
+
+/********************************************
+FOOTER
+********************************************/
+#footer_bloc {
+    margin-top:15px;
+    flex-shrink: 0;
+}
+.navbar-dark .navbar-text a {
+	color: rgba(255,255,255,.5);
+}
+.navbar-dark .navbar-text a:hover {
+	color: rgba(255,255,255,.75);
+}

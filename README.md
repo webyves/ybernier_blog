@@ -20,6 +20,11 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.007 - 11/10/2018 12h
+- Nouvelle structure de page (menu et footer)
+- Creation/modification de view
+- Nouveau controller pour afficher les basic view
+
 v0.006 - 11/10/2018 12h
 - modification des view avec twig
 - structure cards bootstrap pour test

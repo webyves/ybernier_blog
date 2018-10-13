@@ -5,6 +5,7 @@ router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\controller\frontoffice\PostController;
+use \yBernier\Blog\controller\frontoffice\BasicPageController;
 
 //Autoload
 require ('Autoloader.php');
@@ -19,23 +20,42 @@ $twig = new Twig_Environment($loader, array(
 ));
 $twig->addExtension(new Twig_Extension_Debug());
 
-
-
-
+//Router
 try {
-    
-    if (isset($_GET['action'])) {
-        switch ($_GET['action']) {
+    if (isset($_GET['p'])) {
+        switch ($_GET['p']) {
             case 'listPosts':
                 $controller = new PostController();
                 $controller->listPosts();
                 break;
             case 'post':
-                // check id
-                // lance la fonction du controlleur
+                if (isset($_GET['i']) && is_numeric($_GET['i'])) {
+                    if ($_GET['i'] < 1) {
+                        throw new Exception('Post introuvable !');
+                        break;
+                    }
+                    $controller = new PostController();
+                    $controller->post($_GET['i']);
+                } else {
+                    throw new Exception('Post invalide !');
+                }
                 break;
+            case 'contact':
+                $controller = new BasicPageController();
+                $controller->contactPage();
+                break;
+            case 'mentions':
+                $controller = new BasicPageController();
+                $controller->mentionsPage();
+                break;
+            case 'confidentialite':
+                $controller = new BasicPageController();
+                $controller->confidentialitePage();
+                break;
+            case 'connexion':
+                // break;
             default:
-                throw new Exception('Action invalide !');
+                throw new Exception('Page invalide !');
                 break;
         }
     } else {
@@ -44,5 +64,6 @@ try {
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();
-    require('view/frontoffice/errorView.php');
+    $controller = new BasicPageController();
+    $controller->errorPage($errorMessage);
 }

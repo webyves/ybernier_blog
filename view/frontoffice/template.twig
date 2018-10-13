@@ -2,16 +2,77 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        {% block title %}
-        {% endblock %}
+        {% block title %}{% endblock title %}
         <title><?= $title ?></title>
-        <!-- bootstrap CSS -->
+        <!-- libraries CSS -->
         <link href="vendor/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        {% block csslib %}{% endblock csslib %}
+         <!-- yBernier css -->
+        <link href="public/css/main.css" rel="stylesheet" /> 
+    </head>
         
-        <!-- bootstrap jquery JS -->
+    <body>
+        <!-- HEADER -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="index.php">
+                <img src="public/img/avatar_head.png" width="45" height="45" alt="avatar_head"> yBernier Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar ml-auto">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
+                        <a class="nav-item nav-link" href="index.php?p=connexion">Connexion</a>
+                        {% block navmenu %}{% endblock navmenu %}
+                    </div>
+                </div>
+            </div>
+        </nav>    
+        
+        <!-- BODY -->
+        <div class="container" id='main_bloc'>
+            <div class="row">
+                <div class="col-9">
+                    {% block content %}{% endblock content %}
+                </div>
+                <div class="col-3">
+                    {% include 'leftBar.twig' with postListMenu %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER-->
+        <footer class="navbar navbar-expand-lg navbar-dark bg-dark" id='footer_bloc'>
+            <div class="navbar">
+                <div class="navbar-nav">
+                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.007 - &copy; <strong>yBernier</strong></a>
+                </div>
+            </div>
+            <div class="navbar ml-auto">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="index.php?p=mentions">Mentions legales</a>
+                    <a class="nav-item nav-link" href="index.php?p=confidentialite">Politiques de confidentialités</a>
+                    {% block footmenu %}{% endblock footmenu %}
+                </div>
+            </div>
+            <span class="navbar-text">
+                <a class="" href="https://github.com/webyves"><em class="fab fa-git-square"></em></a>
+                <a class="" href="https://www.linkedin.com/in/yves-bernier-004087167/"><em class="fab fa-linkedin"></em></a>
+                <a class="" href="#"><em class="fab fa-facebook-square"></em></a>
+                <a class="" href="#"><em class="fab fa-twitter-square"></em></a>
+                <a class="" href="#"><em class="fab fa-instagram"></em></a>
+            </span>
+        </footer>    
+        
+        
+        <!-- libraries JS -->
         <script src="vendor/components/jquery/jquery.min.js"></script>
         <script src="vendor/components/bootstrap/js/bootstrap.min.js"></script>
-        
+        {% block jslib %}{% endblock jslib %}
         <!-- Summernote CSS JS -->
         <!-- inutile dans le frontend
         <link href="vendor/summernote/summernote/dist/summernote-bs4.css" rel="stylesheet" /> 
@@ -25,15 +86,8 @@
             });
         </script>
         -->
-        <!-- yBernier files -->
-        <link href="public/css/main.css" rel="stylesheet" /> 
         
-    </head>
-        
-    <body>
-        <div class="container">
-        {% block content %}
-        {% endblock %}
-        </div>
+        <!-- yBernier js -->
+        <script src="public/js/main.js" rel="stylesheet"></script> 
     </body>
 </html>
