@@ -8,7 +8,7 @@
         {% for postListMenuCatName, postListMenuItems in postListMenu %}
         <h4>{{ postListMenuCatName }}</h4>
             <ul>
-            {% for postListMenuItem in postListMenuItems | slice(0,5) %}
+            {% for postListMenuItem in postListMenuItems | slice(0,4) %}
                 <li><a href="index.php?p=post&i={{ postListMenuItem.idpost }}">{{ postListMenuItem.title }}</a></li>
             {% endfor %}
             </ul>

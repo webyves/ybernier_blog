@@ -4,8 +4,8 @@ file: index.php
 router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
-use \yBernier\Blog\controller\frontoffice\PostController;
-use \yBernier\Blog\controller\frontoffice\BasicPageController;
+use \yBernier\Blog\controller\PostController;
+use \yBernier\Blog\controller\PageController;
 
 //Autoload
 require ('Autoloader.php');
@@ -41,19 +41,17 @@ try {
                 }
                 break;
             case 'contact':
-                $controller = new BasicPageController();
-                $controller->contactPage();
+                $controller = new PageController();
+                $controller->showPage('contact');
                 break;
             case 'mentions':
-                $controller = new BasicPageController();
-                $controller->mentionsPage();
+                $controller = new PageController();
+                $controller->showPage('mentions');
                 break;
             case 'confidentialite':
-                $controller = new BasicPageController();
-                $controller->confidentialitePage();
+                $controller = new PageController();
+                $controller->showPage('confidentialite');
                 break;
-            case 'connexion':
-                // break;
             default:
                 throw new Exception('Page invalide !');
                 break;
@@ -64,6 +62,6 @@ try {
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();
-    $controller = new BasicPageController();
+    $controller = new PageController();
     $controller->errorPage($errorMessage);
 }

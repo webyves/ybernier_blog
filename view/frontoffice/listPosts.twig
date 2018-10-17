@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row">
-        {% for post in postList %}
+        {% for post in postList | slice(0,11) %}
             <div class="col-4">
                 <div class='card'>
                     <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
