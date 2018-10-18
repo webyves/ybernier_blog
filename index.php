@@ -6,6 +6,7 @@ router and access point for website
 use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\controller\PostController;
 use \yBernier\Blog\controller\PageController;
+use \yBernier\Blog\model\manager\UserManager;
 
 //Autoload
 require ('Autoloader.php');
@@ -20,14 +21,30 @@ $twig = new Twig_Environment($loader, array(
 ));
 $twig->addExtension(new Twig_Extension_Debug());
 
+// CHECK CONNEXION
+if (isset($_POST) && !empty($_POST)) {
+    echo "<pre>";
+    print_r($_POST);
+    echo "</pre>";
+} else {
+    //CHECK cookie
+}
+//override for test
+$UserObjectManager = new UserManager();
+$UserObject = $UserObjectManager->getUser("2");
+    echo "<pre>";
+    print_r($UserObject);
+    echo "</pre>";
+
+
 //Router
 try {
     if (isset($_GET['p'])) {
         switch ($_GET['p']) {
-            case 'listPosts':
-                $controller = new PostController();
-                $controller->listPosts();
-                break;
+            // case 'listPosts':
+                // $controller = new PostController();
+                // $controller->listPosts();
+                // break;
             case 'post':
                 if (isset($_GET['i']) && is_numeric($_GET['i'])) {
                     if ($_GET['i'] < 1) {
@@ -57,6 +74,19 @@ try {
                 break;
         }
     } else {
+        
+        // CHECK ACTION
+        if (isset($_GET['a'])) {
+            switch ($_GET['a']) {
+                case 'logout':
+                    // destroy user object and user cookie
+                    break;
+                default :
+                    throw new Exception('Action invalide !');
+                    break;
+            }
+        }
+        
         $controller = new PostController();
         $controller->listPosts();
     }

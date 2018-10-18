@@ -1,7 +1,7 @@
 <?php
 /***************************************************************** 
-file: PostManager.php 
-Class model for post
+file: Post.php 
+Class entities for post
 ******************************************************************/
 namespace yBernier\Blog\model\entities;
 

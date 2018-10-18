@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        {% set userObject = {'firstName':'Yves', 'lastName':'BERNIER', 'role':0} %}
+        {% set userObject = {'firstName':'Yves', 'lastName':'BERNIER', 'idrole':1} %}
         
         <meta charset="utf-8" />
         {% block title %}{% endblock title %}
@@ -15,33 +15,63 @@
     </head>
         
     <body>
-        {% if userObject.role == 0 %}
+        {% if userObject.idrole == 0 %}
             <!-- MODAL Login / Inscription -->
-            <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal fade" tabindex="-1" role="dialog" id="loginModal" aria-labelledby="loginModal" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Connexion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
+                  <form id="conexForm" method="POST">
+                      <div class="modal-body">
+                          <div class="form-group">
+                            <label for="conexInputEmail">Adresse eMail :</label>
+                            <input type="email" class="form-control" name="conexEmail" id="conexEmail" placeholder="Saisissez votre eMail">
+                          </div>
+                          <div class="form-group">
+                            <label for="conexInputPassword">Mot de Passe :</label>
+                            <input type="password" class="form-control" name="conexInputPassword" id="conexInputPassword" placeholder="Saisissez votre mot de passe">
+                          </div>
+                          <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" name="conexChkbxRemember" id="conexChkbxRemember">
+                            <label class="form-check-label" for="conexChkbxRemember">Se souvenir de moi</label>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-success">Se Connecter</button>
+                      </div>
+                  </form>
                 </div>
               </div>
             </div>            
-            
-            
-            {% set textLoginBtn = 'Connexion' %}
+            {% set textLoginBtn, textLoginTarget = 'Connexion', 'loginModal' %}
         {% else %}        
             <!-- MODAL Logout -->
-            {% set textLoginBtn = 'Déconnexion' %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="logoutModal" aria-labelledby="logoutModal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Déconnexion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                      <div class="modal-body">
+                        <p>Voulez vous vraiment vous déconnecter ?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+                        <a href="index.php?a=logout" class="btn btn-danger">Se Déconnecter</a>
+                      </div>
+                </div>
+              </div>
+            </div>            
+            {% set textLoginBtn, textLoginTarget = 'Déconnexion', 'logoutModal' %}
         {% endif %}
         
         
@@ -58,7 +88,7 @@
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
                         <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
-                        <a class="nav-item nav-link" href="#">{{ textLoginBtn }}</a>
+                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
                         {% block navmenu %}{% endblock navmenu %}
                     </div>
                 </div>
