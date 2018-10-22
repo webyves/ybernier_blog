@@ -20,6 +20,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.009 - 22/10/2018 12h
+- system connexion
+- debut system inscription
+
 v0.008 - 22/10/2018 12h
 - Creation view debug
 - debut system connexion
