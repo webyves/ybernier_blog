@@ -33,6 +33,11 @@ Class PageController {
     }
     
     /* RENDER PAGE PARTS */
+    public function debugPage($varName='varName', $varForDump)
+    {
+        echo $this->fTwig->render('debug.twig', array('varName' => $varName, 'forDump' => $varForDump));
+    }
+
     public function errorPage($errorText)
     {
         echo $this->fTwig->render('error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postList));

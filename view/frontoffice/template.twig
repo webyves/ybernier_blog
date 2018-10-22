@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        {% set userObject = {'firstName':'Yves', 'lastName':'BERNIER', 'idrole':1} %}
         
         <meta charset="utf-8" />
         {% block title %}{% endblock title %}
@@ -36,10 +35,15 @@
                             <label for="conexInputPassword">Mot de Passe :</label>
                             <input type="password" class="form-control" name="conexInputPassword" id="conexInputPassword" placeholder="Saisissez votre mot de passe">
                           </div>
+                          <!-- A SECURISER
                           <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" name="conexChkbxRemember" id="conexChkbxRemember">
                             <label class="form-check-label" for="conexChkbxRemember">Se souvenir de moi</label>
                           </div>
+                          -->
+                      </div>
+                      <div class="modal-footer">
+                        <a href="index.php?p=inscription">pour vous inscrire cliquez ici.</a>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
@@ -89,6 +93,7 @@
                         <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
                         <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
                         <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
+                        <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
                         {% block navmenu %}{% endblock navmenu %}
                     </div>
                 </div>

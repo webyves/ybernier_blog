@@ -20,6 +20,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.008 - 22/10/2018 12h
+- Creation view debug
+- debut system connexion
+
 v0.007 - 11/10/2018 19h20
 - Nouvelle structure de page (menu et footer et leftsidebar)
 - Creation/modification de view

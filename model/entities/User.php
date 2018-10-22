@@ -11,7 +11,7 @@ Class User
     private $firstname;
     private $lastname;
     private $email;
-    private $password; // A CRYPTER ET A DECRYPTER
+    private $password; // CRYPTE
     private $idrole = 0;
     private $role;
     private $idstate;
@@ -28,7 +28,6 @@ Class User
     {
         foreach ($data as $attribut => $value) {
             $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $attribut)));
-                 
             if (is_callable(array($this, $method))) {
                 $this->$method($value);
             }
@@ -58,7 +57,7 @@ Class User
     
     public function getPassword()
     {
-        // A CRYPTER ET A DECRYPTER
+        // crypté
         return $this->password;
     }
 
@@ -87,48 +86,48 @@ Class User
     /* penser a faire des verif pour modif de value */
     public function setIduser($value)
     {
-       $this->iduser = $value;
+        $this->iduser = $value;
     }
 
     public function setFirstname($value)
     {
-       $this->firstname = $value;
+        $this->firstname = $value;
     }
 
     public function setLastname($value)
     {
-       $this->lastname = $value;
+        $this->lastname = $value;
     }
 
     public function setEmail($value)
     {
-       $this->email = $value;
+        $this->email = $value;
     }
     
     public function setPassword($value)
     {
-        // A CRYPTER ET A DECRYPTER
-       $this->password = $value;
+        // A CRYPTER
+        $this->password = $value;
     }
 
     public function setIdrole($value)
     {
-       $this->idrole = $value;
+        $this->idrole = $value;
     }
 
     public function setRole($value)
     {
-       $this->role = $value;
+        $this->role = $value;
     }
     
     public function setIdstate($value)
     {
-       $this->idstate = $value;
+        $this->idstate = $value;
     }
 
     public function setState($value)
     {
-       $this->state = $value;
+        $this->state = $value;
     }
 
 }
