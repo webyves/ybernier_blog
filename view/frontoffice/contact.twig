@@ -7,8 +7,52 @@
 {% block content %}
     <div class="row">
         <div class="col text-center">
-            <h1>PAGE DE CONTACT</h1>
+            <h1>Contactez Nous.</h1>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col text-center">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Info !</h4>
+                <p>
+                    Vous pouvez utiliser ce formulaire pour nous contacter, <br>
+                    Notre equipe vous repondra dans les meilleurs delais.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form id="contactForm" method="POST" action="index.php?a=contact">
+                <div class="form-group">
+                    <label for="contactFirstname">Prénom :</label>
+                    <input type="text" class="form-control" name="contactFirstname" id="contactFirstname" placeholder="Saisissez votre Prénom">
+                </div>
+                <div class="form-group">
+                    <label for="contactLastname">Nom :</label>
+                    <input type="text" class="form-control" name="contactLastname" id="contactLastname" placeholder="Saisissez votre Nom">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Adresse eMail :</label>
+                    <input type="email" class="form-control" name="contactEmail" id="contactEmail" placeholder="Saisissez votre eMail">
+                    <small id="emailHelp" class="form-text text-muted">
+                        Votre adresse eMail ne sera jamais utiliser à des fins commerciales.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="contactSubject">Sujet de votre message :</label>
+                    <input type="text" class="form-control" name="contactSubject" id="contactSubject" placeholder="Saisissez le Sujet de votre Message">
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Votre message :</label>
+                    <textarea class="form-control" name="contactMessage" id="contactMessage" placeholder="Saisissez votre message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">CAPTCHA :</label>
+                </div>
+                <a href="index.php" class="btn btn-danger">Annuler</a>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+            </form>
+        </div>
+    </div>
 {% endblock content %}

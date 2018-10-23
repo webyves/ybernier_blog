@@ -75,6 +75,7 @@ try {
         }
     } else {
         // CHECK ACTION
+        $viewListPost = true;
         if (isset($_GET['a'])) {
             switch ($_GET['a']) {
                 case 'logout':
@@ -84,21 +85,31 @@ try {
                     $UserConnected = null;
                     session_destroy();
                     $twig->addGlobal('userObject', "");
+                    $viewListPost = true;
                     break;
                     
                 case 'inscription' :    
                     $debugController = new PageController();
                     $debugController->debugPage('_POST', $_POST);
                     // NOT TESTED
-                    // $UserController->inscription($_POST);
+                    $UserController->inscription($_POST);
+                    $viewListPost = false;
+                    break;
+                    
+                case 'contact' :    
+                    $pageController = new PageController();
+                    $pageController->contact($_POST);
+                    $viewListPost = false;
                     break;
                 default :
                     throw new Exception('Action invalide !');
                     break;
             }
         }
-        $controller = new PostController();
-        $controller->listPosts();
+        if ($viewListPost) {
+            $postController = new PostController();
+            $postController->listPosts();
+        }
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();

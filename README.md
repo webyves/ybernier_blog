@@ -20,7 +20,11 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.009 - 22/10/2018 12h
+v0.010 - 23/10/2018 16h
+- Formulaire de contact OK/Testé 
+- Generic Function sendMail dans manager
+
+v0.009 - 22/10/2018 18h
 - system connexion
 - debut system inscription
 

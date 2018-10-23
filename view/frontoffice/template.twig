@@ -103,10 +103,11 @@
         <!-- BODY -->
         <div class="container" id='main_bloc'>
             <div class="row">
-                <div class="col-9">
+                <div class="col-sm-9">
+                    {% block contentMessage %}{% endblock contentMessage %}
                     {% block content %}{% endblock content %}
                 </div>
-                <div class="col-3">
+                <div class="col-sm-3">
                     {% include 'leftBar.twig' with postListMenu %}
                 </div>
             </div>
@@ -116,7 +117,7 @@
         <footer class="navbar navbar-expand-lg navbar-dark bg-dark" id='footer_bloc'>
             <div class="navbar">
                 <div class="navbar-nav">
-                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.009 - &copy; <strong>yBernier</strong></a>
+                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.010 - &copy; <strong>yBernier</strong></a>
                 </div>
             </div>
             <div class="navbar ml-auto">

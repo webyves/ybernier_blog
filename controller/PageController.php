@@ -6,6 +6,7 @@ website Page Controller
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\PostManager;
+use \yBernier\Blog\model\manager\Manager;
 
 Class PageController {
     
@@ -22,8 +23,7 @@ Class PageController {
     public function setPostList()
     {
         $postManager = new PostManager();
-        $listPosts = $postManager->getPosts();
-        $this->postList = $listPosts;
+        $this->postList = $postManager->getPosts();
     }
     
     public function setFTwig()
@@ -51,5 +51,26 @@ Class PageController {
             throw new Exception('Page introuvable !');
         }
     }    
+    
+    public function contact($post)
+    {
+        $tabInfo = array( 
+                        'fromFirstname' => $post['contactFirstname'],
+                        'fromLastname' => $post['contactLastname'],
+                        'fromEmail' => $post['contactEmail'],
+                        'toEmail' => "webyves@hotmail.com",             // Put your Administrator email
+                        'messageTxt' => $post['contactMessage'],
+                        'messageHtml' => '',                            // Empty from Contact form page
+                        'subject' => $post['contactSubject']                        
+                    );
+        $Manager = new Manager();
+        $Manager->sendMail($tabInfo);
+        
+        $postManager = new PostManager();
+        $postList = $postManager->getPosts('full_list');
+        echo $this->fTwig->render('confirmContact.twig', array('postList' => $postList, 'postListMenu' => $this->postList));
+    }    
+    
+    
     
 }
