@@ -36,6 +36,8 @@ Class Post
                 $this->$method($value);
             }
         }
+        $this->setSmallcontent($this->GetContent());
+
     }
 
     /* get posts information bloc of functions */
@@ -54,9 +56,9 @@ Class Post
         return $this->content;
     }
 
-    public function getSmallontent()
+    public function getSmallcontent()
     {
-        return $this->content;
+        return $this->smallcontent;
     }
 
     public function getDatefr()
@@ -118,7 +120,7 @@ Class Post
 
     public function setSmallcontent($value)
     {
-       $this->smallcontent = $value;
+       $this->smallcontent = $this->texte_resume($value,100);
     }
 
     public function setDatefr($value)
@@ -161,4 +163,91 @@ Class Post
        $this->author = $value;
     }
 
+    
+    public function texte_resume($texte, $nbreCar)
+    {
+        $LongueurTexteBrutSansHtml = strlen(strip_tags($texte));
+        if($LongueurTexteBrutSansHtml < $nbreCar) 
+            return $texte;
+
+        $MasqueHtmlSplit = '#</?([a-zA-Z1-6]+)(?: +[a-zA-Z]+="[^"]*")*( ?/)?>#';
+        $MasqueHtmlMatch = '#<(?:/([a-zA-Z1-6]+)|([a-zA-Z1-6]+)(?: +[a-zA-Z]+="[^"]*")*( ?/)?)>#';
+
+        $texte .= ' ';
+        $BoutsTexte = preg_split($MasqueHtmlSplit, $texte, -1,  PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $NombreBouts = count($BoutsTexte);
+
+        if ($NombreBouts == 1) {
+            $longueur = strlen($texte);
+            $texte = substr($texte, 0, strpos($texte, ' ', $longueur > $nbreCar ? $nbreCar : $longueur));
+            $texte = $texte . " [...]";
+            return $texte;
+        }
+
+        $longueur = 0;
+        $indexDernierBout = $NombreBouts - 1;
+        $position = $BoutsTexte[$indexDernierBout][1] + strlen($BoutsTexte[$indexDernierBout][0]) - 1;
+        $indexBout = $indexDernierBout;
+        $rechercheEspace = true;
+
+        foreach ($BoutsTexte as $index => $bout) {
+            $longueur += strlen($bout[0]);
+            if ($longueur >= $nbreCar) {
+                $position_fin_bout = $bout[1] + strlen($bout[0]) - 1;
+                $position = $position_fin_bout - ($longueur - $nbreCar);
+
+                if (($positionEspace = strpos($bout[0], ' ', $position - $bout[1])) !== false) {
+                    $position = $bout[1] + $positionEspace;
+                    $rechercheEspace = false;
+                }
+
+                if ($index != $indexDernierBout)
+                        $indexBout = $index + 1;
+                break;
+            }
+        }
+
+        if ($rechercheEspace === true) {
+            for ($i=$indexBout; $i<=$indexDernierBout; $i++) {
+                $position = $BoutsTexte[$i][1];
+                if (($positionEspace = strpos($BoutsTexte[$i][0], ' ')) !== false ) {
+                    $position += $positionEspace;
+                    break;
+                }
+            }
+        }
+
+        $texte = substr($texte, 0, $position);
+        preg_match_all($MasqueHtmlMatch, $texte, $retour, PREG_OFFSET_CAPTURE);
+        $BoutsTag = array();
+
+        foreach( $retour[0] as $index => $tag ) {
+            if(isset($retour[3][$index][0])) {
+                continue;
+            }
+
+            if( $retour[0][$index][0][1] != '/' ) {
+                array_unshift($BoutsTag, $retour[2][$index][0]);
+            } else {
+                array_shift($BoutsTag);
+            }
+        }
+
+        if( !empty($BoutsTag) ) {
+            foreach( $BoutsTag as $tag ) {
+                    $texte .= '</' . $tag . '>';
+            }
+        }
+
+        if ($LongueurTexteBrutSansHtml > $nbreCar) {
+            $texte .= ' [......]';
+            $texte =  str_replace('</p> [......]', '... </p>', $texte);
+            $texte =  str_replace('</ul> [......]', '... </ul>', $texte);
+            $texte =  str_replace('</div> [......]', '... </div>', $texte);
+        }
+
+        $texte = $texte . " [...]";
+        return $texte;
+    }
+    
 }

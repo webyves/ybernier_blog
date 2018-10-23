@@ -17,10 +17,13 @@
                     <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <h6 class="card-subtitle text-muted">le : {{ post.datefr }}</h6>
-                        <h6 class="card-subtitle text-muted">par : {{ post.author }}</h6>
-                        <h6 class="card-subtitle text-muted">dans : {{ post.category }}</h6>
-                        <p>{{ post.content }}</p>
+                        <p class="card-subtitle text-muted">
+                            le : {{ post.datefr }}<br>
+                            par : {{ post.author }}<br>
+                            dans : {{ post.category }}
+                        </p>
+                        <hr>
+                        <p>{{ post.smallcontent }}</p>
                         <a class="card-link" href="index.php?p=post&i={{ post.idpost }}"><em>Lire le post</a></em>
                     </div>
                 </div>

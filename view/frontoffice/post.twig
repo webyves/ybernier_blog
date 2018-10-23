@@ -16,8 +16,14 @@
                 <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
-                    <h6 class="card-subtitle text-muted">{{ post.datefr }}</h6>
+                    <p class="card-subtitle text-muted">
+                        le : {{ post.datefr }}<br>
+                        par : {{ post.author }}<br>
+                        dans : {{ post.category }}
+                    </p>
+                    <hr>
                     <p>{{ post.content }}</p>
+                    <hr>
                     <a class="card-link" href="#"><em>{{ post.nb_comment }} Commentaires</a></em>
                 </div>
             </div>

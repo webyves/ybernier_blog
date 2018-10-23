@@ -67,5 +67,5 @@ Class Manager {
         mail($to,$subject,$message,$header);
     }    
     
-    
+
 }
