@@ -20,6 +20,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.011 - 23/10/2018 20h
+- Design Version black 
+- SmallContent dans l'hydratation
+
 v0.010 - 23/10/2018 16h
 - Formulaire de contact OK/Testé 
 - Generic Function sendMail dans manager
