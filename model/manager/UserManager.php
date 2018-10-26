@@ -10,7 +10,7 @@ use \yBernier\Blog\model\entities\User;
 Class UserManager extends Manager 
 {
 
-    public function getUser($idUser = "", $email = "")
+    public function getUser($idUser = "", $email = "", $cookieid = "")
     {
         $whereVar = "";
         if (!empty($idUser)) {
@@ -19,6 +19,9 @@ Class UserManager extends Manager
         } elseif (!empty($email)) {
             $whereVar = "U.email = :email";
             $param = array(':email' => $email);
+        } elseif (!empty($cookieid)) {
+            $whereVar = "U.cookie_id = :cookie_id";
+            $param = array(':cookie_id' => $cookieid);
         }
         
         $db = $this->dbConnect();
@@ -28,6 +31,7 @@ Class UserManager extends Manager
                     U.last_name as lastname,
                     U.email,
                     U.password,
+                    U.cookie_id as cookieid,
                     
                     U.id_role as idrole,
                     UR.text as role,
@@ -59,15 +63,16 @@ Class UserManager extends Manager
                         ':last_name' => $userInfo['lastName'],
                         ':email' => $userInfo['eMail'],
                         ':password' => $this->cryptPassword($userInfo['password']),
+                        ':cookie_id' => $this->cryptPassword(microtime()),
                         ':id_role' => 4,
                         ':id_state' => 2
         );
 
         $db = $this->dbConnect();
         $reqPost = 'INSERT INTO yb_blog_users
-                        (first_name, last_name, email, password, id_role, id_state) 
+                        (first_name, last_name, email, password, cookie_id, id_role, id_state) 
                         VALUES
-                        (:first_name, :last_name, :email, :password, :id_role, :id_state)';
+                        (:first_name, :last_name, :email, :password, :cookie_id, :id_role, :id_state)';
         $req = $db->prepare($reqPost);
         $req->execute($param);
     }

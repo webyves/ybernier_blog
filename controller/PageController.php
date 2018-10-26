@@ -41,7 +41,7 @@ Class PageController {
     }
     
     /* RENDER PAGE PARTS */
-    public function debugPage($varName='varName', $varForDump)
+    public function debugPage($varForDump, $varName='varName')
     {
         echo $this->fTwig->render('debug.twig', array('varName' => $varName, 'forDump' => $varForDump));
     }

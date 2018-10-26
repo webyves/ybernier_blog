@@ -68,7 +68,7 @@ Class UserController
 
     public function generateUserCookie($userObject)
     {
-        setcookie("userIdCookie",$userObject->getIduser());
+        setcookie("userIdCookie", $userObject->getCookieid(), time()+129600); //expire 36h
     }
 
     public function destroyUserCookie()
@@ -80,9 +80,10 @@ Class UserController
     {
         if (isset($_COOKIE["userIdCookie"])) {
             $Manager = new UserManager();
-            $user = $Manager->getUser($_COOKIE["userIdCookie"]);
-            if (isset($user->getEmail)) {
+            $user = $Manager->getUser("","",$_COOKIE["userIdCookie"]);
+            if (null !== $user->getEmail()) {
                 $this->putUserSession($user);
+                $this->generateUserCookie($user);
                 return $user;
             } else {
                 $this->destroyUserCookie();

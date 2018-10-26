@@ -12,6 +12,7 @@ Class User
     private $lastname;
     private $email;
     private $password; // CRYPTed
+    private $cookieid;
     private $idrole = 0;
     private $role;
     private $idstate;
@@ -60,6 +61,11 @@ Class User
         return $this->password;     // crypted
     }
 
+    public function getCookieid()
+    {
+        return $this->cookieid;
+    }
+
     public function getIdrole()
     {
         return $this->idrole;
@@ -105,6 +111,11 @@ Class User
     public function setPassword($value)
     {
         $this->password = $value;
+    }
+
+    public function setCookieid($value)
+    {
+        $this->cookieid = $value;
     }
 
     public function setIdrole($value)

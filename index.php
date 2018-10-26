@@ -33,16 +33,19 @@ if (isset($_SESSION['userObject'])) {
 $UserController = new UserController();
 if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
     $UserConnected = $UserController->connect($_POST['conexEmail'], $_POST['conexInputPassword']);
-    // if (isset($_POST['conexChkbxRemember']))
-        // $UserController->generateUserCookie($UserConnected);
-// } else {
-    // CHECK cookie
-    // if (!is_null($UserController->getCookieInfo())) {
-        // $UserConnected = $UserController->getCookieInfo();
-        // $UserController->generateUserCookie($UserConnected);
-    // }
+    if (isset($_POST['conexChkbxRemember'])) {
+        $UserController->generateUserCookie($UserConnected);
+    }
+} else {
+    if (!is_null($UserController->getCookieInfo())) {
+        echo "PLOP !";
+        $UserConnected = $UserController->getCookieInfo();
+        $UserController->generateUserCookie($UserConnected);
+    }
 }
 $twig->addGlobal('userObject', $UserConnected);
+    // $controller = new PageController();
+    // $controller->debugPage($_POST);
 
     
 //Router
@@ -78,9 +81,9 @@ try {
         if (isset($_GET['a'])) {
             switch ($_GET['a']) {
                 case 'logout':
-                    // if (isset($_COOKIE["userIdCookie"])) {
-                        // $UserController->destroyUserCookie();
-                    // }
+                    if (isset($_COOKIE["userIdCookie"])) {
+                        $UserController->destroyUserCookie();
+                    }
                     $UserConnected = null;
                     session_destroy();
                     $twig->addGlobal('userObject', "");
