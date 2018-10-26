@@ -50,7 +50,7 @@ Class UserController
         $user = $Manager->getUser("",$email);
         
         if (!empty($user->getPassword())) {
-            if ($pwd == $user->getPassword()) {
+            if (password_verify($pwd, $user->getPassword())) {
                 $this->putUserSession($user);
                 return $user;
             } else {

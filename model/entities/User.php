@@ -11,7 +11,7 @@ Class User
     private $firstname;
     private $lastname;
     private $email;
-    private $password; // CRYPTE
+    private $password; // CRYPTed
     private $idrole = 0;
     private $role;
     private $idstate;
@@ -57,8 +57,7 @@ Class User
     
     public function getPassword()
     {
-        // crypté
-        return $this->password;
+        return $this->password;     // crypted
     }
 
     public function getIdrole()
@@ -83,7 +82,6 @@ Class User
 
 
     /* Set posts information bloc of functions */
-    /* penser a faire des verif pour modif de value */
     public function setIduser($value)
     {
         $this->iduser = $value;
@@ -106,7 +104,6 @@ Class User
     
     public function setPassword($value)
     {
-        // A CRYPTER
         $this->password = $value;
     }
 

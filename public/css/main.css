@@ -36,7 +36,7 @@ LISTE POST & POST (override bootstrap)
 .navbar-dark .navbar-brand, #emailHelp {
 	color: #ceb252 !important;
 }
-.modal-body .form-group label {
+.modal-body .form-group label, .modal-body p {
 	color: rgba(0,0,0,1);
 }
 .card {

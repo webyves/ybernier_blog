@@ -49,12 +49,12 @@ Class UserManager extends Manager
     
     public function cryptPassword($password)
     {
-        return $password;
+        $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+        return $passwordHashed;
     }
     
     public function addUser($userInfo)
     {
-        // NOT TESTED
         $param = array( ':first_name' => $userInfo['firstName'],
                         ':last_name' => $userInfo['lastName'],
                         ':email' => $userInfo['eMail'],
