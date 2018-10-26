@@ -20,10 +20,12 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.013 - 26/10/2018 12h30
-- user password crypt
-- debut fonction et bdd pour user cookie
+v0.014 - 26/10/2018 14h30
+- user cookie OK/Testé
 
+v0.013 - 26/10/2018 12h30
+- user password crypt OK/Testé
+- debut fonction et bdd pour user cookie
 
 v0.012 - 24/10/2018 12h
 - Creation Utilisateur OK/Testé

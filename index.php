@@ -38,7 +38,6 @@ if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
     }
 } else {
     if (!is_null($UserController->getCookieInfo())) {
-        echo "PLOP !";
         $UserConnected = $UserController->getCookieInfo();
         $UserController->generateUserCookie($UserConnected);
     }
