@@ -20,6 +20,9 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.012 - 24/10/2018 12h
+- Creation Utilisateur OK/Testé
+
 v0.011 - 23/10/2018 20h
 - Design Version black 
 - SmallContent dans l'hydratation

@@ -47,25 +47,29 @@ Class UserManager extends Manager
         return $obj;
     }
     
+    public function cryptPassword($password)
+    {
+        return $password;
+    }
+    
     public function addUser($userInfo)
     {
         // NOT TESTED
-        // $param = array( ':id_user' => $userInfo,
-                        // ':first_name' => $userInfo,
-                        // ':last_name' => $userInfo,
-                        // ':email' => $userInfo,
-                        // ':password' => $userInfo,
-                        // ':id_role' => $userInfo,
-                        // ':id_state' => $userInfo
-        // );
+        $param = array( ':first_name' => $userInfo['firstName'],
+                        ':last_name' => $userInfo['lastName'],
+                        ':email' => $userInfo['eMail'],
+                        ':password' => $this->cryptPassword($userInfo['password']),
+                        ':id_role' => 4,
+                        ':id_state' => 2
+        );
 
-        // $db = $this->dbConnect();
-        // $reqPost = 'INSERT INTO yb_blog_users
-                        // (id_user, first_name, last_name, email, password, id_role, id_state) 
-                        // VALUES
-                        // (:id_user, :first_name, :last_name, :email, :password, :id_role, :id_state)';
-        // $req = $db->prepare($reqPost);
-        // $req->execute($param);
+        $db = $this->dbConnect();
+        $reqPost = 'INSERT INTO yb_blog_users
+                        (first_name, last_name, email, password, id_role, id_state) 
+                        VALUES
+                        (:first_name, :last_name, :email, :password, :id_role, :id_state)';
+        $req = $db->prepare($reqPost);
+        $req->execute($param);
     }
     
 }

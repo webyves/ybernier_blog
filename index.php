@@ -32,12 +32,11 @@ if (isset($_SESSION['userObject'])) {
 }
 $UserController = new UserController();
 if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
-    // Check Form
     $UserConnected = $UserController->connect($_POST['conexEmail'], $_POST['conexInputPassword']);
     // if (isset($_POST['conexChkbxRemember']))
         // $UserController->generateUserCookie($UserConnected);
 // } else {
-    //CHECK cookie
+    // CHECK cookie
     // if (!is_null($UserController->getCookieInfo())) {
         // $UserConnected = $UserController->getCookieInfo();
         // $UserController->generateUserCookie($UserConnected);
@@ -89,9 +88,6 @@ try {
                     break;
                     
                 case 'inscription' :    
-                    $debugController = new PageController();
-                    $debugController->debugPage('_POST', $_POST);
-                    // NOT TESTED
                     $UserController->inscription($_POST);
                     $viewListPost = false;
                     break;

@@ -12,10 +12,7 @@ Class PostController extends PageController
     
     public function listPosts()
     {
-        $postManager = new PostManager();
-        $postList = $postManager->getPosts('full_list');
-
-        echo $this->fTwig->render('listPosts.twig', array('postList' => $postList, 'postListMenu' => $this->postList));
+        echo $this->fTwig->render('listPosts.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
 
     }
 
@@ -24,7 +21,7 @@ Class PostController extends PageController
         $postManager = new PostManager();
         $post = $postManager->getPost($idPost);
 
-        echo $this->fTwig->render('post.twig', array('post' => $post, 'postListMenu' => $this->postList));
+        echo $this->fTwig->render('post.twig', array('post' => $post, 'postListMenu' => $this->postListMenu));
 
     }
 }

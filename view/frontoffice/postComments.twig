@@ -1,0 +1,16 @@
+{% extends 'post.twig' %}
+
+{% block comments %}
+    <div class='card'>
+        <div class="card-body">
+        {% for comment in comments %}
+            <p class="card-subtitle text-muted">
+                le : {{ comment.datefr }}<br>
+                par : {{ comment.author }}
+            </p>
+            <p>{{ comment.content }}</p>
+            <hr>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock comments %}

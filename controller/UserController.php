@@ -5,11 +5,45 @@ website User controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
-use \yBernier\Blog\controller\PageController;
 use \yBernier\Blog\model\manager\UserManager;
+use \yBernier\Blog\model\manager\PostManager;
+
 
 Class UserController
 {
+    
+    protected $postList;
+    protected $postListMenu;
+    protected $fTwig;
+    
+    public function __construct()
+    {
+        $this->setFTwig();
+        $this->setPostList();
+        $this->setPostListMenu();
+    }
+    
+    /* SET FUNCTION PARTS */
+    public function setPostListMenu()
+    {
+        $postManager = new PostManager();
+        $this->postListMenu = $postManager->getPosts();
+    }
+    
+    public function setPostList()
+    {
+        $postManager = new PostManager();
+        $this->postList = $postManager->getPosts('full_list');
+    }
+    
+    public function setFTwig()
+    {
+        global $twig;
+        $this->fTwig = $twig;
+    }
+    
+    
+    
     public function connect($email,$pwd)
     {
         $Manager = new UserManager();
@@ -61,15 +95,55 @@ Class UserController
     
     public function inscription($post) 
     {
-        // NOT TESTED
-        // VERIF DES POST
-        // $userInfo = $post;
-        // CREATION DE L'UTILISATEUR EN BASE
-        // $Manager = new UserManager();
-        // $Manager->addUser($userInfo);
         
+        // VERIF DES POST
+        $errorMessage = "";
+        foreach ($_POST as $postKey => $postValue) {
+            if (empty($postValue)) {
+                if (!empty($errorMessage))
+                   $errorMessage .= "<br>";
+                switch ($postKey) {
+                    case 'inscripFirstname' :
+                        $errorMessage .= "Veuillez saisir un Prénom"; 
+                        break;
+                    case 'inscripLastname' :
+                        $errorMessage .= "Veuillez saisir un Nom"; 
+                        break;
+                    case 'inscripEmail' :
+                        $errorMessage .= "Veuillez saisir un eMail"; 
+                        break;
+                    case 'inscripPassword' :
+                        $errorMessage .= "Veuillez saisir un Mot de passe"; 
+                        break;
+                    case 'inscripPasswordVerif' :
+                        $errorMessage .= "Veuillez saisir la verification du mot de passe"; 
+                        break;
+                    default :     
+                        $errorMessage .= "Veuillez verifier vos champs."; 
+                        break;
+                    
+                }
+            }
+        }
+        if ($post['inscripPassword'] != $post['inscripPasswordVerif']) {
+            if (!empty($errorMessage))
+               $errorMessage .= "<br>";
+            $errorMessage .= "La verification de password a échoué";
+        }
+        
+        if (empty($errorMessage)) {
+            $userInfo = array(
+                            'firstName' => $post['inscripFirstname'],
+                            'lastName' => $post['inscripLastname'],
+                            'eMail' => $post['inscripEmail'],
+                            'password' => $post['inscripPassword']
+                );
+            $Manager = new UserManager();
+            $Manager->addUser($userInfo);
+            echo $this->fTwig->render('inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+        } else {
+            echo $this->fTwig->render('inscriptionError.twig', array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu));
+        }
     }
-    
-    
 
 }

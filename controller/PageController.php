@@ -11,19 +11,27 @@ use \yBernier\Blog\model\manager\Manager;
 Class PageController {
     
     protected $postList;
+    protected $postListMenu;
     protected $fTwig;
     
     public function __construct()
     {
         $this->setFTwig();
         $this->setPostList();
+        $this->setPostListMenu();
     }
     
     /* SET FUNCTION PARTS */
+    public function setPostListMenu()
+    {
+        $postManager = new PostManager();
+        $this->postListMenu = $postManager->getPosts();
+    }
+    
     public function setPostList()
     {
         $postManager = new PostManager();
-        $this->postList = $postManager->getPosts();
+        $this->postList = $postManager->getPosts('full_list');
     }
     
     public function setFTwig()
@@ -40,13 +48,13 @@ Class PageController {
 
     public function errorPage($errorText)
     {
-        echo $this->fTwig->render('error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postList));
+        echo $this->fTwig->render('error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
     public function showPage($page = '')
     {
         if (!empty($page)) {
-            echo $this->fTwig->render($page.'.twig', array('postListMenu' => $this->postList));
+            echo $this->fTwig->render($page.'.twig', array('postListMenu' => $this->postListMenu));
         } else {
             throw new Exception('Page introuvable !');
         }
@@ -66,9 +74,7 @@ Class PageController {
         $Manager = new Manager();
         $Manager->sendMail($tabInfo);
         
-        $postManager = new PostManager();
-        $postList = $postManager->getPosts('full_list');
-        echo $this->fTwig->render('confirmContact.twig', array('postList' => $postList, 'postListMenu' => $this->postList));
+        echo $this->fTwig->render('contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }    
     
     
