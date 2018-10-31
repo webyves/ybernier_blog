@@ -7,6 +7,7 @@ use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\controller\PostController;
 use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
+use \yBernier\Blog\controller\CommentController;
 
 //Autoload
 require ('Autoloader.php');
@@ -77,6 +78,18 @@ try {
                 break;
             case 'sendInscriptionForm' :    
                 $UserController->inscription($_POST);
+                break;
+            case 'sendCommentForm' :    
+                if (isset($_GET['i']) && is_numeric($_GET['i'])) {
+                    if ($_GET['i'] < 1) {
+                        throw new Exception('Post introuvable !');
+                        break;
+                    }
+                    $CommentController = new CommentController();
+                    $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
+                } else {
+                    throw new Exception('Post invalide !');
+                }
                 break;
             case 'logout':
                 if (isset($_COOKIE["userIdCookie"])) {

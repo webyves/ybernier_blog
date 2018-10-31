@@ -20,7 +20,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.015 - 26/10/2018 13h15
+v0.016 - 31/10/2018 17h
+- AddComment fonctionne (MAJ MVC comments)
+
+v0.015 - 31/10/2018 13h15
 - user cookie destroy Corigé
 - Debut system Comments controller/manager/entities/view + MAJ postController
 - PageController devient une classe mere pour StaticPageController

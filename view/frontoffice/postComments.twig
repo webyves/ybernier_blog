@@ -1,20 +1,41 @@
 {% extends 'post.twig' %}
 
 {% block comments %}
-    <div class='card'>
+    <div class='card' id="comments">
+        {% block message %}{% endblock message %}
         <div class="card-body">
             <a class="card-link" href="#"><em>{{ nbcom }} Commentaires</a></em>
 
-        {% for comment in comments %}
+        {% for parentComment in comments.parent %}
             <hr>
             <p class="card-subtitle text-muted">
-                le : {{ comment.datecom }}<br>
-                par : {{ comment.author }}
+                le : {{ parentComment.datecom }}<br>
+                par : {{ parentComment.author }}
             </p>
-            <p>{{ comment.textcom }}</p>
+            <p>{{ parentComment.textcom }}</p>
+            {% for childComment in comments.child[parentComment.idcom] %}
+                <p class="child_com card-subtitle text-muted">
+                    le : {{ childComment.datecom }}<br>
+                    par : {{ childComment.author }}
+                </p>
+                <p class="child_com">{{ childComment.textcom }}</p>
+            {% endfor %}
                 <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
         {% endfor %}
         </div>
     </div>
     <!-- BLOC AJOUT COMMENTAIRE SI CONNECTER --> 
+    {% if userObject.idrole != 0 %}
+    <div class='card'>
+        <div class="card-body">
+            <form id="conexForm" method="POST" action="index.php?p=sendCommentForm&i={{ post.idpost }}#comments">
+                <div class="form-group">
+                    <label for="comInputText">Laissez un commentaire :</label>
+                    <input type="text" class="form-control" name="comInputText" id="comInputText" placeholder="Saisissez votre Commentaire">
+                </div>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
 {% endblock comments %}

@@ -30,6 +30,7 @@ Class CommentManager extends Manager
     /*********************************** 
         Function to get multiple comments 
         for 1 specific post or 1 specific comment
+        Generate a specific Tab with parents and child comments
     ***********************************/
     public function getComments($idPost = 0, $idComment = 0, $idState = 1)
     {
@@ -66,14 +67,44 @@ Class CommentManager extends Manager
         $req = $db->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetchall();
-        $tab = array();
+        $tabcomchild = array();
+        $tabcomparent = array();
         foreach ($res as $res_post) {
-            $obj = new Comment($res_post);
-            array_push($tab,$obj);
+            if (empty($res_post['idcomparent'])) {
+                $obj = new Comment($res_post);
+                array_push($tabcomparent,$obj);
+            } else {
+                $obj = new Comment($res_post);
+                if (!isset($tabcomchild[$res_post['idcomparent']])) {
+                    $tabcomchild[$res_post['idcomparent']][0] = $obj;
+                } else {
+                    array_push($tabcomchild[$res_post['idcomparent']],$obj);
+                }
+            }
         }
+        $tab = array('parent' => $tabcomparent, 'child' => $tabcomchild);
         return $tab;
-        
-        // TROUVER SOLUTION POUR RECURSIVITE avec com parent
+    }
+    
+    /*********************************** 
+        Function to Insert Comment in DB
+    ***********************************/
+    public function addComment($text, $idUser, $idPost, $idComParent) 
+    {
+        $param = array( ':text' => strip_tags($text),
+                        ':id_post' => $idPost,
+                        ':id_user' => $idUser,
+                        ':id_com_parent' => $idComParent,
+                        ':id_state' => 1
+        );
+
+        $db = $this->dbConnect();
+        $reqPost = 'INSERT INTO yb_blog_comments
+                        (text, date, id_post, id_user, id_com_parent, id_state) 
+                        VALUES
+                        (:text, NOW(), :id_post, :id_user, :id_com_parent, :id_state)';
+        $req = $db->prepare($reqPost);
+        $req->execute($param);
     }
 
 }
