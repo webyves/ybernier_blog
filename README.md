@@ -20,6 +20,15 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.015 - 26/10/2018 13h15
+- user cookie destroy Corigé
+- Debut system Comments controller/manager/entities/view + MAJ postController
+- PageController devient une classe mere pour StaticPageController
+- MAJ UserController en PageController Extention
+- MAJ/correction du routeur index et des vues (suppression get a) 
+- MAJ Post Manager/entities avec le nbcom
+- Ajout de commentaires dans le code pour chaque fonction (WIP)
+
 v0.014 - 26/10/2018 14h30
 - user cookie OK/Testé
 
