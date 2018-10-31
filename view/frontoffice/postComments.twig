@@ -3,14 +3,18 @@
 {% block comments %}
     <div class='card'>
         <div class="card-body">
+            <a class="card-link" href="#"><em>{{ nbcom }} Commentaires</a></em>
+
         {% for comment in comments %}
+            <hr>
             <p class="card-subtitle text-muted">
-                le : {{ comment.datefr }}<br>
+                le : {{ comment.datecom }}<br>
                 par : {{ comment.author }}
             </p>
-            <p>{{ comment.content }}</p>
-            <hr>
+            <p>{{ comment.textcom }}</p>
+                <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
         {% endfor %}
         </div>
     </div>
+    <!-- BLOC AJOUT COMMENTAIRE SI CONNECTER --> 
 {% endblock comments %}

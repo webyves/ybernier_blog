@@ -4,45 +4,76 @@ file: CommentManager.php
 model for comments
 ******************************************************************/
 namespace yBernier\Blog\model\manager;
-require_once("model/manager/Manager.php");
+
+use \yBernier\Blog\model\entities\Comment;
 
 Class CommentManager extends Manager
 {
-    /* get number of comments */
+    /*********************************** 
+        Function to get number of comment for 1 specific post
+    ***********************************/
     public function getCommentNb($idPost)
     {
-        // return number of comment on post
-    }
-
-    /* get content of post */
-    public function getComments($idPost, $idComment)
-    {
-        // return comments for a post or a comment
-    }
-
-    /* Set comments information bloc of public functions */
-    public function setCommentText($idComment, $text)
-    {
+        $db = $this->dbConnect();
+        $reqComNb = '
+            SELECT COUNT(id_com) as nbpost
+                FROM yb_blog_comments
+                WHERE id_state = 1 AND id_post = :id_post';
+        $req = $db->prepare($reqComNb);
+        $req->bindValue('id_post', $idPost, \PDO::PARAM_INT);
+        $req->execute();
+        $res = $req->fetch();
         
+        return $res['nbpost'];
     }
 
-    public function setCommentPost($idComment, $idPost)
+    /*********************************** 
+        Function to get multiple comments 
+        for 1 specific post or 1 specific comment
+    ***********************************/
+    public function getComments($idPost = 0, $idComment = 0, $idState = 1)
     {
+        $orderReqVar = ""; // for next implementation ORDER BY other Things
+        if (!is_numeric($idState)) {
+            throw new \Exception('ERROR GET STATE COMMENTS');
+        }
+        if (is_numeric($idPost) && $idPost> 0) {
+            $whereVar = " AND C.id_post = :id_post";
+            $param[':id_post'] = $idPost;
+        } elseif (is_numeric($idComment) && $idComment > 0){
+            $whereVar = " AND C.id_com = :id_com";
+            $param[':id_com'] = $idComment;
+        } else {
+            throw new \Exception('ERROR GET COMMENTS');
+        }
         
+        $db = $this->dbConnect();
+        $reqPost = '
+            SELECT 
+                C.id_com as idcom,
+                C.text as textcom,
+                DATE_FORMAT(C.date, \'%d/%m/%Y à %Hh%i\') as datecom,
+                C.id_post as idpost,
+                C.id_com_parent as idcomparent,
+                C.id_state as idstate,
+                C.id_user as iduser,
+                CONCAT(U.first_name, " ", U.last_name) as author
+                
+            FROM yb_blog_comments as C
+            LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
+            WHERE C.id_state = '.$idState.$whereVar.' 
+            ORDER BY '.$orderReqVar.'C.date DESC ';
+        $req = $db->prepare($reqPost);
+        $req->execute($param);
+        $res = $req->fetchall();
+        $tab = array();
+        foreach ($res as $res_post) {
+            $obj = new Comment($res_post);
+            array_push($tab,$obj);
+        }
+        return $tab;
+        
+        // TROUVER SOLUTION POUR RECURSIVITE avec com parent
     }
 
-    public function setCommentCommentParent($idComment, $idCommentParent)
-    {
-        
-    }
-
-    public function setCommentState($idComment, $idState)
-    {
-        
-    }
-
-    public function setCommentUser($idComment, $idUser)
-    {
-        
-    }
 }

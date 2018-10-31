@@ -10,6 +10,13 @@ use \yBernier\Blog\model\entities\Post;
 Class PostManager extends Manager 
 {
 
+    /*********************************** 
+        Function to get multiple post in DB
+        
+        $mode => leftbar (default) or classic list
+        $nbPosts => can restrict quantity
+        $idState => can specify state of post
+    ***********************************/
     public function getPosts($mode = 'menu', $nbPosts = 50, $idState = 1)
     {
         $userReqVar = ""; // for next implementation WHERE user variable
@@ -34,13 +41,17 @@ Class PostManager extends Manager
                     PC.text as category,
                     
                     P.id_user as iduser,
-                    CONCAT(U.first_name, " ", U.last_name) as author
+                    CONCAT(U.first_name, " ", U.last_name) as author,
+                    
+                    COUNT(C.id_com) as nbcom
                     
                 FROM yb_blog_posts as P
                 LEFT JOIN yb_blog_users as U ON (P.id_user = U.id_user)
                 LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
                 LEFT JOIN yb_blog_post_state as PS ON (P.id_state = PS.id_state)
+                LEFT JOIN yb_blog_comments as C ON (P.id_post = C.id_post AND C.id_state = 1)
                 WHERE P.id_state = :id_state'.$userReqVar.$catReqVar.'
+                GROUP BY P.id_post 
                 ORDER BY '.$orderReqVar.'P.date DESC 
                 LIMIT 0, :limit';
         $req = $db->prepare($reqPostsList);
@@ -70,6 +81,9 @@ Class PostManager extends Manager
         return $tab;
     }
     
+    /*********************************** 
+        Function to get 1 specific post in DB  
+    ***********************************/
     public function getPost($idPost)
     {
         $db = $this->dbConnect();
@@ -95,33 +109,5 @@ Class PostManager extends Manager
 
         return $obj;
     }
-    
-    // OBSOLETE
-    // public function getPostsListMenu()
-    // {
-        // $db = $this->dbConnect();
-        // $reqPostsList = 'SELECT 
-                    // P.id_post as idpost, 
-                    // P.title,
-                    // P.id_cat as idcat,
-                    // PC.text as category
-                // FROM yb_blog_posts as P
-                // LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
-                // WHERE P.id_state = 1 
-                // ORDER BY PC.text, P.date DESC
-                // LIMIT 0, 50';
-        // $req = $db->prepare($reqPostsList);
-        // $req->execute();
-        // $res = $req->fetchall();
-
-        // $tab = array();
-        // $n=0;
-        // foreach ($res as $res_post) {
-            // $n++;
-            // $obj = new Post($res_post);
-            // $tab[$res_post['category']][$n] = $obj;
-        // }
-        // return $tab;
-    // }
     
 }

@@ -19,6 +19,7 @@ Class Post
     private $category;
     private $iduser;
     private $author;
+    private $nbcom;
     
     public function __construct($db_post)
     {
@@ -101,8 +102,12 @@ Class Post
         return $this->author;
     }
 
+    public function getNbcom()
+    {
+        return $this->nbcom;
+    }
+
     /* Set posts information bloc of functions */
-    /* penser a faire des verif pour modif de value */
     public function setIdpost($value)
     {
        $this->idpost = $value;
@@ -163,8 +168,15 @@ Class Post
        $this->author = $value;
     }
 
+    public function setNbcom($value)
+    {
+       $this->nbcom = $value;
+    }
     
-    public function texte_resume($texte, $nbreCar)
+    /*********************************** 
+        Function to generate smallcontent
+    ***********************************/
+    private function texte_resume($texte, $nbreCar)
     {
         $LongueurTexteBrutSansHtml = strlen(strip_tags($texte));
         if($LongueurTexteBrutSansHtml < $nbreCar) 

@@ -5,7 +5,7 @@ router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\controller\PostController;
-use \yBernier\Blog\controller\PageController;
+use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
 
 //Autoload
@@ -43,7 +43,7 @@ if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
     }
 }
 $twig->addGlobal('userObject', $UserConnected);
-    // $controller = new PageController();
+    // $controller = new StaticPageController();
     // $controller->debugPage($_POST);
 
     
@@ -67,50 +67,39 @@ try {
             case 'inscription':
             case 'mentions':
             case 'confidentialite':
-                $controller = new PageController();
+                $controller = new StaticPageController();
                 $controller->showPage($_GET['p']);
                 break;
+                
+            case 'sendContactForm' :    
+                $controller = new StaticPageController();
+                $controller->contact($_POST);
+                break;
+            case 'sendInscriptionForm' :    
+                $UserController->inscription($_POST);
+                break;
+            case 'logout':
+                if (isset($_COOKIE["userIdCookie"])) {
+                    echo "plop !!";
+                    $UserController->destroyUserCookie();
+                }
+                $UserConnected = null;
+                session_destroy();
+                $twig->addGlobal('userObject', "");
+                $postController = new PostController();
+                $postController->listPosts();
+                break;
+                    
             default:
                 throw new Exception('Page invalide !');
                 break;
         }
     } else {
-        // CHECK ACTION
-        $viewListPost = true;
-        if (isset($_GET['a'])) {
-            switch ($_GET['a']) {
-                case 'logout':
-                    if (isset($_COOKIE["userIdCookie"])) {
-                        $UserController->destroyUserCookie();
-                    }
-                    $UserConnected = null;
-                    session_destroy();
-                    $twig->addGlobal('userObject', "");
-                    $viewListPost = true;
-                    break;
-                    
-                case 'inscription' :    
-                    $UserController->inscription($_POST);
-                    $viewListPost = false;
-                    break;
-                    
-                case 'contact' :    
-                    $pageController = new PageController();
-                    $pageController->contact($_POST);
-                    $viewListPost = false;
-                    break;
-                default :
-                    throw new Exception('Action invalide !');
-                    break;
-            }
-        }
-        if ($viewListPost) {
-            $postController = new PostController();
-            $postController->listPosts();
-        }
+        $postController = new PostController();
+        $postController->listPosts();
     }
 } catch(Exception $e) {
     $errorMessage = $e->getMessage();
-    $controller = new PageController();
+    $controller = new StaticPageController();
     $controller->errorPage($errorMessage);
 }

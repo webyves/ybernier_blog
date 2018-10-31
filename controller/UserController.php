@@ -6,44 +6,12 @@ website User controller
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\UserManager;
-use \yBernier\Blog\model\manager\PostManager;
 
-
-Class UserController
+Class UserController extends PageController
 {
-    
-    protected $postList;
-    protected $postListMenu;
-    protected $fTwig;
-    
-    public function __construct()
-    {
-        $this->setFTwig();
-        $this->setPostList();
-        $this->setPostListMenu();
-    }
-    
-    /* SET FUNCTION PARTS */
-    public function setPostListMenu()
-    {
-        $postManager = new PostManager();
-        $this->postListMenu = $postManager->getPosts();
-    }
-    
-    public function setPostList()
-    {
-        $postManager = new PostManager();
-        $this->postList = $postManager->getPosts('full_list');
-    }
-    
-    public function setFTwig()
-    {
-        global $twig;
-        $this->fTwig = $twig;
-    }
-    
-    
-    
+    /*********************************** 
+        Function to connect User 
+    ***********************************/
     public function connect($email,$pwd)
     {
         $Manager = new UserManager();
@@ -61,21 +29,36 @@ Class UserController
         }
     }
     
+    /*********************************** 
+        SubFunction to connect User 
+            Put User object in Session
+    ***********************************/
     public function putUserSession($userObject)
     {
         $_SESSION['userObject'] = $userObject;
     }
 
+    /*********************************** 
+        SubFunction to connect User 
+            Generate a cookie with crypted info for connexion
+    ***********************************/
     public function generateUserCookie($userObject)
     {
         setcookie("userIdCookie", $userObject->getCookieid(), time()+129600); //expire 36h
     }
 
+    /*********************************** 
+        SubFunction for cookie User 
+            Destroy the cookie
+    ***********************************/
     public function destroyUserCookie()
     {
-        unset($_COOKIE["userIdCookie"]);
+        setcookie("userIdCookie", "", time()-1);
     }
 
+    /*********************************** 
+        Function to connect User via cookie
+    ***********************************/
     public function getCookieInfo()
     {
         if (isset($_COOKIE["userIdCookie"])) {
@@ -94,10 +77,13 @@ Class UserController
         }
     }
     
+    /*********************************** 
+        Function for user inscription 
+            check possible error
+            send correct infos to user manager
+    ***********************************/
     public function inscription($post) 
     {
-        
-        // VERIF DES POST
         $errorMessage = "";
         foreach ($_POST as $postKey => $postValue) {
             if (empty($postValue)) {

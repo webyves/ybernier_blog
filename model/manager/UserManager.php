@@ -9,10 +9,12 @@ use \yBernier\Blog\model\entities\User;
 
 Class UserManager extends Manager 
 {
-
+    /*********************************** 
+        Function to get user in DB
+            can be form id, email, or cookie
+    ***********************************/
     public function getUser($idUser = "", $email = "", $cookieid = "")
     {
-        $whereVar = "";
         if (!empty($idUser)) {
             $whereVar = "U.id_user = :id_user";
             $param = array(':id_user' => $idUser);
@@ -22,6 +24,8 @@ Class UserManager extends Manager
         } elseif (!empty($cookieid)) {
             $whereVar = "U.cookie_id = :cookie_id";
             $param = array(':cookie_id' => $cookieid);
+        } else {
+            throw new \Exception('ERROR GET USER');
         }
         
         $db = $this->dbConnect();
@@ -51,19 +55,33 @@ Class UserManager extends Manager
         return $obj;
     }
     
-    public function cryptPassword($password)
+    /*********************************** 
+        Private Method to crypt information for user 
+        (password or cookie id)
+    ***********************************/
+    private function cryptInfo($value)
     {
-        $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
-        return $passwordHashed;
+        $valueHashed = password_hash($value, PASSWORD_DEFAULT);
+        return $valueHashed;
     }
     
+    /*********************************** 
+        Function to Insert user in DB
+        
+        $userInfo = array(
+                        'firstName' => "",
+                        'lastName' => "",
+                        'eMail' => "",
+                        'password' => ""    // will be crypted
+            );
+    ***********************************/
     public function addUser($userInfo)
     {
         $param = array( ':first_name' => $userInfo['firstName'],
                         ':last_name' => $userInfo['lastName'],
                         ':email' => $userInfo['eMail'],
-                        ':password' => $this->cryptPassword($userInfo['password']),
-                        ':cookie_id' => $this->cryptPassword(microtime()),
+                        ':password' => $this->cryptInfo($userInfo['password']),
+                        ':cookie_id' => $this->cryptInfo(microtime()),
                         ':id_role' => 4,
                         ':id_state' => 2
         );

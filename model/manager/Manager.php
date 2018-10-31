@@ -6,8 +6,12 @@ Mother Class for manager class
 ******************************************************************/
 namespace yBernier\Blog\model\manager;
 
-Class Manager {
+Class Manager 
+{
     
+    /*********************************** 
+        Function for DataBase Connexion  
+    ***********************************/
     protected function dbConnect()
     {
         $dbUser = "root";
@@ -24,9 +28,26 @@ Class Manager {
         return $db;
     }
     
+    /*********************************** 
+        Function for Sending eMail  
+        
+        $tabInfo = array( 
+                'fromFirstname' => "",  // empty is OK
+                'fromLastname' => "",   // empty is OK
+                'fromEmail' => "",
+                'toEmail' => "",
+                'messageTxt' => "",
+                'messageHtml' => "",    // empty is OK
+                'subject' => ""         // empty is OK                        
+            );
+
+    ***********************************/
     public function sendMail($tabInfo)
     {
-        $fromName = htmlentities($tabInfo['fromFirstname']) . " " . htmlentities($tabInfo['fromLastname']);
+        $fromName = "Anonyme";
+        if (!empty($tabInfo['fromFirstname']) || !empty($tabInfo['fromLastname'])) {
+            $fromName = htmlentities($tabInfo['fromFirstname']) . " " . htmlentities($tabInfo['fromLastname']);
+        }
         $fromEmail = $tabInfo['fromEmail'];
         $to = htmlentities($tabInfo['toEmail']);
         $messageTxt = nl2br(htmlentities($tabInfo['messageTxt']));
@@ -36,7 +57,7 @@ Class Manager {
             $messageHtml = nl2br($tabInfo['messageHtml']); // ATTENTION SECURITY
         }
         if (empty($tabInfo['subject'])) {
-            $subject = "Message depuis le formulaire de contact yBernier Blog";
+            $subject = "Message depuis yBernier Blog";
         } else {
             $subject = $tabInfo['subject']; // ATTENTION SECURITY
         }
