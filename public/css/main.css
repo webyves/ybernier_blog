@@ -69,6 +69,36 @@ listPosts
 .child_com {
     padding-left: 60px;
 }
+
+.news_img_link {
+	position: relative;
+}
+.overlay_news_img {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(206,178,82,0.4);
+	overflow: hidden;
+	width: 0;
+	height: 100%;
+	transition: .5s ease;
+}
+.news_img_link:hover .overlay_news_img {
+	width: 100%;
+}
+.overlay_news_text {
+	color: white;
+	font-size: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	white-space: nowrap;
+}
+
 /********************************************
 FOOTER
 ********************************************/

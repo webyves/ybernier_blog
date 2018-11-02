@@ -14,7 +14,14 @@
         {% for post in postList | slice(0,11) %}
             <div class="col-md-4 col-sm-6">
                 <div class='card'>
-                    <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
+                    <a href="index.php?p=post&i={{ post.idpost }}" class="news_img_link">
+                        <img class="card-img-top news_img" src="public/img/{{ post.imagetop }}" alt="image post {{ post.idpost }}" title="image post {{ post.idpost }}">
+                        <div class="overlay_news_img">
+                            <div class="overlay_news_text">
+                                <em class="fas fa-search-plus"></em>
+                            </div>
+                        </div>
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-subtitle text-muted">
