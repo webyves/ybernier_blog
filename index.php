@@ -83,7 +83,6 @@ try {
                 if (isset($_GET['i']) && is_numeric($_GET['i'])) {
                     if ($_GET['i'] < 1) {
                         throw new Exception('Post introuvable !');
-                        break;
                     }
                     $CommentController = new CommentController();
                     $CommentController->addComment($_POST, $UserConnected, $_GET['i']);

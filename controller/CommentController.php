@@ -13,14 +13,28 @@ Class CommentController extends PostController
     
     /*********************************** 
         Function for Adding comment 
-            check possible error
+            check if response comments or just new comments
             send correct infos to comment manager
     ***********************************/
-    public function addComment($post, $UserConnected, $idPost, $idComParent = null) 
+    public function addComment($post, $UserConnected, $idPost) 
     {
-        if (!empty($post['comInputText'])) {
+        $idComParent = null;
+        $textCom = "";
+        
+        if (isset($post['respComInputIdCom'])) {
+            if (is_numeric($post['respComInputIdCom']) && $post['respComInputIdCom'] > 0) {
+                $textCom = $post['respComInputText'];
+                $idComParent = $post['respComInputIdCom'];
+            } else {
+                throw new \Exception('Commentaire invalide !');
+            }
+        } elseif (isset($post['comInputText'])) {
+            $textCom = $post['comInputText'];
+        }
+        
+        if (!empty($textCom)) {
             $commentManager = new CommentManager();
-            $commentManager->addComment($post['comInputText'], $UserConnected->getIduser(), $idPost, $idComParent);
+            $commentManager->addComment($textCom, $UserConnected->getIduser(), $idPost, $idComParent);
             $nbcom = $commentManager->getCommentNb($idPost);
             $comments = $commentManager->getComments($idPost);
             
@@ -31,6 +45,7 @@ Class CommentController extends PostController
         } else {
             $this->post($idPost);
         }
+        
     }
     
     /*********************************** 

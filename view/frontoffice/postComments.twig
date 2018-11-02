@@ -1,6 +1,33 @@
 {% extends 'post.twig' %}
 
 {% block comments %}
+    <!-- MODAL reponse comments -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="respComModal" aria-labelledby="respComModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Repondre à un commentaire.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="respComForm" method="POST" action="index.php?p=sendCommentForm&i={{ post.idpost }}#comments">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="respComInputText">Votre reponse :</label>
+                    <input type="text" class="form-control" name="respComInputText" id="respComInputText" placeholder="Saisissez votre reponse">
+                    <input type="hidden" class="form-control" name="respComInputIdCom" id="respComInputIdCom" value="0">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>        
+            
     <div class='card' id="comments">
         {% block message %}{% endblock message %}
         <div class="card-body">
@@ -8,10 +35,20 @@
 
         {% for parentComment in comments.parent %}
             <hr>
-            <p class="card-subtitle text-muted">
-                le : {{ parentComment.datecom }}<br>
-                par : {{ parentComment.author }}
-            </p>
+            <div class="row">
+                <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
+                {% if userObject.idrole != 0 %}
+                    <div class="col-1">
+                        <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em></button>
+                    </div>
+                {% endif %}
+                <div class="col">
+                    <p class="card-subtitle text-muted">
+                        le : {{ parentComment.datecom }}<br>
+                        par : {{ parentComment.author }}
+                    </p>
+                </div>
+            </div>
             <p>{{ parentComment.textcom }}</p>
             {% for childComment in comments.child[parentComment.idcom] %}
                 <p class="child_com card-subtitle text-muted">
@@ -20,7 +57,6 @@
                 </p>
                 <p class="child_com">{{ childComment.textcom }}</p>
             {% endfor %}
-                <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
         {% endfor %}
         </div>
     </div>
