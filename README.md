@@ -20,8 +20,9 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.017 - 31/10/2018 11h45
+v0.017 - 31/10/2018 12h30
 - Overlay liens sur listpost
+- Responses aux commentaires implementé/testé/ok
 
 v0.016 - 31/10/2018 17h
 - AddComment fonctionne (MAJ MVC comments)
