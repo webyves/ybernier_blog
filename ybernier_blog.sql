@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  jeu. 11 oct. 2018 à 12:24
+-- Généré le :  sam. 03 nov. 2018 à 11:49
 -- Version du serveur :  5.7.17
 -- Version de PHP :  7.1.3
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `ybernier_blog`
 --
+CREATE DATABASE IF NOT EXISTS `ybernier_blog` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `ybernier_blog`;
 
 -- --------------------------------------------------------
 
@@ -37,6 +39,23 @@ CREATE TABLE `yb_blog_comments` (
   `id_com_parent` int(10) UNSIGNED DEFAULT NULL,
   `id_state` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `yb_blog_comments`
+--
+
+INSERT INTO `yb_blog_comments` (`id_com`, `text`, `date`, `id_post`, `id_user`, `id_com_parent`, `id_state`) VALUES
+(1, 'TEST Commentaire N°1', '2018-10-24 10:37:00', 3, 2, NULL, 1),
+(2, 'Commentaire N°2', '2018-10-24 11:00:00', 3, 2, NULL, 1),
+(3, 'Response Commentaire N°3', '2018-10-24 12:00:00', 3, 2, 1, 1),
+(4, 'Response 2 Commentaire N°4', '2018-10-31 12:00:00', 3, 2, 1, 1),
+(5, 'Response 3 Commentaire N°5', '2018-10-31 16:00:00', 3, 2, 2, 1),
+(6, 'Commentaire pôür Episode 2', '2018-10-31 17:05:46', 2, 6, NULL, 1),
+(7, 'Commentaire test avec balise bizare et NULL en param', '2018-10-31 17:19:59', 4, 6, NULL, 1),
+(8, 'test nouveau commentaire', '2018-11-02 12:35:21', 3, 6, NULL, 1),
+(9, 'reponse au nouveau commentaire', '2018-11-02 12:35:47', 3, 6, 8, 1),
+(10, 'repondre ancien commentaire', '2018-11-02 12:36:07', 3, 6, 2, 1),
+(11, 'nouveau nouveau commentaire aprés reponses', '2018-11-02 12:36:42', 3, 6, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -79,9 +98,10 @@ CREATE TABLE `yb_blog_posts` (
 --
 
 INSERT INTO `yb_blog_posts` (`id_post`, `date`, `title`, `content`, `image_top`, `id_state`, `id_cat`, `id_user`) VALUES
-(1, '2018-10-09 14:36:00', 'Hello wolrd', 'et bien voilà le premier post\r\nHELLO WORLD', 'episode_1.jpg', 1, 1, 2),
-(2, '2018-10-09 15:00:00', 'POST 2', 'POST 2', 'episode_2.jpg', 2, 1, 2),
-(3, '2018-10-09 14:45:00', 'POST 3', 'le 3eme Post', 'episode_3.jpg', 1, 1, 2);
+(1, '2018-10-09 14:36:00', 'Hello world', 'et bien voilà le premier post\r\nHELLO WORLD', 'avatar.png', 1, 1, 2),
+(2, '2018-10-09 14:40:00', 'Episode 2', 'POST 2', 'episode_2.jpg', 1, 2, 2),
+(3, '2018-10-09 14:45:00', 'Episode 3', 'The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother\'s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.', 'episode_3.jpg', 1, 2, 2),
+(4, '2018-10-09 14:37:00', 'Episode 1', 'Post 4 test categories et menus', 'episode_1.jpg', 1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -99,7 +119,8 @@ CREATE TABLE `yb_blog_post_category` (
 --
 
 INSERT INTO `yb_blog_post_category` (`id_cat`, `text`) VALUES
-(1, 'Génerale');
+(1, 'Génerale'),
+(2, 'Star Wars');
 
 -- --------------------------------------------------------
 
@@ -132,6 +153,7 @@ CREATE TABLE `yb_blog_users` (
   `last_name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `cookie_id` varchar(250) NOT NULL,
   `id_role` int(10) UNSIGNED NOT NULL,
   `id_state` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -140,8 +162,12 @@ CREATE TABLE `yb_blog_users` (
 -- Déchargement des données de la table `yb_blog_users`
 --
 
-INSERT INTO `yb_blog_users` (`id_user`, `first_name`, `last_name`, `email`, `password`, `id_role`, `id_state`) VALUES
-(2, 'Yves', 'BERNIER', 'webyvves@hotmail.com', 'aCrypter', 1, 1);
+INSERT INTO `yb_blog_users` (`id_user`, `first_name`, `last_name`, `email`, `password`, `cookie_id`, `id_role`, `id_state`) VALUES
+(2, 'Yves', 'BERNIER', 'webyves@hotmail.com', '$2y$10$afl440xdqsFic4WLrc/0aOkPFwsvb9woLAfa3wY/kGR8gtVs/2Kw.', '1', 1, 1),
+(4, 'Prenom', 'Nom', 'adresse@email.com', '$2y$10$afl440xdqsFic4WLrc/0aOkPFwsvb9woLAfa3wY/kGR8gtVs/2Kw.', '2', 4, 2),
+(5, 'Crypted', 'Boy', 'crypted@boy.fr', '$2y$10$afl440xdqsFic4WLrc/0aOkPFwsvb9woLAfa3wY/kGR8gtVs/2Kw.', '3', 4, 2),
+(6, 'Tom', 'Sawyer', 'tom@sawyer.fr', '$2y$10$FN.QB1O5yeG.49RnW8YGMuBxlAbKoqdKRjc5ZdV7QBw4y1yMLhh52', '0.90458200 1540549097', 4, 2),
+(7, 'bob', 'pouet', 'bob@pouet.com', '$2y$10$mYPIopy4iXER8NBPq91d4.oWmvJpCyBh87QSxWYwHRQ6oylOs6iYi', '$2y$10$C9Ymt1x2gbGc2qvZuCKIB.49jOInbekKTSUyhn/tqNzW8xvACNlv.', 4, 2);
 
 -- --------------------------------------------------------
 
@@ -253,7 +279,7 @@ ALTER TABLE `yb_blog_user_state`
 -- AUTO_INCREMENT pour la table `yb_blog_comments`
 --
 ALTER TABLE `yb_blog_comments`
-  MODIFY `id_com` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_com` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT pour la table `yb_blog_comment_state`
 --
@@ -263,12 +289,12 @@ ALTER TABLE `yb_blog_comment_state`
 -- AUTO_INCREMENT pour la table `yb_blog_posts`
 --
 ALTER TABLE `yb_blog_posts`
-  MODIFY `id_post` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_post` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT pour la table `yb_blog_post_category`
 --
 ALTER TABLE `yb_blog_post_category`
-  MODIFY `id_cat` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_cat` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT pour la table `yb_blog_post_state`
 --
@@ -278,7 +304,7 @@ ALTER TABLE `yb_blog_post_state`
 -- AUTO_INCREMENT pour la table `yb_blog_users`
 --
 ALTER TABLE `yb_blog_users`
-  MODIFY `id_user` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT pour la table `yb_blog_user_role`
 --
