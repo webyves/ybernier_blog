@@ -133,4 +133,34 @@ Class UserController extends PageController
         }
     }
 
+    /*********************************** 
+        Function for Admin user List
+    ***********************************/
+    public function showAdminUserList($messageTwigView = "") 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        $Manager = new UserManager();
+        $userList = $Manager->getUsers();
+        $userRoleList = $Manager->getRoleList();
+        $userStateList = $Manager->getStateList();
+        
+        echo $this->fTwig->render('backoffice/adminUsers'.$messageTwigView.'.twig', array('userList' => $userList, 'userRoleList' => $userRoleList, 'userStateList' => $userStateList));
+    }
+    
+    /*********************************** 
+        Function for Admin user modification form
+    ***********************************/
+    public function modifUser($post) 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $Manager = new UserManager();
+        // bla bla bla DB modif
+        
+        $this->showAdminUserList('Confirm');
+    }
+    
+    
 }

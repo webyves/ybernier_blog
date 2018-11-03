@@ -94,5 +94,81 @@ Class UserManager extends Manager
         $req = $db->prepare($reqPost);
         $req->execute($param);
     }
+
+    /*********************************** 
+        Function to get all users in DB
+    ***********************************/
+    public function getUsers()
+    {
+        $db = $this->dbConnect();
+        $reqPost = 'SELECT 
+                    U.id_user as iduser,
+                    U.first_name as firstname,
+                    U.last_name as lastname,
+                    U.email,
+                    U.password,
+                    U.cookie_id as cookieid,
+                    
+                    U.id_role as idrole,
+                    UR.text as role,
+                    
+                    U.id_state as idstate,
+                    US.text as state
+                    
+                FROM yb_blog_users as U
+                LEFT JOIN yb_blog_user_role as UR ON (U.id_role = UR.id_role)
+                LEFT JOIN yb_blog_user_state as US ON (U.id_state = US.id_state)
+                ORDER BY U.id_state DESC, U.id_role DESC, U.last_name ASC, U.first_name ASC, U.id_user ASC';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        $tab = array();
+        foreach ($res as $user) {
+            $obj = new User($user);
+            array_push($tab,$obj);
+        }
+
+        if (empty($tab)) {
+            throw new \Exception('Aucun Utilisateurs !!');
+        } else {
+            return $tab;
+        }
+    }
+    
+    /*********************************** 
+        Function to get all user's States in DB
+    ***********************************/
+    public function getStateList()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+                SELECT 
+                    US.id_state as idstate,
+                    US.text as state
+                FROM yb_blog_user_state as US
+                ORDER BY US.text';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        return $res;
+    }
+    
+    /*********************************** 
+        Function to get all user's roles in DB
+    ***********************************/
+    public function getRoleList()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+                SELECT 
+                    UR.id_role as idrole,
+                    UR.text as role
+                FROM yb_blog_user_role as UR
+                ORDER BY UR.text';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        return $res;
+    }
     
 }

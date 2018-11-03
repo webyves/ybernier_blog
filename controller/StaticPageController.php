@@ -90,7 +90,6 @@ Class StaticPageController extends PageController
                 $authRole = array(1,2);
                 break;
             case 'adminCatPosts':
-            case 'adminUsers':
                 $authRole = array(1);
                 break;
             default:

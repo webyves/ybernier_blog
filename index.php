@@ -106,11 +106,15 @@ try {
             case 'adminPosts':
             case 'adminCatPosts':
             case 'adminComments':
-            case 'adminUsers':
                 $controller = new StaticPageController();
                 $controller->showAdminPage($_GET['p']);
                 break;
-                
+            case 'adminUsers':
+                $UserController->showAdminUserList();
+                break;
+            case 'sendAdminUserModifForm':
+                $UserController->modifUser($_POST);
+                break;
             default:
                 throw new Exception('Page invalide !');
                 break;
