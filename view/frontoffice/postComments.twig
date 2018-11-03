@@ -1,0 +1,74 @@
+{% extends 'post.twig' %}
+
+{% block comments %}
+    <!-- MODAL reponse comments -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="respComModal" aria-labelledby="respComModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Repondre à un commentaire.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="respComForm" method="POST" action="index.php?p=sendCommentForm&i={{ post.idpost }}#comments">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="respComInputText">Votre reponse :</label>
+                    <input type="text" class="form-control" name="respComInputText" id="respComInputText" placeholder="Saisissez votre reponse">
+                    <input type="hidden" class="form-control" name="respComInputIdCom" id="respComInputIdCom" value="0">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>        
+            
+    <div class='card' id="comments">
+        {% block message %}{% endblock message %}
+        <div class="card-body">
+            <a class="card-link" href="#"><em>{{ nbcom }} Commentaires</a></em>
+
+        {% for parentComment in comments.parent %}
+            <hr>
+            <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
+            <p class="card-subtitle text-muted commentParentBack">
+                le : {{ parentComment.datecom }}<br>
+                par : {{ parentComment.author }}
+            </p>
+            <p class="commentParentBack">
+                {{ parentComment.textcom }}
+                {% if userObject.idrole != 0 %}
+                    <br>
+                    <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em> Répondre au commentaire</button>
+                {% endif %}
+            </p>
+            {% for childComment in comments.child[parentComment.idcom] %}
+                <p class="child_com card-subtitle text-muted">
+                    le : {{ childComment.datecom }}<br>
+                    par : {{ childComment.author }}
+                </p>
+                <p class="child_com">{{ childComment.textcom }}</p>
+            {% endfor %}
+        {% endfor %}
+        </div>
+    </div>
+    <!-- BLOC AJOUT COMMENTAIRE SI CONNECTER --> 
+    {% if userObject.idrole != 0 %}
+    <div class='card'>
+        <div class="card-body">
+            <form id="conexForm" method="POST" action="index.php?p=sendCommentForm&i={{ post.idpost }}#comments">
+                <div class="form-group">
+                    <label for="comInputText">Laissez un commentaire :</label>
+                    <input type="text" class="form-control" name="comInputText" id="comInputText" placeholder="Saisissez votre Commentaire">
+                </div>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock comments %}

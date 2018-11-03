@@ -1,0 +1,41 @@
+{% extends 'template.twig' %}
+
+{% block title %}
+    <title>Liste des posts by twig</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col text-center">
+            <h1>Les Derniers Posts</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for post in postList | slice(0,11) %}
+            <div class="col-sm-6 col-lg-4">
+                <div class='card'>
+                    <a href="index.php?p=post&i={{ post.idpost }}" class="news_img_link">
+                        <img class="card-img-top news_img" src="public/img/{{ post.imagetop }}" alt="image post {{ post.idpost }}" title="image post {{ post.idpost }}">
+                        <div class="overlay_news_img">
+                            <div class="overlay_news_text">
+                                <em class="fas fa-search-plus"></em>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-subtitle text-muted">
+                            le : {{ post.datefr }}<br>
+                            par : {{ post.author }}<br>
+                            dans : {{ post.category }}
+                        </p>
+                        <hr>
+                        <p>{{ post.smallcontent }}</p>
+                        <p class="card-subtitle text-muted"><em>{{ post.nbcom }} Commentaires</em></p>
+                        <a class="card-link" href="index.php?p=post&i={{ post.idpost }}">Lire le post</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

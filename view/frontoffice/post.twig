@@ -1,0 +1,31 @@
+{% extends 'template.twig' %}
+
+{% block title %}
+    <title>Post {{ post.idpost }} : {{ post.title }}</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col text-center">
+            <h1>{{ post.title }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class='card'>
+                <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-subtitle text-muted">
+                        le : {{ post.datefr }}<br>
+                        par : {{ post.author }}<br>
+                        dans : {{ post.category }}
+                    </p>
+                    <hr>
+                    <p>{{ post.content }}</p>
+                </div>
+            </div>
+            {% block comments %}{% endblock comments %}
+        </div>
+    </div>
+{% endblock content %}

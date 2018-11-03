@@ -1,0 +1,58 @@
+{% extends 'template.twig' %}
+
+{% block title %}
+    <title>Inscription</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col text-center">
+            <h1>Vous souhaitez vous incrire ?</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Info !</h4>
+                <p>
+                    Nous informerons les administrateur de votre inscription, <br>
+                    cette derniere sera soumise à validation,<br> 
+                    et vous serez informer de sa validation grace a votre adresse mail.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form id="inscripForm" method="POST" action="index.php?p=sendInscriptionForm">
+                <div class="form-group">
+                    <label for="inscripFirstname">Prénom :</label>
+                    <input type="text" class="form-control" name="inscripFirstname" id="inscripFirstname" placeholder="Saisissez votre Prénom">
+                </div>
+                <div class="form-group">
+                    <label for="inscripLastname">Nom :</label>
+                    <input type="text" class="form-control" name="inscripLastname" id="inscripLastname" placeholder="Saisissez votre Nom">
+                </div>
+                <div class="form-group">
+                    <label for="inscripEmail">Adresse eMail :</label>
+                    <input type="email" class="form-control" name="inscripEmail" id="inscripEmail" placeholder="Saisissez votre eMail">
+                    <small id="emailHelp" class="form-text text-muted">
+                        Cet eMail sera votre identifiant unique.<br>
+                        Votre adresse eMail ne sera jamais utiliser à des fins commerciales.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="inscripPassword">Mot de Passe :</label>
+                    <input type="password" class="form-control" name="inscripPassword" id="inscripPassword" placeholder="Saisissez votre mot de passe">
+                </div>
+                <div class="form-group">
+                    <label for="inscripPasswordVerif">Mot de Passe (verification) :</label>
+                    <input type="password" class="form-control" name="inscripPasswordVerif" id="inscripPasswordVerif" placeholder="Saisissez votre mot de passe">
+                </div>
+                <a href="index.php" class="btn btn-danger">Annuler</a>
+                <button type="submit" class="btn btn-success">S'inscrire</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}

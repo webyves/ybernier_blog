@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col">
+        <h4>Liste des posts</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {% for postListMenuCatName, postListMenuItems in postListMenu %}
+        <h6>{{ postListMenuCatName }}</h6>
+            <ul>
+            {% for postListMenuItem in postListMenuItems | slice(0,4) %}
+                <li><a href="index.php?p=post&i={{ postListMenuItem.idpost }}">{{ postListMenuItem.title }}</a></li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+</div>

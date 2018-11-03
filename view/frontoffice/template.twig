@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        {% block title %}{% endblock title %}
+        
+        <!-- libraries CSS -->
+        <link href="vendor/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet" />
+        <!-- yBernier css -->
+        <link href="public/css/main.css" rel="stylesheet" /> 
+    </head>
+        
+    <body>
+        {% if userObject.idrole == 0 %}
+            <!-- MODAL Login / Inscription -->
+            <div class="modal fade" tabindex="-1" role="dialog" id="loginModal" aria-labelledby="loginModal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Connexion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form id="conexForm" method="POST" action="index.php">
+                      <div class="modal-body">
+                          <div class="form-group">
+                            <label for="conexInputEmail">Adresse eMail :</label>
+                            <input type="email" class="form-control" name="conexEmail" id="conexEmail" placeholder="Saisissez votre eMail">
+                          </div>
+                          <div class="form-group">
+                            <label for="conexInputPassword">Mot de Passe :</label>
+                            <input type="password" class="form-control" name="conexInputPassword" id="conexInputPassword" placeholder="Saisissez votre mot de passe">
+                          </div>
+                          <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" name="conexChkbxRemember" id="conexChkbxRemember">
+                            <label class="form-check-label" for="conexChkbxRemember">Se souvenir de moi</label>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="index.php?p=inscription">pour vous inscrire cliquez ici.</a>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-success">Se Connecter</button>
+                      </div>
+                  </form>
+                </div>
+              </div>
+            </div>            
+            {% set textLoginBtn, textLoginTarget = 'Connexion', 'loginModal' %}
+        {% else %}        
+            <!-- MODAL Logout -->
+            <div class="modal fade" tabindex="-1" role="dialog" id="logoutModal" aria-labelledby="logoutModal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Déconnexion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                      <div class="modal-body">
+                        <p>Voulez vous vraiment vous déconnecter ?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+                        <a href="index.php?p=logout" class="btn btn-danger">Se Déconnecter</a>
+                      </div>
+                </div>
+              </div>
+            </div>            
+            {% set textLoginBtn, textLoginTarget = 'Déconnexion', 'logoutModal' %}
+        {% endif %}
+        
+        
+        <!-- HEADER -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="index.php">
+                <img src="public/img/avatar_head.png" width="45" height="45" alt="avatar_head"> yBernier Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar ml-auto">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
+                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
+                        <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
+                        <div class="nav-item d-block d-md-none">
+                            {% include 'leftBar.twig' with postListMenu %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>    
+        
+        <!-- BODY -->
+        <div class="container" id='main_bloc'>
+            <div class="row">
+                <div class="col-md-9">
+                    {% block contentMessage %}{% endblock contentMessage %}
+                    {% block content %}{% endblock content %}
+                </div>
+                <div class="d-none d-sm-block col-md-3">
+                    {% include 'leftBar.twig' with postListMenu %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER-->
+        <footer class="navbar navbar-expand-lg navbar-dark bg-dark" id='footer_bloc'>
+            <div class="navbar">
+                <div class="navbar-nav">
+                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.018 - &copy; <strong>yBernier</strong></a>
+                </div>
+            </div>
+            <div class="navbar ml-auto">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="index.php?p=mentions">Mentions legales</a>
+                    <a class="nav-item nav-link" href="index.php?p=confidentialite">Politiques de confidentialités</a>
+                    {% block footmenu %}{% endblock footmenu %}
+                </div>
+            </div>
+            <span class="navbar-text">
+                <a class="" href="https://github.com/webyves"><em class="fab fa-git-square"></em></a>
+                <a class="" href="https://www.linkedin.com/in/yves-bernier-004087167/"><em class="fab fa-linkedin"></em></a>
+                <a class="" href="#"><em class="fab fa-facebook-square"></em></a>
+                <a class="" href="#"><em class="fab fa-twitter-square"></em></a>
+                <a class="" href="#"><em class="fab fa-instagram"></em></a>
+            </span>
+        </footer>    
+        
+        
+        <!-- libraries JS -->
+        <script src="vendor/components/jquery/jquery.min.js"></script>
+        <script src="vendor/components/bootstrap/js/bootstrap.min.js"></script>
+        {% block libJS %}{% endblock libJS %}
+        <!-- yBernier js -->
+        <script src="public/js/main.js" rel="stylesheet"></script> 
+    </body>
+</html>
