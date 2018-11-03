@@ -15,7 +15,7 @@ Autoloader::register();
 
 //TWIG
 require_once ('vendor/autoload.php');
-$loader = new Twig_Loader_Filesystem('view/frontoffice');
+$loader = new Twig_Loader_Filesystem('view');
 $twig = new Twig_Environment($loader, array(
     'cache' => false, // 'view/frontend/cache',
     'debug' => true,
@@ -101,8 +101,16 @@ try {
                 $postController->listPosts();
                 break;
             // BACK OFFICE
-
-            
+            case 'admin':
+            case 'adminAddPost':
+            case 'adminPosts':
+            case 'adminCatPosts':
+            case 'adminComments':
+            case 'adminUsers':
+                $controller = new StaticPageController();
+                $controller->showAdminPage($_GET['p']);
+                break;
+                
             default:
                 throw new Exception('Page invalide !');
                 break;

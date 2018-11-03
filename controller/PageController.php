@@ -40,4 +40,15 @@ Class PageController
         $this->fTwig = $twig;
     }
     
+    
+    /*********************************** 
+        Function to check access to page
+            check if User Role is admin or redacteur by default
+    ***********************************/
+    public function checkAccessByRole($objUser, $idRole = array(1,2))
+    {
+        if (!in_array($objUser->getIdrole(), $idRole))
+            throw new \Exception('Utilisateur non autorisé !');
+    }
+    
 }

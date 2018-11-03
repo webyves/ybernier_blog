@@ -127,9 +127,9 @@ Class UserController extends PageController
                 );
             $Manager = new UserManager();
             $Manager->addUser($userInfo);
-            echo $this->fTwig->render('inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
         } else {
-            echo $this->fTwig->render('inscriptionError.twig', array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/inscriptionError.twig', array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu));
         }
     }
 
