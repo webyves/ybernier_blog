@@ -33,7 +33,7 @@ Class Comment
         }
     }
 
-    /* get posts information bloc of functions */
+    /* get comments information bloc of functions */
     public function getIdcom()
     {
        return $this->idcom;

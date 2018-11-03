@@ -7,12 +7,9 @@
         <!-- libraries CSS -->
         <link href="vendor/components/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-        {% block csslib %}{% endblock csslib %}
-        
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet" />
-
         <!-- yBernier css -->
         <link href="public/css/main.css" rel="stylesheet" /> 
     </head>
@@ -119,7 +116,7 @@
         <footer class="navbar navbar-expand-lg navbar-dark bg-dark" id='footer_bloc'>
             <div class="navbar">
                 <div class="navbar-nav">
-                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.017 - &copy; <strong>yBernier</strong></a>
+                <a class="nav-item nav-link" href="https://github.com/webyves/ybernier_blog">V0.018 - &copy; <strong>yBernier</strong></a>
                 </div>
             </div>
             <div class="navbar ml-auto">
@@ -142,21 +139,7 @@
         <!-- libraries JS -->
         <script src="vendor/components/jquery/jquery.min.js"></script>
         <script src="vendor/components/bootstrap/js/bootstrap.min.js"></script>
-        {% block jslib %}{% endblock jslib %}
-        <!-- Summernote CSS JS -->
-        <!-- inutile dans le frontend
-        <link href="vendor/summernote/summernote/dist/summernote-bs4.css" rel="stylesheet" /> 
-        <script src="vendor/summernote/summernote/dist/summernote-bs4.min.js"></script>
-        <script src="vendor/summernote/summernote/dist/lang/summernote-fr-FR.min.js"></script>
-        <script>
-            $(document).ready(function() {
-              $('#summernote').summernote({
-                lang: 'fr-FR'
-              });
-            });
-        </script>
-        -->
-        
+        {% block libJS %}{% endblock libJS %}
         <!-- yBernier js -->
         <script src="public/js/main.js" rel="stylesheet"></script> 
     </body>

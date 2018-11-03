@@ -47,20 +47,4 @@ Class CommentController extends PostController
         }
         
     }
-    
-    /*********************************** 
-        Render All Comments  
-    ***********************************/
-    public function listComments()
-    {
-        
-    }
-    
-    /*********************************** 
-        Render 1 specific Comment  
-    ***********************************/
-    public function comment($idComment)
-    {
-
-    }
 }

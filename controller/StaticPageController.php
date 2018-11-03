@@ -33,31 +33,50 @@ Class StaticPageController extends PageController
         if (!empty($page)) {
             echo $this->fTwig->render($page.'.twig', array('postListMenu' => $this->postListMenu));
         } else {
-            throw new Exception('Page introuvable !');
+            throw new \Exception('Page introuvable !');
         }
     }    
     
     /*********************************** 
         Function For Contact Form treatment 
+            CHECK CAPTCHA
             Make correct infos array
             Send to Manager for sending mail
             Render Confirmation Page
     ***********************************/
     public function contact($post)
     {
-        $tabInfo = array( 
-                        'fromFirstname' => $post['contactFirstname'],
-                        'fromLastname' => $post['contactLastname'],
-                        'fromEmail' => $post['contactEmail'],
-                        'toEmail' => "webyves@hotmail.com",             // Put your Administrator email
-                        'messageTxt' => $post['contactMessage'],
-                        'messageHtml' => '',                            // Empty from Contact form page
-                        'subject' => $post['contactSubject']                        
-                    );
-        $Manager = new Manager();
-        $Manager->sendMail($tabInfo);
+        // check google reCAPTCHA V2
+        $secret = "6LfhH2kUAAAAAKLIzyNxVbfvHVuTNZ7RU3EwYeXJ";
+        $response = $_POST['g-recaptcha-response'];
+        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $api_url = "https://www.google.com/recaptcha/api/siteverify?secret=" 
+            . $secret
+            . "&response=" . $response
+            . "&remoteip=" . $remoteip ;
+        $decode = json_decode(file_get_contents($api_url), true);
         
-        echo $this->fTwig->render('contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+        if ($decode['success'] == true) {
+            // it's Human
+            $tabInfo = array( 
+                            'fromFirstname' => $post['contactFirstname'],
+                            'fromLastname' => $post['contactLastname'],
+                            'fromEmail' => $post['contactEmail'],
+                            'toEmail' => "webyves@hotmail.com",             // Put your Administrator email
+                            'messageTxt' => $post['contactMessage'],
+                            'messageHtml' => '',                            // Empty from Contact form page
+                            'subject' => $post['contactSubject']                        
+                        );
+            $Manager = new Manager();
+            $Manager->sendMail($tabInfo);
+            
+            echo $this->fTwig->render('contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+        } else {
+            // it's Robot
+            throw new \Exception('Erreur d\'identification');
+        }
+        
+        
     }    
     
     

@@ -22,7 +22,7 @@ $twig = new Twig_Environment($loader, array(
 ));
 $twig->addExtension(new Twig_Extension_Debug());
 
-//SESSION INIT !!
+//SESSION INIT
 session_start();
 
 // CONNEXION
@@ -44,14 +44,13 @@ if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
     }
 }
 $twig->addGlobal('userObject', $UserConnected);
-    // $controller = new StaticPageController();
-    // $controller->debugPage($_POST);
 
     
 //Router
 try {
     if (isset($_GET['p'])) {
         switch ($_GET['p']) {
+            // FRONT OFFICE
             case 'post':
                 if (isset($_GET['i']) && is_numeric($_GET['i'])) {
                     if ($_GET['i'] < 1) {
@@ -101,7 +100,9 @@ try {
                 $postController = new PostController();
                 $postController->listPosts();
                 break;
-                    
+            // BACK OFFICE
+
+            
             default:
                 throw new Exception('Page invalide !');
                 break;

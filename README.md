@@ -20,6 +20,11 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.018 - 21/11/2018 12h
+- Correction possible erreur id post
+- integration CAPTCHA sur formulaire
+- epurage des fichiers (suppression partie et commentaires inutiles/debug)
+
 v0.017 - 31/10/2018 12h30
 - Overlay liens sur listpost
 - Responses aux commentaires implementé/testé/ok

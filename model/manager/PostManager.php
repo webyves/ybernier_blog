@@ -60,16 +60,15 @@ Class PostManager extends Manager
         $req->execute();
         $res = $req->fetchall();
 
+        $tab = array();
         if ($mode == 'full_list') {
             // for post list page
-            $tab = array();
             foreach ($res as $res_post) {
                 $obj = new Post($res_post);
                 array_push($tab,$obj);
             }
         } elseif ($mode == 'menu') {
             // for leftbar Menu
-            $tab = array();
             $n=0;
             foreach ($res as $res_post) {
                 $n++;
@@ -77,8 +76,11 @@ Class PostManager extends Manager
                 $tab[$res_post['category']][$n] = $obj;
             }
         }
-        
-        return $tab;
+        if (empty($tab)) {
+            throw new \Exception('Aucun posts disponibles');
+        } else {
+            return $tab;
+        }
     }
     
     /*********************************** 
@@ -105,9 +107,13 @@ Class PostManager extends Manager
         $req->bindValue('id_post', $idPost, \PDO::PARAM_INT);
         $req->execute();
         $res = $req->fetch();
-        $obj = new Post($res);
-
-        return $obj;
+        
+        if (empty($res)) {
+            throw new \Exception('Post Inéxistant !');
+        } else {
+            $obj = new Post($res);
+            return $obj;
+        }
     }
     
 }
