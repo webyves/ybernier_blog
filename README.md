@@ -20,6 +20,11 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.101 - 3/11/2018 16h
+- Debut de l'admin.
+- Caneva de pages admin
+- MAJ Views routeur et Twig pour pages admin
+
 v0.018 - 3/11/2018 12h
 - Correction possible erreur id post
 - integration CAPTCHA sur formulaire
