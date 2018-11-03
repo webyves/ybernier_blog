@@ -1,0 +1,55 @@
+{% extends 'backoffice/template.twig' %}
+
+{% block title %}
+    <title>Accueil Administration</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col text-center">
+            <h1>BIENVENUE SUR L'ADMIN</h1>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminAddPost">
+                    <em class="fas fa-pen-nib fa-5x"></em>
+                    <br><small class="text-muted">Ecrire un nouveau Post</small>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminPosts">
+                    <em class="fas fa-wrench fa-5x"></em>
+                    <br><small class="text-muted">Gérer les Posts</small>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminCatPosts">
+                    <em class="fas fa-list-ol fa-5x"></em>
+                    <br><small class="text-muted">Gérer les Categories de Posts</small>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminComments">
+                    <em class="fas fa-glasses fa-5x"></em>
+                    <br><small class="text-muted">Gérer les Commentaires</small>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminUsers">
+                    <em class="fas fa-address-book fa-5x"></em>
+                    <br><small class="text-muted">Gérer les Utilisateurs</small>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

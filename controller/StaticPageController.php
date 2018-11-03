@@ -14,7 +14,7 @@ Class StaticPageController extends PageController
     ***********************************/
     public function debugPage($varForDump, $varName='varName')
     {
-        echo $this->fTwig->render('debug.twig', array('varName' => $varName, 'forDump' => $varForDump));
+        echo $this->fTwig->render('frontoffice/debug.twig', array('varName' => $varName, 'forDump' => $varForDump));
     }
 
     /*********************************** 
@@ -22,7 +22,7 @@ Class StaticPageController extends PageController
     ***********************************/
     public function errorPage($errorText)
     {
-        echo $this->fTwig->render('error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
+        echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
     /*********************************** 
@@ -31,11 +31,25 @@ Class StaticPageController extends PageController
     public function showPage($page = '')
     {
         if (!empty($page)) {
-            echo $this->fTwig->render($page.'.twig', array('postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
         } else {
             throw new \Exception('Page introuvable !');
         }
     }    
+    
+    /*********************************** 
+        Generic Render Admin Page 
+    ***********************************/
+    public function showAdminPage($page = '')
+    {
+        $this->checkAccessByRole($_SESSION['userObject']);
+        if (!empty($page)) {
+            echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
+        } else {
+            throw new \Exception('Page introuvable !');
+        }
+    }    
+    
     
     /*********************************** 
         Function For Contact Form treatment 
@@ -70,7 +84,7 @@ Class StaticPageController extends PageController
             $Manager = new Manager();
             $Manager->sendMail($tabInfo);
             
-            echo $this->fTwig->render('contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
         } else {
             // it's Robot
             throw new \Exception('Erreur d\'identification');
