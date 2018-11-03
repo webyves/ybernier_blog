@@ -24,6 +24,10 @@ a:hover {
 	color: rgba(221, 201, 136, 1);
     text-decoration: none;
 }
+.commentParentBack {
+    background-color:rgba(206, 178, 82, .2);
+    padding:5px;
+}
 /********************************************
 LISTE POST & POST (override bootstrap)
 ********************************************/

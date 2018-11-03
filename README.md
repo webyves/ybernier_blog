@@ -24,6 +24,7 @@ v0.018 - 3/11/2018 12h
 - Correction possible erreur id post
 - integration CAPTCHA sur formulaire
 - epurage des fichiers (suppression partie et commentaires inutiles/debug)
+- correction design responsive (leftbar dans menu et meilleur visuel comments).
 
 v0.017 - 2/11/2018 12h30
 - Overlay liens sur listpost

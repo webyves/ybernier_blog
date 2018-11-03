@@ -93,7 +93,9 @@
                         <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
                         <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
                         <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
-                        {% block navmenu %}{% endblock navmenu %}
+                        <div class="nav-item d-block d-md-none">
+                            {% include 'leftBar.twig' with postListMenu %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,11 +104,11 @@
         <!-- BODY -->
         <div class="container" id='main_bloc'>
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-md-9">
                     {% block contentMessage %}{% endblock contentMessage %}
                     {% block content %}{% endblock content %}
                 </div>
-                <div class="col-sm-3">
+                <div class="d-none d-sm-block col-md-3">
                     {% include 'leftBar.twig' with postListMenu %}
                 </div>
             </div>

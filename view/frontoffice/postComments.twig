@@ -35,21 +35,18 @@
 
         {% for parentComment in comments.parent %}
             <hr>
-            <div class="row">
-                <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
+            <!-- BLOC REPONDRE COMMENTAIRE SI CONNECTER --> 
+            <p class="card-subtitle text-muted commentParentBack">
+                le : {{ parentComment.datecom }}<br>
+                par : {{ parentComment.author }}
+            </p>
+            <p class="commentParentBack">
+                {{ parentComment.textcom }}
                 {% if userObject.idrole != 0 %}
-                    <div class="col-1">
-                        <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em></button>
-                    </div>
+                    <br>
+                    <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em> Répondre au commentaire</button>
                 {% endif %}
-                <div class="col">
-                    <p class="card-subtitle text-muted">
-                        le : {{ parentComment.datecom }}<br>
-                        par : {{ parentComment.author }}
-                    </p>
-                </div>
-            </div>
-            <p>{{ parentComment.textcom }}</p>
+            </p>
             {% for childComment in comments.child[parentComment.idcom] %}
                 <p class="child_com card-subtitle text-muted">
                     le : {{ childComment.datecom }}<br>
