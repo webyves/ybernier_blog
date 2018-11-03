@@ -11,6 +11,7 @@
         </div>
     </div>
     <div class="row text-center">
+      {% if userObject.idrole in [1,2] %}
         <div class="col">
             <div class="adminBTN">
                 <a href="index.php?p=adminAddPost">
@@ -29,17 +30,19 @@
         </div>
         <div class="col">
             <div class="adminBTN">
-                <a href="index.php?p=adminCatPosts">
-                    <em class="fas fa-list-ol fa-5x"></em>
-                    <br><small class="text-muted">Gérer les Categories de Posts</small>
-                </a>
-            </div>
-        </div>
-        <div class="col">
-            <div class="adminBTN">
                 <a href="index.php?p=adminComments">
                     <em class="fas fa-glasses fa-5x"></em>
                     <br><small class="text-muted">Gérer les Commentaires</small>
+                </a>
+            </div>
+        </div>
+      {% endif %}
+      {% if userObject.idrole in [1] %}
+        <div class="col">
+            <div class="adminBTN">
+                <a href="index.php?p=adminCatPosts">
+                    <em class="fas fa-list-ol fa-5x"></em>
+                    <br><small class="text-muted">Gérer les Categories de Posts</small>
                 </a>
             </div>
         </div>
@@ -51,5 +54,6 @@
                 </a>
             </div>
         </div>
+      {% endif %}
     </div>
 {% endblock content %}

@@ -38,20 +38,6 @@ Class StaticPageController extends PageController
     }    
     
     /*********************************** 
-        Generic Render Admin Page 
-    ***********************************/
-    public function showAdminPage($page = '')
-    {
-        $this->checkAccessByRole($_SESSION['userObject']);
-        if (!empty($page)) {
-            echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
-        } else {
-            throw new \Exception('Page introuvable !');
-        }
-    }    
-    
-    
-    /*********************************** 
         Function For Contact Form treatment 
             CHECK CAPTCHA
             Make correct infos array
@@ -89,9 +75,38 @@ Class StaticPageController extends PageController
             // it's Robot
             throw new \Exception('Erreur d\'identification');
         }
-        
-        
     }    
+    
+    /*********************************** 
+        Generic Render Admin Page 
+    ***********************************/
+    public function showAdminPage($page = '')
+    {
+        switch ($page) {
+            case 'admin':
+            case 'adminAddPost':
+            case 'adminPosts':
+            case 'adminComments':
+                $authRole = array(1,2);
+                break;
+            case 'adminCatPosts':
+            case 'adminUsers':
+                $authRole = array(1);
+                break;
+            default:
+                $authRole = array(-1);
+                break;
+        }
+        
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        if (!empty($page)) {
+            echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
+        } else {
+            throw new \Exception('Page introuvable !');
+        }
+    }    
+    
+        
     
     
     
