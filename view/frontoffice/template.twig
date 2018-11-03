@@ -91,10 +91,13 @@
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
                         <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
+                        {% if userObject.idrole in [1,2] %}
+                            <a class="nav-item nav-link" href="index.php?p=admin">Admin</a>
+                        {% endif %}
                         <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
                         <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
                         <div class="nav-item d-block d-md-none">
-                            {% include 'leftBar.twig' with postListMenu %}
+                            {% include 'frontoffice/sideBar.twig' with postListMenu %}
                         </div>
                     </div>
                 </div>
@@ -109,7 +112,7 @@
                     {% block content %}{% endblock content %}
                 </div>
                 <div class="d-none d-sm-block col-md-3">
-                    {% include 'leftBar.twig' with postListMenu %}
+                    {% include 'frontoffice/sideBar.twig' with postListMenu %}
                 </div>
             </div>
         </div>

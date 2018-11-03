@@ -41,7 +41,7 @@ Class CommentController extends PostController
             $postManager = new PostManager();
             $post = $postManager->getPost($idPost);
             
-            echo $this->fTwig->render('postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
         } else {
             $this->post($idPost);
         }
