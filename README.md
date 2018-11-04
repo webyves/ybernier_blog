@@ -26,7 +26,12 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
-v0.103 - 4/11/2018 16h30
+v0.104 - 4/11/2018 18h
+- Gestion des commentaires implementé/testé/ok
+- MAJ views back et front
+- MAJ controller
+
+v0.103 - 4/11/2018 15h45
 - Modification du Captcha => config.php
 - modification des instructions d'installation (ajout du captcha)
 - Ajout du Captcha a l'inscription

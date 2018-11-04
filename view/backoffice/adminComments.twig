@@ -5,9 +5,114 @@
 {% endblock title %}
 
 {% block content %}
+<!-- MODAL MODIFICATION COMMENT STATE -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modifCommentModal" aria-labelledby="modifCommentModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Changer l'Etat du commentaire.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="modifComForm" method="POST" action="index.php?p=sendAdminCommentModifForm">
+                <div class="modal-body">
+                    <div id="divNameCommentModal">...</div>
+                    <div class="form-group">
+                        <label for="commentModalSelEtat">Etat :</label>
+                        <select class="form-control" name="commentModalSelEtat" id="commentModalSelEtat">
+                        {% for cState in CommentStateList %}
+                            <option value="{{ cState.idstate }}">{{ cState.state }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="commentModalChkbxSendMail" id="commentModalChkbxSendMail">
+                        <label class="form-check-label" for="commentModalChkbxSendMail">Informer l'utilisateur par eMail.</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="commentModalIdUser" id="commentModalIdUser" value="0">
+                    <input type="hidden" class="form-control" name="commentModalIdCom" id="commentModalIdCom" value="0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>        
+
+
     <div class="row">
         <div class="col text-center">
             <h1>Gestion de commentaires</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Auteur</th>
+                        <th scope="col">Text</th>
+                        <th scope="col">Etat</th>
+                        <th scope="col">Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set postid = 0 %}
+                {% for parentComment in comments.parent %}
+                    {% if postid != parentComment.idpost %}
+                    <tr class="table-primary text-dark">
+                        <th colspan='6' class="text-center">Post {{ parentComment.idpost }}</th>
+                    </tr>
+                    {% endif %}
+                    <tr class="commentParentBack">
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" 
+                                    class="btn btn-sm btn-warning btn_action_mComment" 
+                                    title="Validation du commentaire" 
+                                    data-iduser="{{ parentComment.iduser }}" 
+                                    data-idcom="{{ parentComment.idcom }}" 
+                                    data-idstate="{{ parentComment.idstate }}">
+                                        <em class="fas fa-clipboard-check"></em>
+                                </button>
+                            </div>
+                        </td>
+                        <td id="C_D_{{ parentComment.idcom }}">{{ parentComment.datecom }}</td>
+                        <td id="C_A_{{ parentComment.idcom }}">{{ parentComment.author }}</td>
+                        <td id="C_T_{{ parentComment.idcom }}">{{ parentComment.textcom }}</td>
+                        <td id="C_E_{{ parentComment.idcom }}" {% if parentComment.idstate == 2 %}class="text-danger"{% endif %}>{{ parentComment.state }}</td>
+                        <td>{{ parentComment.idcom }}</td>
+                    </tr>
+                    {% for childComment in comments.child[parentComment.idcom] %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" 
+                                        class="btn btn-sm btn-warning btn_action_mComment" 
+                                        title="Validation du commentaire" 
+                                        data-iduser="{{ childComment.iduser }}" 
+                                        data-idcom="{{ childComment.idcom }}" 
+                                        data-idstate="{{ childComment.idstate }}">
+                                            <em class="fas fa-clipboard-check"></em>
+                                    </button>
+                                </div>
+                            </td>
+                            <td id="C_D_{{ childComment.idcom }}">{{ childComment.datecom }}</td>
+                            <td id="C_A_{{ childComment.idcom }}">{{ childComment.author }}</td>
+                            <td id="C_T_{{ childComment.idcom }}">{{ childComment.textcom }}</td>
+                            <td id="C_E_{{ childComment.idcom }}" {% if childComment.idstate == 2 %}class="text-danger"{% endif %}>{{ childComment.state }}</td>
+                            <td>{{ childComment.idcom }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% set postid = parentComment.idpost %}
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock content %}

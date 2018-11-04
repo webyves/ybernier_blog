@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     /****************************************
         Function for modification user
-        put goog value in modal
+        put value in modal
     ****************************************/
     $('.btn_action_mUser').on('click', function(){
         var id_user = $(this).data("iduser");
@@ -18,7 +18,17 @@ $(document).ready(function() {
         $('#modifUserModal').modal('show');
     });
 
-
+    /****************************************
+        Function for modification comment
+        put value in modal
+    ****************************************/
+    $('.btn_action_mComment').on('click', function(){
+        $('#commentModalIdUser').val($(this).data("iduser"));
+        $('#commentModalIdCom').val($(this).data("idcom"));
+        $('#commentModalSelEtat').val($(this).data("idstate"));
+        $('#divNameCommentModal').html("<strong>Commentaire id: " + $(this).data("idcom") + "</strong>");
+        $('#modifCommentModal').modal('show');
+    });
 
 
 

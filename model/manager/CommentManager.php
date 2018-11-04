@@ -38,7 +38,7 @@ Class CommentManager extends Manager
         if (!is_numeric($idState)) {
             throw new \Exception('ERROR GET STATE COMMENTS');
         }
-        if (is_numeric($idPost) && $idPost> 0) {
+        if (is_numeric($idPost) && $idPost > 0) {
             $whereVar = " AND C.id_post = :id_post";
             $param[':id_post'] = $idPost;
         } elseif (is_numeric($idComment) && $idComment > 0){
@@ -57,11 +57,13 @@ Class CommentManager extends Manager
                 C.id_post as idpost,
                 C.id_com_parent as idcomparent,
                 C.id_state as idstate,
+                CS.text as state,
                 C.id_user as iduser,
                 CONCAT(U.first_name, " ", U.last_name) as author
                 
             FROM yb_blog_comments as C
             LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
+            LEFT JOIN yb_blog_comment_state as CS ON (C.id_state = CS.id_state)
             WHERE C.id_state = '.$idState.$whereVar.' 
             ORDER BY '.$orderReqVar.'C.date DESC ';
         $req = $db->prepare($reqPost);
@@ -95,7 +97,7 @@ Class CommentManager extends Manager
                         ':id_post' => $idPost,
                         ':id_user' => $idUser,
                         ':id_com_parent' => $idComParent,
-                        ':id_state' => 1
+                        ':id_state' => 2
         );
 
         $db = $this->dbConnect();
@@ -106,5 +108,95 @@ Class CommentManager extends Manager
         $req = $db->prepare($reqPost);
         $req->execute($param);
     }
+    
+    
+    /*********************************** 
+        Function to get All comments 
+    ***********************************/
+    public function getCommentList()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+            SELECT 
+                C.id_com as idcom,
+                C.text as textcom,
+                DATE_FORMAT(C.date, \'%d/%m/%Y à %Hh%i\') as datecom,
+                C.id_post as idpost,
+                C.id_com_parent as idcomparent,
+                C.id_state as idstate,
+                CS.text as state,
+                C.id_user as iduser,
+                CONCAT(U.first_name, " ", U.last_name) as author
+                
+            FROM yb_blog_comments as C
+            LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
+            LEFT JOIN yb_blog_comment_state as CS ON (C.id_state = CS.id_state)
+            ORDER BY C.id_post DESC, C.date DESC';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        $tabcomchild = array();
+        $tabcomparent = array();
+        foreach ($res as $res_post) {
+            if (empty($res_post['idcomparent'])) {
+                $obj = new Comment($res_post);
+                array_push($tabcomparent,$obj);
+            } else {
+                $obj = new Comment($res_post);
+                if (!isset($tabcomchild[$res_post['idcomparent']])) {
+                    $tabcomchild[$res_post['idcomparent']][0] = $obj;
+                } else {
+                    array_push($tabcomchild[$res_post['idcomparent']],$obj);
+                }
+            }
+        }
+        $tab = array('parent' => $tabcomparent, 'child' => $tabcomchild);
+        return $tab;
+    }
+    
+    /*********************************** 
+        Function to get all comment's States in DB
+    ***********************************/
+    public function getStateList()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+                SELECT 
+                    CS.id_state as idstate,
+                    CS.text as state
+                FROM yb_blog_comment_state as CS
+                ORDER BY CS.text';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        return $res;
+    }
+    
+    /*********************************** 
+        Function to update comment in DB by id_com
+    ***********************************/
+    public function updateComment($tab)
+    {
+        $reqVarUpdate = "";
+        $param = array(':id_com' => $tab['idcom']);
+        
+        if (isset($tab['idstate'])){
+            if (!empty($reqVarUpdate))
+                $reqVarUpdate .= ", ";
+            $reqVarUpdate .= "id_state = :id_state";
+            $param['id_state'] = $tab['idstate'];
+        }
 
+        $db = $this->dbConnect();
+        $reqPost = '
+                UPDATE yb_blog_comments  
+                SET '.$reqVarUpdate.' 
+                WHERE id_com = :id_com';
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de la mise à jour !!');
+    }
+    
 }

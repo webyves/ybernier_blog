@@ -15,6 +15,7 @@ Class Comment
     private $author;
     private $idcomparent;
     private $idstate;
+    private $state;
 
     public function __construct($db_post)
     {
@@ -73,6 +74,11 @@ Class Comment
        return $this->idstate;
     }
 
+    public function getState()
+    {
+       return $this->state;
+    }
+
     /* Set comments information bloc of public functions */
     public function setIdcom($value)
     {
@@ -111,6 +117,11 @@ Class Comment
     public function setIdstate($value)
     {
        $this->idstate = $value;
+    }
+    
+    public function setState($value)
+    {
+       $this->state = $value;
     }
     
 }

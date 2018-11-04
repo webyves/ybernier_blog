@@ -133,6 +133,6 @@ ADMIN PARTS CONTENT
 .adminBTN:hover {
     background-color:rgba(255, 255, 255, 1);
 }
-#divNameUserModal {
+#divNameUserModal, #divNameCommentModal {
     color: #000;
 }
