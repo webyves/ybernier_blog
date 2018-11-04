@@ -50,5 +50,24 @@ Class PageController
         if (!in_array($objUser->getIdrole(), $idRole))
             throw new \Exception('Utilisateur non autorisé !');
     }
+
+
+    /*********************************** 
+        Function to check reCaptcha v2
+    ***********************************/
+    public function checkCaptchaV2($post)
+    {
+        $secret = $GLOBALS['secretKey'];
+        $response = $post['g-recaptcha-response'];
+        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $api_url = "https://www.google.com/recaptcha/api/siteverify?secret=" 
+            . $secret
+            . "&response=" . $response
+            . "&remoteip=" . $remoteip ;
+        $decode = json_decode(file_get_contents($api_url), true);
+        
+        if ($decode['success'] != true)
+            throw new \Exception('Erreur d\'identification');
+    }
     
 }

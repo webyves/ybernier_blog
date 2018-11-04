@@ -46,35 +46,22 @@ Class StaticPageController extends PageController
     ***********************************/
     public function contact($post)
     {
-        // check google reCAPTCHA V2
-        $secret = "6LfhH2kUAAAAAKLIzyNxVbfvHVuTNZ7RU3EwYeXJ";
-        $response = $_POST['g-recaptcha-response'];
-        $remoteip = $_SERVER['REMOTE_ADDR'];
-        $api_url = "https://www.google.com/recaptcha/api/siteverify?secret=" 
-            . $secret
-            . "&response=" . $response
-            . "&remoteip=" . $remoteip ;
-        $decode = json_decode(file_get_contents($api_url), true);
+        $this->checkCaptchaV2($post);
+
+        $tabInfo = array( 
+                        'fromFirstname' => $post['contactFirstname'],
+                        'fromLastname' => $post['contactLastname'],
+                        'fromEmail' => $post['contactEmail'],
+                        'toEmail' => $GLOBALS['adminEmail'],
+                        'messageTxt' => $post['contactMessage'],
+                        'messageHtml' => '',
+                        'subject' => $post['contactSubject']                        
+                    );
+        $Manager = new Manager();
+        $Manager->sendMail($tabInfo);
         
-        if ($decode['success'] == true) {
-            // it's Human
-            $tabInfo = array( 
-                            'fromFirstname' => $post['contactFirstname'],
-                            'fromLastname' => $post['contactLastname'],
-                            'fromEmail' => $post['contactEmail'],
-                            'toEmail' => $GLOBALS['adminEmail'],
-                            'messageTxt' => $post['contactMessage'],
-                            'messageHtml' => '',
-                            'subject' => $post['contactSubject']                        
-                        );
-            $Manager = new Manager();
-            $Manager->sendMail($tabInfo);
-            
-            echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
-        } else {
-            // it's Robot
-            throw new \Exception('Erreur d\'identification');
-        }
+        echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
+
     }    
     
     /*********************************** 

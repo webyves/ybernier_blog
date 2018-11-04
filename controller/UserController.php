@@ -89,6 +89,8 @@ Class UserController extends PageController
     ***********************************/
     public function inscription($post) 
     {
+        $this->checkCaptchaV2($post);
+
         $errorMessage = "";
         foreach ($_POST as $postKey => $postValue) {
             if (empty($postValue)) {
