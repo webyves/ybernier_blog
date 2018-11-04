@@ -9,6 +9,9 @@ use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
 use \yBernier\Blog\controller\CommentController;
 
+//Configuration file
+require ('config.php');
+
 //Autoload
 require ('Autoloader.php');
 Autoloader::register();
@@ -21,33 +24,34 @@ $twig = new Twig_Environment($loader, array(
     'debug' => true,
 ));
 $twig->addExtension(new Twig_Extension_Debug());
+$twig->addGlobal('appVersion', $GLOBALS["appVersion"]);
 
 //SESSION INIT
 session_start();
 
-// CONNEXION
-if (isset($_SESSION['userObject'])) {
-    $UserConnected =  $_SESSION['userObject'];
-} else {
-    $UserConnected =  null;
-}
-$UserController = new UserController();
-if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
-    $UserConnected = $UserController->connect($_POST['conexEmail'], $_POST['conexInputPassword']);
-    if (isset($_POST['conexChkbxRemember'])) {
-        $UserController->generateUserCookie($UserConnected);
+try {
+    // CONNEXION
+    if (isset($_SESSION['userObject'])) {
+        $UserConnected =  $_SESSION['userObject'];
+    } else {
+        $UserConnected =  null;
     }
-} else {
-    if (!is_null($UserController->getCookieInfo())) {
-        $UserConnected = $UserController->getCookieInfo();
-        $UserController->generateUserCookie($UserConnected);
+    $UserController = new UserController();
+    if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
+        $UserConnected = $UserController->connect($_POST['conexEmail'], $_POST['conexInputPassword']);
+        if (isset($_POST['conexChkbxRemember'])) {
+            $UserController->generateUserCookie($UserConnected);
+        }
+    } else {
+        if (!is_null($UserController->getCookieInfo())) {
+            $UserConnected = $UserController->getCookieInfo();
+            $UserController->generateUserCookie($UserConnected);
+        }
     }
-}
-$twig->addGlobal('userObject', $UserConnected);
+    $twig->addGlobal('userObject', $UserConnected);
 
     
-//Router
-try {
+    //Router
     if (isset($_GET['p'])) {
         switch ($_GET['p']) {
             // FRONT OFFICE
@@ -100,6 +104,7 @@ try {
                 $postController = new PostController();
                 $postController->listPosts();
                 break;
+                
             // BACK OFFICE
             case 'admin':
             case 'adminAddPost':

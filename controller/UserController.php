@@ -11,11 +11,15 @@ Class UserController extends PageController
 {
     /*********************************** 
         Function to connect User 
+            Check if it's not blocked one
     ***********************************/
     public function connect($email,$pwd)
     {
         $Manager = new UserManager();
         $user = $Manager->getUser("",$email);
+        
+        if ($user->getIdstate() == 2)
+            throw new \Exception('Vous ne pouvez vous connecter car vous n\'avez pas encore été validé par un administrateur.');
         
         if (!empty($user->getPassword())) {
             if (password_verify($pwd, $user->getPassword())) {
@@ -81,6 +85,7 @@ Class UserController extends PageController
         Function for user inscription 
             check possible error
             send correct infos to user manager
+            send email to admin
     ***********************************/
     public function inscription($post) 
     {
@@ -127,6 +132,18 @@ Class UserController extends PageController
                 );
             $Manager = new UserManager();
             $Manager->addUser($userInfo);
+            
+            $tabInfo = array( 
+                    'fromFirstname' => $post['inscripFirstname'],
+                    'fromLastname' => $post['inscripLastname'],
+                    'fromEmail' => $post['inscripEmail'],
+                    'toEmail' => $GLOBALS['adminEmail'],
+                    'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$post['inscripFirstname']." ".$post['inscripLastname']." ".$post['inscripEmail'],
+                    'messageHtml' => "",
+                    'subject' => "[yBernier Blog] - Nouvelle Inscription"                         
+                );
+            $Manager-> sendMail($tabInfo);
+            
             echo $this->fTwig->render('frontoffice/inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
         } else {
             echo $this->fTwig->render('frontoffice/inscriptionError.twig', array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu));
@@ -156,11 +173,26 @@ Class UserController extends PageController
     {
         $authRole = array(1);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-        $Manager = new UserManager();
-        // bla bla bla DB modif
         
-        $this->showAdminUserList('Confirm');
+        if (is_numeric($post['userModalIdUser']) && $post['userModalIdUser'] > 0) {
+            if (is_numeric($post['userModalSelRole']) && $post['userModalSelRole'] > 0 &&
+            is_numeric($post['userModalSelEtat']) && $post['userModalSelEtat'] > 0) {
+                $Manager = new UserManager();
+                // bla bla bla DB modif
+                $tab = array (
+                    'iduser' => $post['userModalIdUser'],
+                    'idstate' => $post['userModalSelEtat'],
+                    'idrole' => $post['userModalSelRole']
+                    );
+                $Manager->updateUser($tab);
+                $this->showAdminUserList('Confirm');
+                
+            } else {
+                throw new \Exception('Valeure Incorrecte !');
+            }
+        } else {
+            throw new \Exception('Utilisateur Incorrect !');
+        }
     }
-    
     
 }

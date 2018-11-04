@@ -171,4 +171,38 @@ Class UserManager extends Manager
         return $res;
     }
     
+    /*********************************** 
+        Function to update user infos in DB by id_user
+    ***********************************/
+    public function updateUser($tab)
+    {
+        $reqVarUpdate = "";
+        $param = array(':id_user' => $tab['iduser']);
+        
+        if (isset($tab['idstate'])){
+            if (!empty($reqVarUpdate))
+                $reqVarUpdate .= ", ";
+            $reqVarUpdate .= "id_state = :id_state";
+            $param['id_state'] = $tab['idstate'];
+        }
+        if (isset($tab['idrole'])){
+            if (!empty($reqVarUpdate))
+                $reqVarUpdate .= ", ";
+            $reqVarUpdate .= "id_role = :id_role";
+            $param['id_role'] = $tab['idrole'];
+        }
+
+        $db = $this->dbConnect();
+        $reqPost = '
+                UPDATE yb_blog_users  
+                SET '.$reqVarUpdate.' 
+                WHERE id_user = :id_user';
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de la mise à jour !!');
+    }
+    
+    
 }

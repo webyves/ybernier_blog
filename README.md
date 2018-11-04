@@ -5,20 +5,29 @@ Blog dev pour cours OC
 # INSTALLATION NOTES
 
 1) cloner le repository sur votre serveur
-2) executer le fichier SQL sur votre base de donnée
-3) Modifier la fonction dbConnect() le fichier model/Manager.php comme suit :
-    - $dbUser = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
-    - $dbUserPwd = ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
-    - $dbHost = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
-    - $dbName = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
-4) acceder au frontend par le fichier index.php
-5) acceder au backend par le fichier admin.php avec les identifiant suivants : 
+2) executer le fichier SQL sur votre base de donnée pour l'importer
+3) Modifier le fichier config.php comme suit :
+    - $GLOBALS['dbUser'] = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
+    - $GLOBALS['dbUserPwd']= ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
+    - $GLOBALS['dbHost'] = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
+    - $GLOBALS['dbName'] = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
+    - $GLOBALS['adminEmail'] = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur "
+4) acceder au frontoffice par le fichier index.php
+5) acceder au backoffice identifiez vous sur le frontoffice avec les identifiant suivants : 
     - mail : admin@admin.com
     - pwd : Admin_Demo
-
+6) Conseil : 
+- Créez vous un compte que vous validerez via le backoffice 
+- puis bloqué le compte admin@admin.com
 
 
 # VERSION PATCH NOTES 
+
+v0.102 - 4/11/2018 14h15
+- Gestion des utilisateurs implementé/testé/ok
+- MAJ views back et front
+- MAJ controller
+- Creation d'un fichier config pour gerer l'installation facilement
 
 v0.101 - 3/11/2018 16h
 - Debut de l'admin.
