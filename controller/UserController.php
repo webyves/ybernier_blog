@@ -134,9 +134,9 @@ Class UserController extends PageController
             $Manager->addUser($userInfo);
             
             $tabInfo = array( 
-                    'fromFirstname' => $post['inscripFirstname'],
-                    'fromLastname' => $post['inscripLastname'],
-                    'fromEmail' => $post['inscripEmail'],
+                    'fromFirstname' =>  "Administrateur",
+                    'fromLastname' => "yBernier Blog",
+                    'fromEmail' => $GLOBALS['adminEmail'],
                     'toEmail' => $GLOBALS['adminEmail'],
                     'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$post['inscripFirstname']." ".$post['inscripLastname']." ".$post['inscripEmail'],
                     'messageHtml' => "",
@@ -178,13 +178,28 @@ Class UserController extends PageController
             if (is_numeric($post['userModalSelRole']) && $post['userModalSelRole'] > 0 &&
             is_numeric($post['userModalSelEtat']) && $post['userModalSelEtat'] > 0) {
                 $Manager = new UserManager();
-                // bla bla bla DB modif
+
                 $tab = array (
                     'iduser' => $post['userModalIdUser'],
                     'idstate' => $post['userModalSelEtat'],
                     'idrole' => $post['userModalSelRole']
                     );
                 $Manager->updateUser($tab);
+                
+                if (isset($post['userModalChkbxSendMail'])) {
+                    $user = $Manager->getUser($post['userModalIdUser']);
+                    $emailInfo = array( 
+                            'fromFirstname' => "Administrateur",
+                            'fromLastname' => "yBernier Blog",
+                            'fromEmail' => $GLOBALS['adminEmail'],
+                            'toEmail' =>  $user->getEmail(), 
+                            'messageTxt' => "Votre compte à bien été mis à jour : ".$user->getRole()." ".$user->getState(),
+                            'messageHtml' => "",
+                            'subject' => "[yBernier Blog] - Mise à jour de votre compte"                         
+                        );
+                    $Manager-> sendMail($emailInfo);
+                }
+                
                 $this->showAdminUserList('Confirm');
                 
             } else {
