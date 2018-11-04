@@ -11,7 +11,9 @@ Blog dev pour cours OC
     - $GLOBALS['dbUserPwd']= ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
     - $GLOBALS['dbHost'] = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - $GLOBALS['dbName'] = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
-    - $GLOBALS['adminEmail'] = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur "
+    - $GLOBALS['adminEmail'] = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
+    - $GLOBALS['siteKey'] = "xxxxxx"; <- remplacer avec votre site Key de captcha google v2 entre les "
+    - $GLOBALS['secretKey'] = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
 4) acceder au frontoffice par le fichier index.php
 5) acceder au backoffice identifiez vous sur le frontoffice avec les identifiant suivants : 
     - mail : admin@admin.com
@@ -19,9 +21,15 @@ Blog dev pour cours OC
 6) Conseil : 
 - Créez vous un compte que vous validerez via le backoffice 
 - puis bloqué le compte admin@admin.com
+- pour creer votre captache google v2 rendez vous ici : https://www.google.com/recaptcha/admin
 
 
 # VERSION PATCH NOTES 
+
+v0.103 - 4/11/2018 16h30
+- Modification du Captcha => config.php
+- modification des instructions d'installation (ajout du captcha)
+- Ajout du Captcha a l'inscription
 
 v0.102 - 4/11/2018 14h15
 - Gestion des utilisateurs implementé/testé/ok
