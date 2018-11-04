@@ -111,9 +111,16 @@ try {
             case 'adminAddPost':
             case 'adminPosts':
             case 'adminCatPosts':
-            case 'adminComments':
                 $controller = new StaticPageController();
                 $controller->showAdminPage($_GET['p']);
+                break;
+            case 'adminComments':
+                $controller = new CommentController();
+                $controller->showAdminCommentList();
+                break;
+            case 'sendAdminCommentModifForm':
+                $controller = new CommentController();
+                $controller->modifComment($_POST);
                 break;
             case 'adminUsers':
                 $UserController->showAdminUserList();
