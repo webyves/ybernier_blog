@@ -62,9 +62,9 @@ Class StaticPageController extends PageController
                             'fromFirstname' => $post['contactFirstname'],
                             'fromLastname' => $post['contactLastname'],
                             'fromEmail' => $post['contactEmail'],
-                            'toEmail' => "webyves@hotmail.com",             // Put your Administrator email
+                            'toEmail' => $GLOBALS['adminEmail'],
                             'messageTxt' => $post['contactMessage'],
-                            'messageHtml' => '',                            // Empty from Contact form page
+                            'messageHtml' => '',
                             'subject' => $post['contactSubject']                        
                         );
             $Manager = new Manager();
@@ -90,7 +90,6 @@ Class StaticPageController extends PageController
                 $authRole = array(1,2);
                 break;
             case 'adminCatPosts':
-            case 'adminUsers':
                 $authRole = array(1);
                 break;
             default:
@@ -99,6 +98,7 @@ Class StaticPageController extends PageController
         }
         
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
         if (!empty($page)) {
             echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
         } else {

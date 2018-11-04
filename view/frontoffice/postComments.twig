@@ -42,7 +42,7 @@
             </p>
             <p class="commentParentBack">
                 {{ parentComment.textcom }}
-                {% if userObject.idrole != 0 %}
+                {% if userObject.idrole in [1,2,3] %}
                     <br>
                     <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em> Répondre au commentaire</button>
                 {% endif %}
@@ -58,7 +58,7 @@
         </div>
     </div>
     <!-- BLOC AJOUT COMMENTAIRE SI CONNECTER --> 
-    {% if userObject.idrole != 0 %}
+    {% if userObject.idrole in [1,2,3] %}
     <div class='card'>
         <div class="card-body">
             <form id="conexForm" method="POST" action="index.php?p=sendCommentForm&i={{ post.idpost }}#comments">

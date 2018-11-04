@@ -24,23 +24,6 @@ a:hover {
 	color: rgba(221, 201, 136, 1);
     text-decoration: none;
 }
-.commentParentBack {
-    background-color:rgba(206, 178, 82, .2);
-    padding:5px;
-}
-.sideBar {
-    background-color:rgba(206, 178, 82, .1);
-}
-.adminBTN {
-    padding:5px;
-    background-color:rgba(255, 255, 255, .8);
-    border: 1px solid #ceb252;
-    border-radius:10px
-}
-.adminBTN:hover {
-    background-color:rgba(255, 255, 255, 1);
-}
-
 /********************************************
 LISTE POST & POST (override bootstrap)
 ********************************************/
@@ -65,6 +48,10 @@ LISTE POST & POST (override bootstrap)
     line-height: 1.05;
     font-size: 80%;
     font-weight: 400;
+}
+.commentParentBack {
+    background-color:rgba(206, 178, 82, .2);
+    padding:5px;
 }
 
 /********************************************
@@ -129,4 +116,23 @@ FOOTER
 }
 .navbar-dark .navbar-text a:hover {
 	color: rgba(221, 201, 136, 1);
+}
+
+/********************************************
+ADMIN PARTS CONTENT
+********************************************/
+.sideBar {
+    background-color:rgba(206, 178, 82, .1);
+}
+.adminBTN {
+    padding:5px;
+    background-color:rgba(255, 255, 255, .8);
+    border: 1px solid #ceb252;
+    border-radius:10px
+}
+.adminBTN:hover {
+    background-color:rgba(255, 255, 255, 1);
+}
+#divNameUserModal {
+    color: #000;
 }

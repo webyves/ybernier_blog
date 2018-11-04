@@ -14,17 +14,7 @@ Class Manager
     ***********************************/
     protected function dbConnect()
     {
-        $dbUser = "root";
-        $dbUserPwd = "";
-        $dbHost = "localhost";
-        $dbName = "ybernier_blog";
-        
-        // $dbUser = "ybernierog83";
-        // $dbUserPwd = "kvZ13dlC";
-        // $dbHost = "ybernierog83.mysql.db";
-        // $dbName = "ybernierog83";
-
-        $db = new \PDO('mysql:host='.$dbHost.';dbname='.$dbName.';charset=utf8', $dbUser, $dbUserPwd);
+        $db = new \PDO('mysql:host='.$GLOBALS['dbHost'].';dbname='.$GLOBALS['dbName'].';charset=utf8', $GLOBALS['dbUser'], $GLOBALS['dbUserPwd']);
         return $db;
     }
     
