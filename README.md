@@ -26,10 +26,15 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.105 - 5/11/2018 16h
+- Gestion des categories implementé/testé/ok
+- MAJ views back et front
+- MAJ controller/Manager/entities
+
 v0.104 - 4/11/2018 18h
 - Gestion des commentaires implementé/testé/ok
 - MAJ views back et front
-- MAJ controller
+- MAJ controller/Manager/entities
 
 v0.103 - 4/11/2018 15h45
 - Modification du Captcha => config.php
@@ -39,7 +44,7 @@ v0.103 - 4/11/2018 15h45
 v0.102 - 4/11/2018 14h15
 - Gestion des utilisateurs implementé/testé/ok
 - MAJ views back et front
-- MAJ controller
+- MAJ controller/Manager/entities
 - Creation d'un fichier config pour gerer l'installation facilement
 
 v0.101 - 3/11/2018 16h

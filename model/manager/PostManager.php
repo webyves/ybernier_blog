@@ -115,5 +115,124 @@ Class PostManager extends Manager
             return $obj;
         }
     }
+
+    /*********************************** 
+        Function to get all categories post in DB  
+    ***********************************/
+    public function getCats()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+                SELECT 
+                    PC.id_cat as idcat,
+                    PC.text as cattext,
+                    COUNT(P.id_post) as nbpost
+                FROM yb_blog_post_category as PC
+                LEFT JOIN yb_blog_posts as P ON (P.id_cat = PC.id_cat)
+                GROUP BY PC.id_cat
+                ORDER BY PC.text';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        return $res;
+    }
+    
+    /*********************************** 
+        Function to update 1 category post in DB by id_cat 
+    ***********************************/
+    public function updateCat($tab)
+    {
+        $param = array(
+            ':id_cat' => $tab['idcat'],
+            ':text' => $tab['text']
+            );
+        $db = $this->dbConnect();
+        $reqPost = '
+                UPDATE yb_blog_post_category  
+                SET text = :text
+                WHERE id_cat = :id_cat';
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de la mise à jour !!');
+    }
+    
+    /*********************************** 
+        Function to add category post in DB 
+    ***********************************/
+    public function addCat($tab)
+    {
+        $param = array(
+            ':text' => $tab['text']
+            );
+        $db = $this->dbConnect();
+        $reqPost = '
+                INSERT INTO yb_blog_post_category  
+                (text) VALUES (:text)';
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de l\'ajout !!');
+    }
+    
+    /*********************************** 
+        Function to delete 1 category post in DB by id_cat 
+    ***********************************/
+    public function deleteCat($idCat)
+    {
+        if (is_numeric($idCat) && $idCat > 0) {
+            $param = array('idcat' => $idCat);
+            $db = $this->dbConnect();
+            $reqPost = '
+                    DELETE FROM yb_blog_post_category  
+                    WHERE id_cat = :idcat';
+            $req = $db->prepare($reqPost);
+            $res = $req->execute($param);
+        } else {
+            throw new \Exception('Erreur dans la categorie !!');
+        }
+    }
+    
+    /*********************************** 
+        Function to Change post's category
+        $tab = array (
+            'newcat' => 1,
+            'oldcat' => $post['catModifModalIdCat'],
+            'idpost' => 'all' // or one id_post
+            );
+    ***********************************/
+    public function changePostCat($tab)
+    {
+        if (is_numeric($tab['newcat']) && $tab['newcat'] > 0
+        && is_numeric($tab['oldcat']) && $tab['oldcat'] > 0) {
+            $param = array(
+                'newcat' => $tab['newcat'],
+                'oldcat' => $tab['oldcat']
+                );
+        } else {
+            throw new \Exception('Erreur dans les categories !!');
+        }
+        
+        $whereReq = "";
+        if ($tab['idpost'] != 'all') {
+            if (is_numeric($tab['idpost']) && $tab['idpost'] > 0) {
+                $whereReq = " AND id_post = :id_post";
+                $param['id_post'] = $tab['idpost'];
+            } else {
+                throw new \Exception('Erreur lors du transfert !!');
+            }
+        }
+        
+        $db = $this->dbConnect();
+        $reqPost = '
+                UPDATE yb_blog_posts  
+                SET id_cat = :newcat
+                WHERE id_cat = :oldcat'.$whereReq;
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+    }
     
 }
