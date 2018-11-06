@@ -26,6 +26,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.106 - 6/11/2018 12h
+- Gcorrection d'une request (nbpost)
+- Correction/MAJ views design front et back
+
 v0.105 - 5/11/2018 16h
 - Gestion des categories implementé/testé/ok
 - MAJ views back et front

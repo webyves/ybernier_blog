@@ -16,7 +16,6 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: 'Bungee', cursive;
 	color: #ceb252;
 }
-
 a {
 	color: rgba(199, 166, 56, 1);
 }
@@ -24,10 +23,10 @@ a:hover {
 	color: rgba(221, 201, 136, 1);
     text-decoration: none;
 }
+
 /********************************************
 LISTE POST & POST (override bootstrap)
 ********************************************/
-
 .navbar-dark .navbar-nav .nav-link {
 	color: rgba(199, 166, 56, 1);
 }
@@ -65,16 +64,9 @@ MAIN CONTENT
 /********************************************
 listPosts
 ********************************************/
-.card-title {
-    color: #000;
-}
-.card-body p {
-    color: #000;
-}
 .child_com {
     padding-left: 60px;
 }
-
 .news_img_link {
 	position: relative;
 }
@@ -132,7 +124,4 @@ ADMIN PARTS CONTENT
 }
 .adminBTN:hover {
     background-color:rgba(255, 255, 255, 1);
-}
-#divNameUserModal, #divNameCommentModal {
-    color: #000;
 }

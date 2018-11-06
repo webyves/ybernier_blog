@@ -15,9 +15,9 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="respComForm" method="POST" action="index.php?p=sendAdminUserModifForm">
+            <form id="modifUserForm" method="POST" action="index.php?p=sendAdminUserModifForm">
                 <div class="modal-body">
-                    <div id="divNameUserModal">...</div>
+                    <div id="divNameUserModal" class="text-dark">...</div>
                     <div class="form-group">
                         <label for="userModalSelRole">Role :</label>
                         <select class="form-control" name="userModalSelRole" id="userModalSelRole">
@@ -69,7 +69,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% set roleid = 0 %}
                 {% for user in userList %}
+                    {% if roleid != user.idrole %}
+                    <tr class="table-primary text-dark">
+                        <th colspan='6' class="text-center">{{ user.role }}</th>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <td>
                             <div class="btn-group">
@@ -87,8 +93,9 @@
                         <td id="U_L_{{ user.iduser }}">{{ user.lastname }}</td>
                         <td id="U_E_{{ user.iduser }}">{{ user.email }}</td>
                         <td id="U_R_{{ user.iduser }}">{{ user.role }}</td>
-                        <td id="U_S_{{ user.iduser }}">{{ user.state }}</td>
+                        <td id="U_S_{{ user.iduser }}"{% if user.idstate == 2 %}class="text-danger"{% endif %}>{{ user.state }}</td>
                     </tr>
+                    {% set roleid = user.idrole %}
                 {% endfor %}
                 </tbody>
             </table>
