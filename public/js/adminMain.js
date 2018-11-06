@@ -30,6 +30,25 @@ $(document).ready(function() {
         $('#modifCommentModal').modal('show');
     });
 
+    /****************************************
+        Function for modification Category post
+        put value in modal
+    ****************************************/
+    $('.btn_action_mCat').on('click', function(){
+        $('#catModifModalIdCat').val($(this).data("idcat"));
+        $('#catModifModalText').val($("#C_T_"+$(this).data("idcat")).html());
+        $('#divNameModifCatModal').html("<strong>" + $(this).data("idcat") + " : " + $("#C_T_"+$(this).data("idcat")).html() + "</strong>");
+        $('#modifCatModal').modal('show');
+    });
 
+    /****************************************
+        Function for Suppression Category post
+        put value in modal
+    ****************************************/
+    $('.btn_action_sCat').on('click', function(){
+        $('#catSupModalIdCat').val($(this).data("idcat"));
+        $('#divSpanSupCatModal').html("<strong>" + $(this).data("idcat") + " : " + $("#C_T_"+$(this).data("idcat")).html() + "</strong>");
+        $('#supCatModal').modal('show');
+    });
 
 });

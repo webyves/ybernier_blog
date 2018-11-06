@@ -1,0 +1,8 @@
+{% extends 'backoffice/adminCatPosts.twig' %}
+
+{% block contentMessage %}
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">ERREUR !</h4>
+        <p>{{ messageText }}.</p>
+    </div>
+{% endblock contentMessage %}

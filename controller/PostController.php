@@ -34,4 +34,92 @@ Class PostController extends PageController
         echo $this->fTwig->render('frontoffice/postComments.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
 
     }
+    
+    /*********************************** 
+        Function for Admin post categories List
+    ***********************************/
+    public function showAdminCatPostList($messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        $Manager = new PostManager();
+        $catList = $Manager->getCats();
+        
+        echo $this->fTwig->render('backoffice/adminCatPosts'.$messageTwigView.'.twig', array('catList' => $catList, 'messageText' => $messageText));
+    }
+    
+    /*********************************** 
+        Function for Admin Category add form
+    ***********************************/
+    public function newCat($post) 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        if (empty(strip_tags($post['catAddModalText']))) {
+            $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
+            
+        } else {
+            $tab = array (
+                'text' => strip_tags($post['catAddModalText'])
+                );
+            $Manager = new PostManager();
+            $Manager->addCat($tab);
+            $this->showAdminCatPostList('Confirm');
+        }
+    }
+    
+    /*********************************** 
+        Function for Admin Category modification form
+    ***********************************/
+    public function modifCat($post) 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        if (!is_numeric($post['catModifModalIdCat']) || $post['catModifModalIdCat'] == 1 ) {
+            $this->showAdminCatPostList('Error', 'Modification Impossible sur cette catégorie');
+            
+        } elseif (empty(strip_tags($post['catModifModalText']))) {
+            $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
+            
+        } else {
+            $tab = array (
+                'idcat' => $post['catModifModalIdCat'],
+                'text' => strip_tags($post['catModifModalText'])
+                );
+            $Manager = new PostManager();
+            $Manager->updateCat($tab);
+            $this->showAdminCatPostList('Confirm');
+        }
+    }
+    
+    /*********************************** 
+        Function for Admin Category suppression form
+    ***********************************/
+    public function supCat($post) 
+    {
+        $authRole = array(1);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        if (!is_numeric($post['catSupModalIdCat']) || $post['catSupModalIdCat'] == 1 ) {
+            $this->showAdminCatPostList('Error', 'Suppression Impossible sur cette catégorie');
+
+        } else {
+            $tab = array (
+                'newcat' => 1,
+                'oldcat' => $post['catSupModalIdCat'],
+                'idpost' => 'all'
+                );
+            $Manager = new PostManager();
+            $Manager->changePostCat($tab);
+            $Manager->deleteCat($post['catSupModalIdCat']);
+            $this->showAdminCatPostList('Confirm');
+        }
+    }
+    
+    
+    
+    
 }
