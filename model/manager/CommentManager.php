@@ -15,10 +15,22 @@ Class CommentManager extends Manager
     public function getCommentNb($idPost)
     {
         $db = $this->dbConnect();
+        // $reqComNb = '
+            // SELECT COUNT(id_com) as nbpost
+                // FROM yb_blog_comments
+                // WHERE id_state = 1 AND id_post = :id_post';
         $reqComNb = '
-            SELECT COUNT(id_com) as nbpost
-                FROM yb_blog_comments
-                WHERE id_state = 1 AND id_post = :id_post';
+            SELECT 
+                COUNT(C1.id_com) as nbpost
+            FROM yb_blog_comments as C1
+            INNER JOIN yb_blog_comments as C2 ON (
+                C2.id_post = C1.id_post AND
+                C2.id_state = 1 AND 
+                C2.id_com_parent IS NULL)
+            WHERE 
+                C1.id_state = 1 AND 
+                (C1.id_com = C2.id_com OR C1.id_com_parent = C2.id_com) AND 
+                C1.id_post = :id_post';
         $req = $db->prepare($reqComNb);
         $req->bindValue('id_post', $idPost, \PDO::PARAM_INT);
         $req->execute();
