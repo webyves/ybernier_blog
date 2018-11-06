@@ -1,13 +1,146 @@
 {% extends 'backoffice/template.twig' %}
 
 {% block title %}
-    <title>Accueil Administration</title>
+    <title>Gestion des Catégories</title>
 {% endblock title %}
 
 {% block content %}
+<!-- MODAL MODIFICATION CATEGORIE -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modifCatModal" aria-labelledby="modifCatModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier Categorie.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="modifCatForm" method="POST" action="index.php?p=sendAdminCatModifForm">
+                <div class="modal-body">
+                    <div id="divNameModifCatModal" class="text-dark">...</div>
+                    <div class="form-group">
+                        <label for="catModifModalText">Texte :</label>
+                        <input type="text" class="form-control" name="catModifModalText" id="catModifModalText" placeholder="Nouveau texte">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="catModifModalIdCat" id="catModifModalIdCat" value="0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>        
+
+<!-- MODAL AJOUT CATEGORIE -->
+<div class="modal fade" tabindex="-1" role="dialog" id="addCatModal" aria-labelledby="addCatModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer une Categorie.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addCatForm" method="POST" action="index.php?p=sendAdminCatAddForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="catAddModalText">Texte :</label>
+                        <input type="text" class="form-control" name="catAddModalText" id="catAddModalText" placeholder="Saisissez un texte">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>        
+
+<!-- MODAL SUPPRESSION CATEGORIE -->
+<div class="modal fade" tabindex="-1" role="dialog" id="supCatModal" aria-labelledby="supCatModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Supprimer une Categorie.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="supCatForm" method="POST" action="index.php?p=sendAdminCatSupForm">
+                <div class="modal-body">
+                    <p class="text-dark">
+                        Voulez vous vraiment supprimer cette catégorie ?<br>
+                        <strong id="divSpanSupCatModal">...</strong><br>
+                        Tous les posts qu'elle contient seront transférez dans la catageorie 1:Génerale
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="catSupModalIdCat" id="catSupModalIdCat" value="0">
+                    <button type="submit" class="btn btn-danger">Transferer et Supprimer</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>        
+
+
     <div class="row">
         <div class="col text-center">
             <h1>Gestion des Catégorie de post</h1>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th>
+                            <button type="button" 
+                                class="btn btn-sm btn-success btn_action_aCat" 
+                                title="Créer une categorie"
+                                data-toggle="modal"
+                                data-target="#addCatModal">
+                                    <em class="fas fa-plus"></em> New Cat
+                            </button>
+                        </th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Text</th>
+                        <th scope="col">Nb Post</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cat in catList %}
+                    <tr>
+                        <td>
+                        {% if cat.idcat != 1 %}
+                            <div class="btn-group">
+                                <button type="button" 
+                                    class="btn btn-sm btn-warning btn_action_mCat" 
+                                    title="Modifier la categorie" 
+                                    data-idcat="{{ cat.idcat }}">
+                                        <em class="far fa-edit"></em>
+                                </button>
+                                <button type="button" 
+                                    class="btn btn-sm btn-danger btn_action_sCat" 
+                                    title="Supprimer la categorie" 
+                                    data-idcat="{{ cat.idcat }}">
+                                        <em class="far fa-trash-alt"></em>
+                                </button>
+                            </div>
+                        {% endif %}
+                        </td>
+                        <td>{{ cat.idcat }}</td>
+                        <td id="C_T_{{ cat.idcat }}">{{ cat.cattext }}</td>
+                        <td id="C_NP_{{ cat.idcat }}">{{ cat.nbpost }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 {% endblock content %}

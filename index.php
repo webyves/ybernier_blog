@@ -110,10 +110,27 @@ try {
             case 'admin':
             case 'adminAddPost':
             case 'adminPosts':
-            case 'adminCatPosts':
                 $controller = new StaticPageController();
                 $controller->showAdminPage($_GET['p']);
                 break;
+                
+            case 'adminCatPosts':
+                $controller = new PostController();
+                $controller->showAdminCatPostList();
+                break;
+            case 'sendAdminCatAddForm':
+                $controller = new PostController();
+                $controller->newCat($_POST);
+                break;
+            case 'sendAdminCatModifForm':
+                $controller = new PostController();
+                $controller->modifCat($_POST);
+                break;
+            case 'sendAdminCatSupForm':
+                $controller = new PostController();
+                $controller->supCat($_POST);
+                break;
+                
             case 'adminComments':
                 $controller = new CommentController();
                 $controller->showAdminCommentList();
@@ -122,6 +139,7 @@ try {
                 $controller = new CommentController();
                 $controller->modifComment($_POST);
                 break;
+                
             case 'adminUsers':
                 $UserController->showAdminUserList();
                 break;
