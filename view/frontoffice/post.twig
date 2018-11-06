@@ -15,14 +15,14 @@
             <div class='card'>
                 <img class="card-img-top" src="public/img/{{ post.imagetop }}" alt="image post top">
                 <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
+                    <h5 class="card-title text-dark">{{ post.title }}</h5>
                     <p class="card-subtitle text-muted">
                         le : {{ post.datefr }}<br>
                         par : {{ post.author }}<br>
                         dans : {{ post.category }}
                     </p>
                     <hr>
-                    <p>{{ post.content }}</p>
+                    <p class="text-dark">{{ post.content }}</p>
                 </div>
             </div>
             {% block comments %}{% endblock comments %}

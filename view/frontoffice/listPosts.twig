@@ -23,14 +23,14 @@
                         </div>
                     </a>
                     <div class="card-body">
-                        <h5 class="card-title">{{ post.title }}</h5>
+                        <h5 class="card-title text-dark">{{ post.title }}</h5>
                         <p class="card-subtitle text-muted">
                             le : {{ post.datefr }}<br>
                             par : {{ post.author }}<br>
                             dans : {{ post.category }}
                         </p>
                         <hr>
-                        <p>{{ post.smallcontent }}</p>
+                        <p class="text-dark">{{ post.smallcontent }}</p>
                         <p class="card-subtitle text-muted"><em>{{ post.nbcom }} Commentaires</em></p>
                         <a class="card-link" href="index.php?p=post&i={{ post.idpost }}">Lire le post</a>
                     </div>

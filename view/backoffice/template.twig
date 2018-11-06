@@ -52,8 +52,7 @@
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" href="index.php?p=admin">BackOffice</a>
                         <a class="nav-item nav-link" href="index.php">FrontOffice <span class="sr-only">(current)</span></a>
-                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#logoutModal">Déconnexion</a>
-                        <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
+                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#logoutModal"><em class="fas fa-power-off"></em> {{ userObject.firstname }} {{ userObject.lastname }}</a>
                         <div class="nav-item d-block d-md-none">
                             {% include 'backoffice/sideBar.twig' %}
                         </div>

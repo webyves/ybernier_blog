@@ -40,10 +40,10 @@
                 le : {{ parentComment.datecom }}<br>
                 par : {{ parentComment.author }}
             </p>
-            <p class="commentParentBack">
+            <p class="commentParentBack text-dark">
                 {{ parentComment.textcom }}
                 {% if userObject.idrole in [1,2,3] %}
-                    <br>
+                    <br><br>
                     <button type="button" class="card-subtitle btn btn-sm btn-success btn_action_reply" data-idcom="{{ parentComment.idcom }}" title="Répondre"><em class="fas fa-reply"></em> Répondre au commentaire</button>
                 {% endif %}
             </p>
@@ -52,7 +52,7 @@
                     le : {{ childComment.datecom }}<br>
                     par : {{ childComment.author }}
                 </p>
-                <p class="child_com">{{ childComment.textcom }}</p>
+                <p class="child_com text-dark">{{ childComment.textcom }}</p>
             {% endfor %}
         {% endfor %}
         </div>

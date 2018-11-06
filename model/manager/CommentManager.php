@@ -15,10 +15,6 @@ Class CommentManager extends Manager
     public function getCommentNb($idPost)
     {
         $db = $this->dbConnect();
-        // $reqComNb = '
-            // SELECT COUNT(id_com) as nbpost
-                // FROM yb_blog_comments
-                // WHERE id_state = 1 AND id_post = :id_post';
         $reqComNb = '
             SELECT 
                 COUNT(C1.id_com) as nbpost

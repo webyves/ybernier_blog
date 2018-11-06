@@ -17,7 +17,7 @@ configuration file for the website.
     // $GLOBALS['dbName'] = "ybernierog83";
 
 /*** Application version ***/
-    $GLOBALS['appVersion'] = "V0.105";
+    $GLOBALS['appVersion'] = "V0.106";
     
 /*** Administrator eMail ***/
     $GLOBALS['adminEmail'] = "webyves@hotmail.com";

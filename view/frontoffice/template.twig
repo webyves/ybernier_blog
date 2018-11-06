@@ -74,7 +74,7 @@
                 </div>
               </div>
             </div>            
-            {% set textLoginBtn, textLoginTarget = 'Déconnexion', 'logoutModal' %}
+            {% set textLoginBtn, textLoginTarget = '<em class="fas fa-power-off"></em>', 'logoutModal' %}
         {% endif %}
         
         
@@ -94,8 +94,9 @@
                         {% if userObject.idrole in [1,2] %}
                             <a class="nav-item nav-link" href="index.php?p=admin">Admin</a>
                         {% endif %}
-                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">{{ textLoginBtn }}</a>
-                        <span class="nav-item nav-link">{{ userObject.firstname }} {{ userObject.lastname }}</span>
+                        <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">
+                            {{ textLoginBtn|raw }} {{ userObject.firstname }} {{ userObject.lastname }}
+                        </a>
                         <div class="nav-item d-block d-md-none">
                             {% include 'frontoffice/sideBar.twig' with postListMenu %}
                         </div>
