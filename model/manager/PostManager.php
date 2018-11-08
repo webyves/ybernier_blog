@@ -289,5 +289,46 @@ Class PostManager extends Manager
         return $res;
     }
     
-    
+    /*********************************** 
+        Function to Update post by id_post  
+        $tab = array(
+            'id_post' => '',
+            'title' => '',
+            'content' => '',
+            'imag_top' => '',
+            'id_state' => '',
+            'id_cat' => ''
+            );
+    ***********************************/
+    public function updatePost($tab)
+    {
+        
+        $param = array(':id_post' => $tab['id_post']);
+        $setVar = "";
+        
+        foreach($tab as $key => $value) {
+            if (!empty($value) && $key != 'id_post') {
+                $param[$key] = $value;
+                if (!empty($setVar))
+                    $setVar .= ', ';
+                $setVar .= $key.' = :'.$key;
+            }
+        }
+        if (!empty($setVar)) {
+            $setVar = "SET ".$setVar;
+            $db = $this->dbConnect();
+            $reqPost = '
+                    UPDATE yb_blog_posts  
+                    '.$setVar.'
+                    WHERE id_post = :id_post';
+            $req = $db->prepare($reqPost);
+            $res = $req->execute($param);
+            
+            if (!$res)
+                throw new \Exception('Erreur lors de la mise à jour !!');
+        } else {
+                throw new \Exception('Aucune donnée pour la mise à jour !!');
+        }            
+            
+    }        
 }

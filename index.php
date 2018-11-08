@@ -117,6 +117,15 @@ try {
                 $controller = new PostController();
                 $controller->showAdminPostsPage();
                 break;
+            case 'sendAdminPostModifForm':    
+                $controller = new PostController();
+                $controller->modifPost($_POST);
+                break;
+            case 'adminEditPost':
+                $controller = new PostController();
+                $controller->showAdminEditPostPage($_GET['i']);
+                break;
+                
             case 'adminCatPosts':
                 $controller = new PostController();
                 $controller->showAdminCatPostList();

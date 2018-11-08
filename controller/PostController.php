@@ -5,6 +5,7 @@ website Post controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\model\manager\UserManager;
 use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\manager\CommentManager;
 
@@ -133,6 +134,70 @@ Class PostController extends PageController
         $stateList = $Manager->getStates();
         
         echo $this->fTwig->render('backoffice/adminPosts'.$messageTwigView.'.twig', array('postList' => $postList, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
+    }
+    
+    /*********************************** 
+        Function for Admin Edit post 
+    ***********************************/
+    public function showAdminEditPostPage($idPost, $messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        if (is_numeric($idPost) && $idPost > 0) {
+            $Manager = new PostManager();
+            $post = $Manager->getPost($idPost);
+            echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'messageText' => $messageText));
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
+    }
+    
+    /*********************************** 
+        Function for Admin Edit post 
+    ***********************************/
+    public function modifPost($post) 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        if (is_numeric($post['modifPostModalIdPost']) && $post['modifPostModalIdPost'] > 0) {
+            $tab = array(
+                'id_post' => (int)$post['modifPostModalIdPost'],
+                'id_state' =>  (int)$post['modifPostModalSelEtat'],
+                'id_cat' =>  (int)$post['modifPostModalSelCat']
+                );
+            $postManager = new PostManager();
+            $oldPost = $postManager->getPost((int)$post['modifPostModalIdPost']);
+            $postManager->updatePost($tab);
+            
+            if (isset($post['modifPostModalChkbxSendMail'])) {
+                $updPost = $postManager->getPost((int)$post['modifPostModalIdPost']);
+                $userManager = new UserManager();
+                $author = $userManager->getUser($updPost->getIduser());
+                
+                $tabInfo = array( 
+                        'fromFirstname' =>  "Administrateur",
+                        'fromLastname' => "yBernier Blog",
+                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'toEmail' => $author->getEmail(),
+                        'messageTxt' => "Votre post anciennement intitulé : \n"
+                                        .$oldPost->getTitle().
+                                        "\n viens d'être mis à jour par : \n"
+                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                        'messageHtml' => "Votre post anciennement intitulé : <br>
+                                        <b>".$oldPost->getTitle()."</b><br>
+                                        viens d'être mis à jour par : <br>
+                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                        'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
+                    );
+                $Manager-> sendMail($tabInfo);
+            }
+            
+            $this->showAdminPostsPage('Confirm');
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
     }
     
     
