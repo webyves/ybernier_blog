@@ -205,20 +205,26 @@ Class PostController extends PageController
     /*********************************** 
         Function for Admin Full Edit post 
     ***********************************/
-    public function editPost($post, $idPost) 
+    public function editPost($post, $files, $idPost) 
     {
         $authRole = array(1,2);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-
+        
+        
         if (is_numeric($idPost) && $idPost > 0) {
             $tab = array(
                 'id_post' => (int)$idPost,
                 'title' => strip_tags($post['fullModifPostTitle']),
                 'content' => $post['fullModifPostContent'],
-                //'imag_top' => '', // NEED CHCKFILE
                 'id_state' => (int)$post['fullModifPostSelEtat'],
                 'id_cat' => (int)$post['fullModifPostSelCat']
                 );
+                
+            if ($files['fullModifPostImage']['size']>0) {
+                $imageTop = $this->uploadImagePost($files['fullModifPostImage'], $idPost);
+                $tab['image_top'] = $imageTop;
+            }
+            
             $postManager = new PostManager();
             $oldPost = $postManager->getPost((int)$idPost);
             $postManager->updatePost($tab);
@@ -250,6 +256,38 @@ Class PostController extends PageController
         } else {
             throw new \Exception('Erreur sur le post');
         }
+    }
+    
+    /*********************************** 
+        Function to check error on upload and sendback goog intel 
+    ***********************************/
+    public function uploadImagePost($files, $idPost) 
+    {
+        if ($files['error'] > 0)
+            throw new \Exception('Erreur lors de l\'envoie du fichier');
+        
+        if ($files['size'] > $GLOBALS['maxFileSize']) 
+            throw new \Exception('Le fichier a envoyer est trop Gros');
+        
+        $extensions_valides = array('jpg', 'jpeg', 'gif', 'png');
+        $extension_upload = strtolower(substr(strrchr($files['name'], '.'), 1));
+        if (!in_array($extension_upload,$extensions_valides) )
+            throw new \Exception('Extension invalide pour le fichier');
+
+        // $image_sizes = getimagesize($files['tmp_name']);
+        // if ($image_sizes[0] > $GLOBALS['maxwidth'] OR $image_sizes[1] > $GLOBALS['maxheight'])
+            // throw new \Exception('Dimension de l\'image Incorrectes');
+        
+        $nomFic = "imageTop".$idPost.".".$extension_upload;
+        $nom = "public/img/post/".$nomFic;
+        // if(file_exists($nom))
+            // unlink($nom);
+        $resultat = move_uploaded_file($files['tmp_name'], $nom);
+        if (!$resultat)
+            throw new \Exception('Le transfert a achoué');
+        
+        return $nomFic;
+        
     }
     
 }

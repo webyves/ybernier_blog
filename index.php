@@ -127,7 +127,10 @@ try {
                 break;
             case 'sendAdminPostFullModifForm':
                 $controller = new PostController();
-                $controller->editPost($_POST, $_GET['i']);
+        // $debug = new StaticPageController();
+        // $debug->debugPage($_FILES);
+        
+                $controller->editPost($_POST, $_FILES, $_GET['i']);
                 break;
                 
             case 'adminCatPosts':

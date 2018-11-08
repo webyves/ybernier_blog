@@ -18,7 +18,7 @@
             </p>
         </div>    
     </div>    
-    <form id="fullModifPostForm" method="POST" action="index.php?p=sendAdminPostFullModifForm&i={{ post.idpost }}">
+    <form id="fullModifPostForm" method="POST" enctype="multipart/form-data" action="index.php?p=sendAdminPostFullModifForm&i={{ post.idpost }}">
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -69,6 +69,15 @@
             </div>    
             <div class="row">
                 <div class="col">
+                    <p class="card-subtitle text-muted">
+                        Taille max : 1 Mo<br>
+                        Extension autorisée : jpg, jpeg, gif, png.<br>
+                        <span class="text-danger">Supprimera et Remplacera l'ancienne image</span>
+                    </p>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" name="fullModifPostChkbxSendMail" id="fullModifPostChkbxSendMail">
                         <label class="form-check-label" for="fullModifPostChkbxSendMail">Informer l'utilisateur par eMail.</label>
@@ -84,7 +93,7 @@
         </div>    
         <div class="col">
             <p>Image Actuelle :</p>
-            <img src="public/img/{{ post.imagetop }}" class="img-thumbnail">
+            <img src="public/img/post/{{ post.imagetop }}" class="img-thumbnail">
         </div>    
     </div>    
     </form>
