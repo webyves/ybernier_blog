@@ -109,11 +109,14 @@ try {
             // BACK OFFICE
             case 'admin':
             case 'adminAddPost':
-            case 'adminPosts':
                 $controller = new StaticPageController();
                 $controller->showAdminPage($_GET['p']);
                 break;
                 
+            case 'adminPosts':
+                $controller = new PostController();
+                $controller->showAdminPostsPage();
+                break;
             case 'adminCatPosts':
                 $controller = new PostController();
                 $controller->showAdminCatPostList();

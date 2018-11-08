@@ -13,18 +13,48 @@ Class PostManager extends Manager
     /*********************************** 
         Function to get multiple post in DB
         
-        $mode => leftbar (default) or classic list
+        $mode => sidebar (default) or classic list
         $nbPosts => can restrict quantity
         $idState => can specify state of post
+        $userId => can specify an author of post
+        $catId => can specify a category of post
     ***********************************/
-    public function getPosts($mode = 'menu', $nbPosts = 50, $idState = 1)
+    public function getPosts($mode = 'menu', $nbPosts = 50, $idState = 1, $userId = 'all', $catId = 'all')
     {
-        $userReqVar = ""; // for next implementation WHERE user variable
-        $catReqVar = ""; // for next implementation WHERE categorie variable
-        $orderReqVar = "PC.text, "; 
+        $param = null;
+        $orderReq = "PC.text, "; 
         if ($mode == 'full_list')
-            $orderReqVar=""; 
-
+            $orderReq=""; 
+        
+        $limitReq = "";
+        if ($nbPosts != "all") {
+            $limitReq = " LIMIT 0, ".(int)$nbPosts;
+        }
+        
+        $whereReq = "";
+        if ($idState != "all") {
+            if (!empty($whereReq))
+                $whereReq .= " AND ";
+            $whereReq .= "P.id_state = :id_state";
+            $param[':id_state'] = (int)$idState;
+        }
+        
+        if ($userId != "all") {
+            if (!empty($whereReq))
+                $whereReq .= " AND ";
+            $whereReq .= "P.id_user = :id_user";
+            $param[':id_user'] = (int)$userId;
+        }
+        
+        if ($catId != "all") {
+            if (!empty($whereReq))
+                $whereReq .= " AND ";
+            $whereReq .= "P.id_cat = :id_cat";
+            $param[':id_cat'] = (int)$catId;
+        }
+        
+        if (!empty($whereReq))
+            $whereReq = " WHERE ".$whereReq;
         
         $db = $this->dbConnect();
         $reqPostsList = 'SELECT 
@@ -43,32 +73,38 @@ Class PostManager extends Manager
                     P.id_user as iduser,
                     CONCAT(U.first_name, " ", U.last_name) as author,
                     
-                    COUNT(C.id_com) as nbcom
+                    (SELECT COUNT(C1.id_com)
+                    FROM yb_blog_comments as C1
+                    INNER JOIN yb_blog_comments as C2 ON (
+                        C2.id_post = C1.id_post AND
+                        C2.id_state = 1 AND 
+                        C2.id_com_parent IS NULL)
+                    WHERE 
+                        C1.id_state = 1 AND 
+                        (C1.id_com = C2.id_com OR C1.id_com_parent = C2.id_com) AND 
+                        C1.id_post = P.id_post) as nbcom
                     
                 FROM yb_blog_posts as P
                 LEFT JOIN yb_blog_users as U ON (P.id_user = U.id_user)
                 LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
                 LEFT JOIN yb_blog_post_state as PS ON (P.id_state = PS.id_state)
-                LEFT JOIN yb_blog_comments as C ON (P.id_post = C.id_post AND C.id_state = 1)
-                WHERE P.id_state = :id_state'.$userReqVar.$catReqVar.'
+                '.$whereReq.'
                 GROUP BY P.id_post 
-                ORDER BY '.$orderReqVar.'P.date DESC 
-                LIMIT 0, :limit';
+                ORDER BY '.$orderReq.'P.date DESC 
+                '.$limitReq;
+                
         $req = $db->prepare($reqPostsList);
-        $req->bindValue('limit', $nbPosts, \PDO::PARAM_INT);
-        $req->bindValue('id_state', $idState, \PDO::PARAM_INT);
-        $req->execute();
+        $req->execute($param);
         $res = $req->fetchall();
 
         $tab = array();
         if ($mode == 'full_list') {
-            // for post list page
             foreach ($res as $res_post) {
                 $obj = new Post($res_post);
                 array_push($tab,$obj);
             }
         } elseif ($mode == 'menu') {
-            // for leftbar Menu
+            // for frontpage sidebar Menu
             $n=0;
             foreach ($res as $res_post) {
                 $n++;
@@ -234,5 +270,24 @@ Class PostManager extends Manager
         $res = $req->execute($param);
         
     }
+    
+    /*********************************** 
+        Function to get all State post in DB  
+    ***********************************/
+    public function getStates()
+    {
+        $db = $this->dbConnect();
+        $reqPost = '
+                SELECT 
+                    S.id_state as idstate,
+                    S.text as state
+                FROM yb_blog_post_state as S
+                ORDER BY S.text';
+        $req = $db->prepare($reqPost);
+        $req->execute();
+        $res = $req->fetchall();
+        return $res;
+    }
+    
     
 }

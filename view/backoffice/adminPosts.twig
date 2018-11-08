@@ -1,13 +1,110 @@
 {% extends 'backoffice/template.twig' %}
 
 {% block title %}
-    <title>Accueil Administration</title>
+    <title>Gestion des Posts</title>
 {% endblock title %}
 
 {% block content %}
+<!-- MODAL MODIFICATION Posts -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modifPostModal" aria-labelledby="modifPostModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Changer l'Etat du commentaire.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="modifPostForm" method="POST" action="index.php?p=sendAdminPostModifForm">
+                <div class="modal-body">
+                    <div id="divNamePostModal" class="text-dark">...</div>
+                    <div class="form-group">
+                        <label for="modifPostModalSelCat">Catégorie :</label>
+                        <select class="form-control" name="modifPostModalSelCat" id="modifPostModalSelCat">
+                        {% for pCat in catList %}
+                            <option value="{{ pCat.idcat }}">{{ pCat.cattext }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modifPostModalSelEtat">Etat :</label>
+                        <select class="form-control" name="modifPostModalSelEtat" id="modifPostModalSelEtat">
+                        {% for pState in stateList %}
+                            <option value="{{ pState.idstate }}">{{ pState.state }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="modifPostModalChkbxSendMail" id="modifPostModalChkbxSendMail">
+                        <label class="form-check-label" for="modifPostModalChkbxSendMail">Informer l'utilisateur par eMail.</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="modifPostModalIdPost" id="modifPostModalIdPost" value="0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>        
+
+
     <div class="row">
         <div class="col text-center">
             <h1>Gestion des posts</h1>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="index.php?p=adminAddPost" 
+                                class="btn btn-sm btn-success" 
+                                title="Créer une categorie">
+                                    <em class="fas fa-plus"></em> New Post
+                            </a>
+                        </th>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Auteur / Date</th>
+                        <th scope="col">Categorie</th>
+                        <th scope="col">Etat</th>
+                        <th scope="col">Nb Com</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for post in postList %}
+                    <tr>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" 
+                                    class="btn btn-sm btn-primary btn_action_mPost" 
+                                    title="Modification rapide" 
+                                    data-idpost="{{ post.idpost }}" 
+                                    data-idcat="{{ post.idcat }}" 
+                                    data-idstate="{{ post.idstate }}">
+                                        <em class="fas fa-bolt"></em>
+                                </button>
+                                <a href="index.php?p=adminEditPost&i={{ post.idpost }}" 
+                                    class="btn btn-sm btn-warning" 
+                                    title="Edition Complete du post">
+                                        <em class="far fa-edit"></em>
+                                </a>
+                            </div>
+                        </td>
+                        <td id="P_T_{{ post.idpost }}">{{ post.title }}</td>
+                        <td>{{ post.author }} {{ post.datefr }}</td>
+                        <td>{{ post.category }}</td>
+                        <td {% if post.idstate == 2 %}class="text-danger"{% endif %}>{{ post.state }}</td>
+                        <td>{{ post.nbcom }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
 {% endblock content %}

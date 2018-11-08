@@ -119,6 +119,21 @@ Class PostController extends PageController
         }
     }
     
+    /*********************************** 
+        Function for Admin post 
+    ***********************************/
+    public function showAdminPostsPage($messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        $Manager = new PostManager();
+        $postList = $Manager->getPosts('full_list', 'all', 'all');
+        $catList = $Manager->getCats();
+        $stateList = $Manager->getStates();
+        
+        echo $this->fTwig->render('backoffice/adminPosts'.$messageTwigView.'.twig', array('postList' => $postList, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
+    }
     
     
     
