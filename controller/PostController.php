@@ -191,7 +191,7 @@ Class PostController extends PageController
                                         <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
                         'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
                     );
-                $Manager-> sendMail($tabInfo);
+                $userManager-> sendMail($tabInfo);
             }
             
             $this->showAdminPostsPage('Confirm');
