@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e34c074981e6c69bdc2f3cea799be101",
+    "content-hash": "7e92a4c82ce7a6fc1de56560c04591ac",
     "packages": [
         {
             "name": "components/bootstrap",
@@ -109,39 +109,6 @@
             "description": "jQuery JavaScript Library",
             "homepage": "http://jquery.com",
             "time": "2018-03-04T13:23:48+00:00"
-        },
-        {
-            "name": "summernote/summernote",
-            "version": "v0.8.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/summernote/summernote.git",
-                "reference": "28b5be6cd5e1c422cdb15aae6ef237b6c2f3f16c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/summernote/summernote/zipball/28b5be6cd5e1c422cdb15aae6ef237b6c2f3f16c",
-                "reference": "28b5be6cd5e1c422cdb15aae6ef237b6c2f3f16c",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alan",
-                    "email": "susukang98@gmail.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "Super Simple WYSIWYG Editor on Bootstrap(3.0 and 2.x).",
-            "homepage": "http://summernote.org/",
-            "keywords": [
-                "wysiwyg"
-            ],
-            "time": "2017-09-09T11:08:25+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
