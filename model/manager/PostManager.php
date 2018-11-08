@@ -132,6 +132,7 @@ Class PostManager extends Manager
                     DATE_FORMAT(P.date, \'%d/%m/%Y à %Hh%i\') as datefr,
                     P.image_top as imagetop,
                     P.id_cat as idcat,
+                    P.id_state as idstate,
                     P.id_user as iduser,
                     PC.text as category,
                     CONCAT(U.first_name, " ", U.last_name) as author

@@ -147,7 +147,9 @@ Class PostController extends PageController
         if (is_numeric($idPost) && $idPost > 0) {
             $Manager = new PostManager();
             $post = $Manager->getPost($idPost);
-            echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'messageText' => $messageText));
+            $catList = $Manager->getCats();
+            $stateList = $Manager->getStates();
+            echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
         } else {
             throw new \Exception('Erreur sur le post');
         }

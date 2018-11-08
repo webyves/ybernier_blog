@@ -63,5 +63,4 @@ $(document).ready(function() {
         $('#modifPostModal').modal('show');
     });
 
-
 });
