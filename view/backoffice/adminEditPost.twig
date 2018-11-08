@@ -18,7 +18,7 @@
             </p>
         </div>    
     </div>    
-    <form id="fullModifPostForm" method="POST" action="index.php?p=sendAdminPostFullModifForm">
+    <form id="fullModifPostForm" method="POST" action="index.php?p=sendAdminPostFullModifForm&i={{ post.idpost }}">
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -53,27 +53,38 @@
         <div class="col">
             <div class="form-group">
                 <label for="fullModifPostContent">Contenu :</label>
-                <textarea id="summernote" name="fullModifPostContent" class="form-control">{{ post.content }}</textarea>
+                <textarea id="summernote" name="fullModifPostContent" class="form-control">{{ post.content|raw }}</textarea>
             </div>    
         </div>    
     </div>    
     <div class="row">
         <div class="col">
-            <div class="form-group">
-                <label for="fullModifPostImage">Changer le fichier image :</label>
-                <input  type="file" class="form-control-file" name="fullModifPostImage" id="fullModifPostImage" value="{{ post.title }}">
-            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="fullModifPostImage">Changer le fichier image :</label>
+                        <input  type="file" class="form-control-file" name="fullModifPostImage" id="fullModifPostImage" value="{{ post.title }}">
+                    </div>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="fullModifPostChkbxSendMail" id="fullModifPostChkbxSendMail">
+                        <label class="form-check-label" for="fullModifPostChkbxSendMail">Informer l'utilisateur par eMail.</label>
+                    </div>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>    
+            </div>    
         </div>    
         <div class="col">
-                <p>Image Actuelle :</p>
-                <img src="public/img/{{ post.imagetop }}" class="">
-            </div>
-        </div>    
-    </div>    
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-            <button type="submit" class="btn btn-success">Envoyer</button>
+            <p>Image Actuelle :</p>
+            <img src="public/img/{{ post.imagetop }}" class="img-thumbnail">
         </div>    
     </div>    
     </form>
@@ -95,8 +106,17 @@
         $(document).ready(function() {
                 $('#summernote').summernote({
                 tabsize: 2,
-                height: 100,
-                lang: 'fr-FR'
+                height: 200,
+                lang: 'fr-FR',
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'table', 'hr']],
+                    ['misc', ['codeview', 'undo', 'redo']]
+                ]
             });
         });
     </script>

@@ -126,8 +126,8 @@ try {
                 $controller->showAdminEditPostPage($_GET['i']);
                 break;
             case 'sendAdminPostFullModifForm':
-                $controller = new StaticPageController();
-                $controller->debugPage($_POST);
+                $controller = new PostController();
+                $controller->editPost($_POST, $_GET['i']);
                 break;
                 
             case 'adminCatPosts':

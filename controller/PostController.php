@@ -156,7 +156,7 @@ Class PostController extends PageController
     }
     
     /*********************************** 
-        Function for Admin Edit post 
+        Function for Admin Fast Edit post 
     ***********************************/
     public function modifPost($post) 
     {
@@ -202,6 +202,54 @@ Class PostController extends PageController
         }
     }
     
-    
+    /*********************************** 
+        Function for Admin Full Edit post 
+    ***********************************/
+    public function editPost($post, $idPost) 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        if (is_numeric($idPost) && $idPost > 0) {
+            $tab = array(
+                'id_post' => (int)$idPost,
+                'title' => strip_tags($post['fullModifPostTitle']),
+                'content' => $post['fullModifPostContent'],
+                //'imag_top' => '', // NEED CHCKFILE
+                'id_state' => (int)$post['fullModifPostSelEtat'],
+                'id_cat' => (int)$post['fullModifPostSelCat']
+                );
+            $postManager = new PostManager();
+            $oldPost = $postManager->getPost((int)$idPost);
+            $postManager->updatePost($tab);
+            
+            if (isset($post['fullModifPostChkbxSendMail'])) {
+                $updPost = $postManager->getPost((int)$idPost);
+                $userManager = new UserManager();
+                $author = $userManager->getUser($updPost->getIduser());
+                
+                $tabInfo = array( 
+                        'fromFirstname' =>  "Administrateur",
+                        'fromLastname' => "yBernier Blog",
+                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'toEmail' => $author->getEmail(),
+                        'messageTxt' => "Votre post anciennement intitulé : \n"
+                                        .$oldPost->getTitle().
+                                        "\n viens d'être mis à jour par : \n"
+                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                        'messageHtml' => "Votre post anciennement intitulé : <br>
+                                        <b>".$oldPost->getTitle()."</b><br>
+                                        viens d'être mis à jour par : <br>
+                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                        'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
+                    );
+                $userManager-> sendMail($tabInfo);
+            }
+            
+            $this->showAdminEditPostPage((int)$idPost,'Confirm');
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
+    }
     
 }

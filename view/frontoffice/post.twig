@@ -22,7 +22,7 @@
                         dans : {{ post.category }}
                     </p>
                     <hr>
-                    <p class="text-dark">{{ post.content }}</p>
+                    <div class="text-dark">{{ post.content|raw }}</div>
                 </div>
             </div>
             {% block comments %}{% endblock comments %}
