@@ -176,27 +176,31 @@ Class UserManager extends Manager
     ***********************************/
     public function updateUser($tab)
     {
-        $reqVarUpdate = "";
+        $nbValToSet = 0;
         $param = array(':id_user' => $tab['iduser']);
-        
-        if (isset($tab['idstate'])){
-            if (!empty($reqVarUpdate))
-                $reqVarUpdate .= ", ";
-            $reqVarUpdate .= "id_state = :id_state";
-            $param['id_state'] = $tab['idstate'];
-        }
-        if (isset($tab['idrole'])){
-            if (!empty($reqVarUpdate))
-                $reqVarUpdate .= ", ";
-            $reqVarUpdate .= "id_role = :id_role";
-            $param['id_role'] = $tab['idrole'];
-        }
-
-        $db = $this->dbConnect();
         $reqPost = '
                 UPDATE yb_blog_users  
-                SET '.$reqVarUpdate.' 
-                WHERE id_user = :id_user';
+                SET ';
+        
+        if (isset($tab['idstate'])){
+            $reqPost .= "id_state = :id_state";
+            $param['id_state'] = $tab['idstate'];
+            $nbValToSet++;
+        }
+        if (isset($tab['idrole'])){
+            if ($nbValToSet > 0)
+                $reqPost .= ", ";
+            $reqPost .= "id_role = :id_role";
+            $param['id_role'] = $tab['idrole'];
+            $nbValToSet++;
+        }
+        
+        $reqPost .= ' WHERE id_user = :id_user';
+                
+        if ($nbValToSet < 1)
+            throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        
+        $db = $this->dbConnect();
         $req = $db->prepare($reqPost);
         $res = $req->execute($param);
         

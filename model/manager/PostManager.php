@@ -257,10 +257,14 @@ Class PostManager extends Manager
             throw new \Exception('Erreur dans les categories !!');
         }
         
-        $whereReq = "";
+        $reqPost = '
+                UPDATE yb_blog_posts  
+                SET id_cat = :newcat
+                WHERE id_cat = :oldcat';
+                
         if ($tab['idpost'] != 'all') {
             if (is_numeric($tab['idpost']) && $tab['idpost'] > 0) {
-                $whereReq = " AND id_post = :id_post";
+                $reqPost .= " AND id_post = :id_post";
                 $param['id_post'] = $tab['idpost'];
             } else {
                 throw new \Exception('Erreur lors du transfert !!');
@@ -268,10 +272,6 @@ Class PostManager extends Manager
         }
         
         $db = $this->dbConnect();
-        $reqPost = '
-                UPDATE yb_blog_posts  
-                SET id_cat = :newcat
-                WHERE id_cat = :oldcat'.$whereReq;
         $req = $db->prepare($reqPost);
         $res = $req->execute($param);
         
@@ -310,31 +310,33 @@ Class PostManager extends Manager
     {
         
         $param = array(':id_post' => $tab['id_post']);
-        $setVar = "";
+        $nbValToSet = 0;
+        
+        $reqPost = '
+                UPDATE yb_blog_posts
+                SET ';
         
         foreach($tab as $key => $value) {
             if (!empty($value) && $key != 'id_post') {
                 $param[$key] = $value;
-                if (!empty($setVar))
-                    $setVar .= ', ';
-                $setVar .= $key.' = :'.$key;
+                if ($nbValToSet > 0)
+                    $reqPost .= ', ';
+                $reqPost .= $key.' = :'.$key;
+                $nbValToSet++;
             }
         }
-        if (!empty($setVar)) {
-            $setVar = "SET ".$setVar;
-            $db = $this->dbConnect();
-            $reqPost = '
-                    UPDATE yb_blog_posts  
-                    '.$setVar.'
-                    WHERE id_post = :id_post';
-            $req = $db->prepare($reqPost);
-            $res = $req->execute($param);
-            
-            if (!$res)
-                throw new \Exception('Erreur lors de la mise à jour !!');
-        } else {
-                throw new \Exception('Aucune donnée pour la mise à jour !!');
-        }            
+
+        $reqPost .=' WHERE id_post = :id_post'; 
+        
+        if ($nbValToSet < 1)
+            throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        
+        $db = $this->dbConnect();
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de la mise à jour !!');
     }
 
     /*********************************** 

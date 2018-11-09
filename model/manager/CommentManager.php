@@ -44,17 +44,6 @@ Class CommentManager extends Manager
     {
         $param = null;
         $param[':id_state'] = (int)$idState;
-        if (is_numeric($idPost) && $idPost > 0) {
-            $whereVar = " AND C.id_post = :id_post";
-            $param[':id_post'] = $idPost;
-        } elseif (is_numeric($idComment) && $idComment > 0){
-            $whereVar = " AND C.id_com = :id_com";
-            $param[':id_com'] = $idComment;
-        } else {
-            throw new \Exception('ERROR GET COMMENTS');
-        }
-        
-        $db = $this->dbConnect();
         $reqPost = '
             SELECT 
                 C.id_com as idcom,
@@ -70,8 +59,20 @@ Class CommentManager extends Manager
             FROM yb_blog_comments as C
             LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
             LEFT JOIN yb_blog_comment_state as CS ON (C.id_state = CS.id_state)
-            WHERE C.id_state = :id_state'.$whereVar.' 
-            ORDER BY C.date DESC';
+            WHERE C.id_state = :id_state';
+            
+        if (is_numeric($idPost) && $idPost > 0) {
+            $reqPost .= " AND C.id_post = :id_post";
+            $param[':id_post'] = $idPost;
+        } elseif (is_numeric($idComment) && $idComment > 0){
+            $reqPost .= " AND C.id_com = :id_com";
+            $param[':id_com'] = $idComment;
+        } else {
+            throw new \Exception('ERROR GET COMMENTS');
+        }
+        $reqPost .= " ORDER BY C.date DESC";
+        
+        $db = $this->dbConnect();
         $req = $db->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetchall();
@@ -183,21 +184,25 @@ Class CommentManager extends Manager
     ***********************************/
     public function updateComment($tab)
     {
-        $reqVarUpdate = "";
+        $nbValToSet = 0;
         $param = array(':id_com' => $tab['idcom']);
-        
-        if (isset($tab['idstate'])){
-            if (!empty($reqVarUpdate))
-                $reqVarUpdate .= ", ";
-            $reqVarUpdate .= "id_state = :id_state";
-            $param['id_state'] = $tab['idstate'];
-        }
 
-        $db = $this->dbConnect();
         $reqPost = '
                 UPDATE yb_blog_comments  
-                SET '.$reqVarUpdate.' 
-                WHERE id_com = :id_com';
+                SET ';
+        
+        if (isset($tab['idstate'])){
+            $reqPost .= "id_state = :id_state";
+            $param[':id_state'] = (int)$tab['idstate'];
+            $nbValToSet++;
+        }
+        
+        $reqPost .= ' WHERE id_com = :id_com';
+        
+        if ($nbValToSet < 1)
+            throw new \Exception('Aucune Valeur pour la mise à jour !!');
+                
+        $db = $this->dbConnect();
         $req = $db->prepare($reqPost);
         $res = $req->execute($param);
         
