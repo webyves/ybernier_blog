@@ -333,7 +333,7 @@ Class PostManager extends Manager
     }
 
     /*********************************** 
-        Function to Update post by id_post  
+        Function to add a post  
         $tab = array(
             'title' => '',
             'content' => '', // CAN BE NULL

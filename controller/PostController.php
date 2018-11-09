@@ -25,6 +25,9 @@ Class PostController extends PageController
     ***********************************/
     public function post($idPost)
     {
+        if (!is_numeric($idPost) || $idPost < 1 )
+            throw new Exception('Post introuvable !');
+        
         $postManager = new PostManager();
         $post = $postManager->getPost($idPost);
         
