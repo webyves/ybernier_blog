@@ -15,20 +15,6 @@ Class UserManager extends Manager
     ***********************************/
     public function getUser($idUser = "", $email = "", $cookieid = "")
     {
-        if (!empty($idUser)) {
-            $whereVar = "U.id_user = :id_user";
-            $param = array(':id_user' => $idUser);
-        } elseif (!empty($email)) {
-            $whereVar = "U.email = :email";
-            $param = array(':email' => $email);
-        } elseif (!empty($cookieid)) {
-            $whereVar = "U.cookie_id = :cookie_id";
-            $param = array(':cookie_id' => $cookieid);
-        } else {
-            throw new \Exception('ERROR GET USER');
-        }
-        
-        $db = $this->dbConnect();
         $reqPost = 'SELECT 
                     U.id_user as iduser,
                     U.first_name as firstname,
@@ -46,7 +32,21 @@ Class UserManager extends Manager
                 FROM yb_blog_users as U
                 LEFT JOIN yb_blog_user_role as UR ON (U.id_role = UR.id_role)
                 LEFT JOIN yb_blog_user_state as US ON (U.id_state = US.id_state)
-                WHERE '.$whereVar;
+                WHERE ';
+        if (!empty($idUser)) {
+            $reqPost .= "U.id_user = :id_user";
+            $param = array(':id_user' => $idUser);
+        } elseif (!empty($email)) {
+            $reqPost .= "U.email = :email";
+            $param = array(':email' => $email);
+        } elseif (!empty($cookieid)) {
+            $reqPost .= "U.cookie_id = :cookie_id";
+            $param = array(':cookie_id' => $cookieid);
+        } else {
+            throw new \Exception('ERROR GET USER');
+        }
+        
+        $db = $this->dbConnect();
         $req = $db->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetch();
