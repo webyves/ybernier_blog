@@ -53,10 +53,6 @@ Class PostManager extends Manager
             $param[':id_cat'] = (int)$catId;
         }
         
-        if (!empty($whereReq))
-            $whereReq = " WHERE ".$whereReq;
-        
-        $db = $this->dbConnect();
         $reqPostsList = 'SELECT 
                     P.id_post as idpost, 
                     P.title, 
@@ -87,11 +83,20 @@ Class PostManager extends Manager
                 FROM yb_blog_posts as P
                 LEFT JOIN yb_blog_users as U ON (P.id_user = U.id_user)
                 LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
-                LEFT JOIN yb_blog_post_state as PS ON (P.id_state = PS.id_state)
-                '.$whereReq.'
+                LEFT JOIN yb_blog_post_state as PS ON (P.id_state = PS.id_state)';
+                
+        if (!empty($whereReq)) {
+            $reqPostsList .= " WHERE ";
+            $reqPostsList .= $whereReq;
+        }
+        
+        $reqPostsList .= '
                 GROUP BY P.id_post 
                 ORDER BY '.$orderReq.'P.date DESC 
                 '.$limitReq;
+        
+        
+        $db = $this->dbConnect();
                 
         $req = $db->prepare($reqPostsList);
         $req->execute($param);
