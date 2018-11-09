@@ -55,7 +55,7 @@ Class CommentController extends PostController
                     'messageHtml' => "",
                     'subject' => "[yBernier Blog] - Nouveau commentaire"                         
                 );
-            $commentManager-> sendMail($tabInfo);
+            $this-> sendMail($tabInfo);
             
             
             echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
@@ -111,7 +111,7 @@ Class CommentController extends PostController
                             'messageHtml' => "",
                             'subject' => "[yBernier Blog] - Mise à jour de votre Commentaire"                         
                         );
-                    $userManager-> sendMail($emailInfo);
+                    $this-> sendMail($emailInfo);
                 }
                 
                 $this->showAdminCommentList('Confirm');

@@ -57,8 +57,7 @@ Class StaticPageController extends PageController
                         'messageHtml' => '',
                         'subject' => $post['contactSubject']                        
                     );
-        $Manager = new Manager();
-        $Manager->sendMail($tabInfo);
+        $this->sendMail($tabInfo);
         
         echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
 

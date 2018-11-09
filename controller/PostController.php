@@ -211,7 +211,7 @@ Class PostController extends PageController
                                         <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
                         'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
                     );
-                $userManager-> sendMail($tabInfo);
+                $this->sendMail($tabInfo);
             }
             
             $this->showAdminPostsPage('Confirm');
@@ -267,7 +267,7 @@ Class PostController extends PageController
                                         <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
                         'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
                     );
-                $userManager-> sendMail($tabInfo);
+                $this-> sendMail($tabInfo);
             }
             
             $this->showAdminEditPostPage((int)$idPost,'Confirm');
