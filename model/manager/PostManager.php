@@ -310,31 +310,33 @@ Class PostManager extends Manager
     {
         
         $param = array(':id_post' => $tab['id_post']);
-        $setVar = "";
+        $nbValToSet = 0;
+        
+        $reqPost = '
+                UPDATE yb_blog_posts
+                SET ';
         
         foreach($tab as $key => $value) {
             if (!empty($value) && $key != 'id_post') {
                 $param[$key] = $value;
-                if (!empty($setVar))
-                    $setVar .= ', ';
-                $setVar .= $key.' = :'.$key;
+                if ($nbValToSet > 0)
+                    $reqPost .= ', ';
+                $reqPost .= $key.' = :'.$key;
+                $nbValToSet++;
             }
         }
-        if (!empty($setVar)) {
-            $setVar = "SET ".$setVar;
-            $db = $this->dbConnect();
-            $reqPost = '
-                    UPDATE yb_blog_posts  
-                    '.$setVar.'
-                    WHERE id_post = :id_post';
-            $req = $db->prepare($reqPost);
-            $res = $req->execute($param);
-            
-            if (!$res)
-                throw new \Exception('Erreur lors de la mise à jour !!');
-        } else {
-                throw new \Exception('Aucune donnée pour la mise à jour !!');
-        }            
+
+        $reqPost .=' WHERE id_post = :id_post'; 
+        
+        if ($nbValToSet < 1)
+            throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        
+        $db = $this->dbConnect();
+        $req = $db->prepare($reqPost);
+        $res = $req->execute($param);
+        
+        if (!$res)
+            throw new \Exception('Erreur lors de la mise à jour !!');
     }
 
     /*********************************** 
