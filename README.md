@@ -26,6 +26,9 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.109 - 9/11/2018 11h30
+- Add Post Works
+
 v0.108 - 8/11/2018 19h30
 - Upload Image Top
 - Fin MAJ POSTS

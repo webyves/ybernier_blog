@@ -63,7 +63,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="fullModifPostImage">Changer le fichier image :</label>
-                        <input  type="file" class="form-control-file" name="fullModifPostImage" id="fullModifPostImage" value="{{ post.title }}">
+                        <input  type="file" class="form-control-file" name="fullModifPostImage" id="fullModifPostImage">
                     </div>
                 </div>    
             </div>    
@@ -72,7 +72,8 @@
                     <p class="card-subtitle text-muted">
                         Taille max : 1 Mo<br>
                         Extension autorisée : jpg, jpeg, gif, png.<br>
-                        <span class="text-danger">Supprimera et Remplacera l'ancienne image</span>
+                        <span class="text-info">Laissez vide conservera l'image actuelle.</span><br>
+                        <span class="text-danger">Sinon Supprimera et Remplacera l'ancienne image</span><br>
                     </p>
                 </div>    
             </div>    

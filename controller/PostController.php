@@ -156,6 +156,21 @@ Class PostController extends PageController
     }
     
     /*********************************** 
+        Function for Admin Edit post 
+    ***********************************/
+    public function showAdminAddPostPage($messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        $Manager = new PostManager();
+        $catList = $Manager->getCats();
+        $stateList = $Manager->getStates();
+        
+        echo $this->fTwig->render('backoffice/adminAddPost'.$messageTwigView.'.twig', array('catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
+    }
+    
+    /*********************************** 
         Function for Admin Fast Edit post 
     ***********************************/
     public function modifPost($post) 
@@ -256,6 +271,39 @@ Class PostController extends PageController
         } else {
             throw new \Exception('Erreur sur le post');
         }
+    }
+
+    /*********************************** 
+        Function for Admin Add new post 
+    ***********************************/
+    public function addPost($post, $files) 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+
+        $tab = array(
+            'title' => strip_tags($post['addPostTitle']),
+            'content' => $post['addPostContent'],
+            'id_state' => (int)$post['addPostSelEtat'],
+            'id_cat' => (int)$post['addPostSelCat'],
+            'image_top' => 'default.jpg',
+            'id_user' => $_SESSION['userObject']->getIduser()
+            );
+        $postManager = new PostManager();
+        $idNewPost = $postManager->addPost($tab);
+        
+        if ($files['addPostImage']['size'] > 0) {
+            $imageTop = $this->uploadImagePost($files['addPostImage'], $idNewPost);
+            $imageTab = array(
+                'id_post' => $idNewPost,
+                'image_top' => $imageTop
+                );
+            $postManager->updatePost($imageTab);
+        }
+        
+        $this->showAdminEditPostPage($idNewPost,'ConfirmAdd');
+
     }
     
     /*********************************** 
