@@ -233,7 +233,7 @@ Class PostController extends PageController
             $tab = array(
                 'id_post' => (int)$idPost,
                 'title' => strip_tags($post['fullModifPostTitle']),
-                'content' => $post['fullModifPostContent'],
+                'content' => $this->valideHtml($post['fullModifPostContent']),
                 'id_state' => (int)$post['fullModifPostSelEtat'],
                 'id_cat' => (int)$post['fullModifPostSelCat']
                 );
@@ -287,7 +287,7 @@ Class PostController extends PageController
 
         $tab = array(
             'title' => strip_tags($post['addPostTitle']),
-            'content' => $post['addPostContent'],
+            'content' =>  $this->valideHtml($post['addPostContent']),
             'id_state' => (int)$post['addPostSelEtat'],
             'id_cat' => (int)$post['addPostSelCat'],
             'image_top' => 'default.jpg',
@@ -340,5 +340,16 @@ Class PostController extends PageController
         return $nomFic;
         
     }
+
+    /*********************************** 
+        Function to check HTML text before send in DB
+            suppr script balise with regex
+    ***********************************/
+    public function valideHtml($html) 
+    {
+        $result = preg_replace('#(<|&lt;)script(.*?)(>|&gt;)(.*?)(<|&lt;)/script(>|&gt;)#is', '', $html);
+        return $result;
+    }
+
     
 }

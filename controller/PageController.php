@@ -129,7 +129,4 @@ Class PageController
         mail($to,$subject,$message,$header);
     }    
     
-
-
-    
 }
