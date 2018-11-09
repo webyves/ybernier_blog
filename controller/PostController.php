@@ -25,6 +25,9 @@ Class PostController extends PageController
     ***********************************/
     public function post($idPost)
     {
+        if (!is_numeric($idPost) || $idPost < 1 )
+            throw new Exception('Post introuvable !');
+        
         $postManager = new PostManager();
         $post = $postManager->getPost($idPost);
         
@@ -208,7 +211,7 @@ Class PostController extends PageController
                                         <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
                         'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
                     );
-                $userManager-> sendMail($tabInfo);
+                $this->sendMail($tabInfo);
             }
             
             $this->showAdminPostsPage('Confirm');
@@ -230,7 +233,7 @@ Class PostController extends PageController
             $tab = array(
                 'id_post' => (int)$idPost,
                 'title' => strip_tags($post['fullModifPostTitle']),
-                'content' => $post['fullModifPostContent'],
+                'content' => $this->valideHtml($post['fullModifPostContent']),
                 'id_state' => (int)$post['fullModifPostSelEtat'],
                 'id_cat' => (int)$post['fullModifPostSelCat']
                 );
@@ -264,7 +267,7 @@ Class PostController extends PageController
                                         <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
                         'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
                     );
-                $userManager-> sendMail($tabInfo);
+                $this-> sendMail($tabInfo);
             }
             
             $this->showAdminEditPostPage((int)$idPost,'Confirm');
@@ -284,7 +287,7 @@ Class PostController extends PageController
 
         $tab = array(
             'title' => strip_tags($post['addPostTitle']),
-            'content' => $post['addPostContent'],
+            'content' =>  $this->valideHtml($post['addPostContent']),
             'id_state' => (int)$post['addPostSelEtat'],
             'id_cat' => (int)$post['addPostSelCat'],
             'image_top' => 'default.jpg',
@@ -337,5 +340,16 @@ Class PostController extends PageController
         return $nomFic;
         
     }
+
+    /*********************************** 
+        Function to check HTML text before send in DB
+            suppr script balise with regex
+    ***********************************/
+    public function valideHtml($html) 
+    {
+        $result = preg_replace('#(<|&lt;)script(.*?)(>|&gt;)(.*?)(<|&lt;)/script(>|&gt;)#is', '', $html);
+        return $result;
+    }
+
     
 }

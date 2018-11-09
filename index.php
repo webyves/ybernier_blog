@@ -57,16 +57,8 @@ try {
         switch ($_GET['p']) {
             // FRONT OFFICE
             case 'post':
-                if (isset($_GET['i']) && is_numeric($_GET['i'])) {
-                    if ($_GET['i'] < 1) {
-                        throw new Exception('Post introuvable !');
-                        break;
-                    }
-                    $controller = new PostController();
-                    $controller->post($_GET['i']);
-                } else {
-                    throw new Exception('Post invalide !');
-                }
+                $controller = new PostController();
+                $controller->post($_GET['i']);
                 break;
             case 'contact':
             case 'inscription':
@@ -84,24 +76,15 @@ try {
                 $UserController->inscription($_POST);
                 break;
             case 'sendCommentForm' :    
-                if (isset($_GET['i']) && is_numeric($_GET['i'])) {
-                    if ($_GET['i'] < 1) {
-                        throw new Exception('Post introuvable !');
-                    }
-                    $CommentController = new CommentController();
-                    $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
-                } else {
-                    throw new Exception('Post invalide !');
-                }
+                $CommentController = new CommentController();
+                $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
                 break;
             case 'logout':
-                if (isset($_COOKIE["userIdCookie"])) {
-                    echo "plop !!";
-                    $UserController->destroyUserCookie();
-                }
-                $UserConnected = null;
+                $UserController->destroyUserCookie();
+                $UserConnected =  null;
+                $twig->addGlobal('userObject', $UserConnected);
+                unset($_SESSION['userObject']);
                 session_destroy();
-                $twig->addGlobal('userObject', "");
                 $postController = new PostController();
                 $postController->listPosts();
                 break;
@@ -135,9 +118,6 @@ try {
                 break;
             case 'sendAdminAddPostForm':
                 $controller = new PostController();
-// $debug = new StaticPageController();
-// $debug->debugPage($_POST,'_POST');
-// $debug->debugPage($_FILES,'_FILES');
                 $controller->addPost($_POST, $_FILES);
                 break;
         

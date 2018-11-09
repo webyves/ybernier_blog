@@ -42,10 +42,8 @@ Class CommentManager extends Manager
     ***********************************/
     public function getComments($idPost = 0, $idComment = 0, $idState = 1)
     {
-        $orderReqVar = ""; // for next implementation ORDER BY other Things
-        if (!is_numeric($idState)) {
-            throw new \Exception('ERROR GET STATE COMMENTS');
-        }
+        $param = null;
+        $param[':id_state'] = (int)$idState;
         if (is_numeric($idPost) && $idPost > 0) {
             $whereVar = " AND C.id_post = :id_post";
             $param[':id_post'] = $idPost;
@@ -72,8 +70,8 @@ Class CommentManager extends Manager
             FROM yb_blog_comments as C
             LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
             LEFT JOIN yb_blog_comment_state as CS ON (C.id_state = CS.id_state)
-            WHERE C.id_state = '.$idState.$whereVar.' 
-            ORDER BY '.$orderReqVar.'C.date DESC ';
+            WHERE C.id_state = :id_state'.$whereVar.' 
+            ORDER BY C.date DESC';
         $req = $db->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetchall();

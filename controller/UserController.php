@@ -144,7 +144,7 @@ Class UserController extends PageController
                     'messageHtml' => "",
                     'subject' => "[yBernier Blog] - Nouvelle Inscription"                         
                 );
-            $Manager-> sendMail($tabInfo);
+            $this->sendMail($tabInfo);
             
             echo $this->fTwig->render('frontoffice/inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
         } else {
@@ -199,7 +199,7 @@ Class UserController extends PageController
                             'messageHtml' => "",
                             'subject' => "[yBernier Blog] - Mise à jour de votre compte"                         
                         );
-                    $Manager-> sendMail($emailInfo);
+                    $this->sendMail($emailInfo);
                 }
                 
                 $this->showAdminUserList('Confirm');
