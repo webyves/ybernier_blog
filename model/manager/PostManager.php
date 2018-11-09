@@ -296,7 +296,7 @@ Class PostManager extends Manager
             'id_post' => '',
             'title' => '',
             'content' => '',
-            'imag_top' => '',
+            'image_top' => '',
             'id_state' => '',
             'id_cat' => ''
             );
@@ -330,6 +330,58 @@ Class PostManager extends Manager
         } else {
                 throw new \Exception('Aucune donnée pour la mise à jour !!');
         }            
+    }
+
+    /*********************************** 
+        Function to Update post by id_post  
+        $tab = array(
+            'title' => '',
+            'content' => '', // CAN BE NULL
+            'image_top' => '', // CAN BE NULL
+            'id_state' => '',
+            'id_cat' => ''
+            );
+    ***********************************/
+    public function addPost($tab)
+    {
+        
+        $param = null;
+        $reqCol = "";
+        $reqVal = "";
+        
+        foreach($tab as $key => $value) {
+            if (!empty($value) && $key != 'id_post') {
+                
+                $param[$key] = $value;
+                
+                if (!empty($reqCol))
+                    $reqCol .= ', ';
+                $reqCol .= $key;
+                
+                if (!empty($reqVal))
+                    $reqVal .= ', ';
+                $reqVal .= ':'.$key;
+                
+            }
+        }
+        
+        if (!empty($reqCol)) {
+            $db = $this->dbConnect();
+            $reqPost = '
+                    INSERT INTO yb_blog_posts  
+                    ('.$reqCol.', date) VALUES ('.$reqVal.', NOW())';
+            $req = $db->prepare($reqPost);
+            $res = $req->execute($param);
             
-    }        
+            if (!$res)
+                throw new \Exception('Erreur lors l\'ajout du post !!');
+            
+            $idNewPost = $db->lastInsertId();
+            return $idNewPost;
+            
+        } else {
+                throw new \Exception('Aucune donnée à ajouter');
+        }            
+    }
+    
 }

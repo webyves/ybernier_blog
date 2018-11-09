@@ -1,13 +1,112 @@
 {% extends 'backoffice/template.twig' %}
 
 {% block title %}
-    <title>Accueil Administration</title>
+    <title>Nouveau Post</title>
 {% endblock title %}
 
 {% block content %}
     <div class="row">
         <div class="col text-center">
-            <h1>Créer un nouveau post</h1>
+            <h1>Créer un post</h1>
         </div>
     </div>
+    <form id="addPostForm" method="POST" enctype="multipart/form-data" action="index.php?p=sendAdminAddPostForm">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="addPostSelCat">Catégorie :</label>
+                <select class="form-control" name="addPostSelCat" id="addPostSelCat">
+                {% for pCat in catList %}
+                    <option value="{{ pCat.idcat }}" {% if pCat.idcat == 1 %}selected{% endif %}>{{ pCat.cattext }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>    
+        <div class="col">
+            <div class="form-group">
+                <label for="addPostSelEtat">Etat :</label>
+                <select class="form-control" name="addPostSelEtat" id="addPostSelEtat">
+                {% for pState in stateList %}
+                    <option value="{{ pState.idstate }}" {% if pState.idstate == 2 %}selected{% endif %}>{{ pState.state }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="addPostTitle">Titre :</label>
+                <input type="text" class="form-control" name="addPostTitle" id="addPostTitle" placeholder="saisissez votre titre">
+            </div>
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="addPostContent">Contenu :</label>
+                <textarea id="summernote" name="addPostContent" class="form-control"></textarea>
+            </div>    
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="addPostImage">Image Top :</label>
+                        <input  type="file" class="form-control-file" name="addPostImage" id="addPostImage">
+                    </div>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <p class="card-subtitle text-muted">
+                        Taille max : 1 Mo<br>
+                        Extension autorisée : jpg, jpeg, gif, png.<br>
+                        <span class="text-info">Laissez vide mettra l'image par defaut.</span><br>
+                    </p>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>    
+            </div>    
+        </div>    
+        <div class="col">
+        </div>    
+    </div>    
+    </form>
 {% endblock content %}
+
+{% block csslib %}
+    <!-- Summernote CSS -->
+    <link href="vendor/summernote/dist/summernote-lite.css" rel="stylesheet" /> 
+{% endblock csslib %}
+
+{% block jslib %}
+    <!-- Summernote JS -->
+    <script src="vendor/summernote/dist/summernote-lite.js"></script>
+    <script src="vendor/summernote/dist/lang/summernote-fr-FR.js"></script>
+    <script>
+        $(document).ready(function() {
+                $('#summernote').summernote({
+                placeholder:'saisissez votre contenu',
+                tabsize: 2,
+                height: 200,
+                lang: 'fr-FR',
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'table', 'hr']],
+                    ['misc', ['codeview', 'undo', 'redo']]
+                ]
+            });
+        });
+    </script>
+{% endblock jslib %}
