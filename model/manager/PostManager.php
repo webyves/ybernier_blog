@@ -257,10 +257,14 @@ Class PostManager extends Manager
             throw new \Exception('Erreur dans les categories !!');
         }
         
-        $whereReq = "";
+        $reqPost = '
+                UPDATE yb_blog_posts  
+                SET id_cat = :newcat
+                WHERE id_cat = :oldcat';
+                
         if ($tab['idpost'] != 'all') {
             if (is_numeric($tab['idpost']) && $tab['idpost'] > 0) {
-                $whereReq = " AND id_post = :id_post";
+                $reqPost .= " AND id_post = :id_post";
                 $param['id_post'] = $tab['idpost'];
             } else {
                 throw new \Exception('Erreur lors du transfert !!');
@@ -268,10 +272,6 @@ Class PostManager extends Manager
         }
         
         $db = $this->dbConnect();
-        $reqPost = '
-                UPDATE yb_blog_posts  
-                SET id_cat = :newcat
-                WHERE id_cat = :oldcat'.$whereReq;
         $req = $db->prepare($reqPost);
         $res = $req->execute($param);
         
