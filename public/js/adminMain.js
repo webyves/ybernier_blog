@@ -50,5 +50,17 @@ $(document).ready(function() {
         $('#divSpanSupCatModal').html("<strong>" + $(this).data("idcat") + " : " + $("#C_T_"+$(this).data("idcat")).html() + "</strong>");
         $('#supCatModal').modal('show');
     });
+    
+    /****************************************
+        Function for modification Post
+        put value in modal
+    ****************************************/
+    $('.btn_action_mPost').on('click', function(){
+        $('#modifPostModalSelCat').val($(this).data("idcat"));
+        $('#modifPostModalSelEtat').val($(this).data("idstate"));
+        $('#modifPostModalIdPost').val($(this).data("idpost"));
+        $('#divNamePostModal').html("<strong>" + $("#P_T_"+$(this).data("idpost")).html() + "</strong>");
+        $('#modifPostModal').modal('show');
+    });
 
 });

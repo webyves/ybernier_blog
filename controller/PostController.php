@@ -5,6 +5,7 @@ website Post controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\model\manager\UserManager;
 use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\manager\CommentManager;
 
@@ -119,7 +120,174 @@ Class PostController extends PageController
         }
     }
     
+    /*********************************** 
+        Function for Admin post 
+    ***********************************/
+    public function showAdminPostsPage($messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        $Manager = new PostManager();
+        $postList = $Manager->getPosts('full_list', 'all', 'all');
+        $catList = $Manager->getCats();
+        $stateList = $Manager->getStates();
+        
+        echo $this->fTwig->render('backoffice/adminPosts'.$messageTwigView.'.twig', array('postList' => $postList, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
+    }
     
+    /*********************************** 
+        Function for Admin Edit post 
+    ***********************************/
+    public function showAdminEditPostPage($idPost, $messageTwigView = "", $messageText = "") 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        if (is_numeric($idPost) && $idPost > 0) {
+            $Manager = new PostManager();
+            $post = $Manager->getPost($idPost);
+            $catList = $Manager->getCats();
+            $stateList = $Manager->getStates();
+            echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
+    }
     
+    /*********************************** 
+        Function for Admin Fast Edit post 
+    ***********************************/
+    public function modifPost($post) 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+
+        if (is_numeric($post['modifPostModalIdPost']) && $post['modifPostModalIdPost'] > 0) {
+            $tab = array(
+                'id_post' => (int)$post['modifPostModalIdPost'],
+                'id_state' =>  (int)$post['modifPostModalSelEtat'],
+                'id_cat' =>  (int)$post['modifPostModalSelCat']
+                );
+            $postManager = new PostManager();
+            $oldPost = $postManager->getPost((int)$post['modifPostModalIdPost']);
+            $postManager->updatePost($tab);
+            
+            if (isset($post['modifPostModalChkbxSendMail'])) {
+                $updPost = $postManager->getPost((int)$post['modifPostModalIdPost']);
+                $userManager = new UserManager();
+                $author = $userManager->getUser($updPost->getIduser());
+                
+                $tabInfo = array( 
+                        'fromFirstname' =>  "Administrateur",
+                        'fromLastname' => "yBernier Blog",
+                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'toEmail' => $author->getEmail(),
+                        'messageTxt' => "Votre post anciennement intitulé : \n"
+                                        .$oldPost->getTitle().
+                                        "\n viens d'être mis à jour par : \n"
+                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                        'messageHtml' => "Votre post anciennement intitulé : <br>
+                                        <b>".$oldPost->getTitle()."</b><br>
+                                        viens d'être mis à jour par : <br>
+                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                        'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
+                    );
+                $userManager-> sendMail($tabInfo);
+            }
+            
+            $this->showAdminPostsPage('Confirm');
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
+    }
+    
+    /*********************************** 
+        Function for Admin Full Edit post 
+    ***********************************/
+    public function editPost($post, $files, $idPost) 
+    {
+        $authRole = array(1,2);
+        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        
+        
+        if (is_numeric($idPost) && $idPost > 0) {
+            $tab = array(
+                'id_post' => (int)$idPost,
+                'title' => strip_tags($post['fullModifPostTitle']),
+                'content' => $post['fullModifPostContent'],
+                'id_state' => (int)$post['fullModifPostSelEtat'],
+                'id_cat' => (int)$post['fullModifPostSelCat']
+                );
+                
+            if ($files['fullModifPostImage']['size']>0) {
+                $imageTop = $this->uploadImagePost($files['fullModifPostImage'], $idPost);
+                $tab['image_top'] = $imageTop;
+            }
+            
+            $postManager = new PostManager();
+            $oldPost = $postManager->getPost((int)$idPost);
+            $postManager->updatePost($tab);
+            
+            if (isset($post['fullModifPostChkbxSendMail'])) {
+                $updPost = $postManager->getPost((int)$idPost);
+                $userManager = new UserManager();
+                $author = $userManager->getUser($updPost->getIduser());
+                
+                $tabInfo = array( 
+                        'fromFirstname' =>  "Administrateur",
+                        'fromLastname' => "yBernier Blog",
+                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'toEmail' => $author->getEmail(),
+                        'messageTxt' => "Votre post anciennement intitulé : \n"
+                                        .$oldPost->getTitle().
+                                        "\n viens d'être mis à jour par : \n"
+                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                        'messageHtml' => "Votre post anciennement intitulé : <br>
+                                        <b>".$oldPost->getTitle()."</b><br>
+                                        viens d'être mis à jour par : <br>
+                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                        'subject' => "[yBernier Blog] - Mise à jour de votre post."                         
+                    );
+                $userManager-> sendMail($tabInfo);
+            }
+            
+            $this->showAdminEditPostPage((int)$idPost,'Confirm');
+        } else {
+            throw new \Exception('Erreur sur le post');
+        }
+    }
+    
+    /*********************************** 
+        Function to check error on upload and sendback goog intel 
+    ***********************************/
+    public function uploadImagePost($files, $idPost) 
+    {
+        if ($files['error'] > 0)
+            throw new \Exception('Erreur lors de l\'envoie du fichier');
+        
+        if ($files['size'] > $GLOBALS['maxFileSize']) 
+            throw new \Exception('Le fichier a envoyer est trop Gros');
+        
+        $extensions_valides = array('jpg', 'jpeg', 'gif', 'png');
+        $extension_upload = strtolower(substr(strrchr($files['name'], '.'), 1));
+        if (!in_array($extension_upload,$extensions_valides) )
+            throw new \Exception('Extension invalide pour le fichier');
+
+        // $image_sizes = getimagesize($files['tmp_name']);
+        // if ($image_sizes[0] > $GLOBALS['maxwidth'] OR $image_sizes[1] > $GLOBALS['maxheight'])
+            // throw new \Exception('Dimension de l\'image Incorrectes');
+        
+        $nomFic = "imageTop".$idPost.".".$extension_upload;
+        $nom = "public/img/post/".$nomFic;
+        // if(file_exists($nom))
+            // unlink($nom);
+        $resultat = move_uploaded_file($files['tmp_name'], $nom);
+        if (!$resultat)
+            throw new \Exception('Le transfert a achoué');
+        
+        return $nomFic;
+        
+    }
     
 }

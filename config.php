@@ -17,7 +17,7 @@ configuration file for the website.
     // $GLOBALS['dbName'] = "ybernierog83";
 
 /*** Application version ***/
-    $GLOBALS['appVersion'] = "V0.106";
+    $GLOBALS['appVersion'] = "V0.108";
     
 /*** Administrator eMail ***/
     $GLOBALS['adminEmail'] = "webyves@hotmail.com";
@@ -26,5 +26,8 @@ configuration file for the website.
     $GLOBALS['siteKey'] = '6LfhH2kUAAAAAMbiHPXUeb1K8818IqINi0h1tCs2'; // on Form
     $GLOBALS['secretKey'] = '6LfhH2kUAAAAAKLIzyNxVbfvHVuTNZ7RU3EwYeXJ'; // on Serveur
     
-    
-    
+/*** MAX File Size for upload ***/
+    $GLOBALS['maxFileSize'] = 1048576; //octets = 1Mo
+    // $GLOBALS['maxwidth'] = 800;
+    // $GLOBALS['maxheight'] = 600;
+

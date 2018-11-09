@@ -15,7 +15,7 @@
             <div class="col-sm-6 col-lg-4">
                 <div class='card'>
                     <a href="index.php?p=post&i={{ post.idpost }}" class="news_img_link">
-                        <img class="card-img-top news_img" src="public/img/{{ post.imagetop }}" alt="image post {{ post.idpost }}" title="image post {{ post.idpost }}">
+                        <img class="card-img-top news_img" src="public/img/post/{{ post.imagetop }}" alt="image post {{ post.idpost }}" title="image post {{ post.idpost }}">
                         <div class="overlay_news_img">
                             <div class="overlay_news_text">
                                 <em class="fas fa-search-plus"></em>
@@ -30,7 +30,7 @@
                             dans : {{ post.category }}
                         </p>
                         <hr>
-                        <p class="text-dark">{{ post.smallcontent }}</p>
+                        <div class="text-dark">{{ post.smallcontent|raw }}</div>
                         <p class="card-subtitle text-muted"><em>{{ post.nbcom }} Commentaires</em></p>
                         <a class="card-link" href="index.php?p=post&i={{ post.idpost }}">Lire le post</a>
                     </div>

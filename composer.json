@@ -2,7 +2,6 @@
     "require": {
         "twig/twig": "^2.0",
         "components/jquery": "^3.3",
-        "components/bootstrap": "^4.1",
-        "summernote/summernote": "^0.8.8"
+        "components/bootstrap": "^4.1"
     }
 }

@@ -26,6 +26,15 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.108 - 8/11/2018 19h30
+- Upload Image Top
+- Fin MAJ POSTS
+
+v0.107 - 8/11/2018 16h
+- Debut de Gestion des post
+- affichage dans admin
+- modification rapide cat & etat
+
 v0.106 - 6/11/2018 12h
 - Gcorrection d'une request (nbpost)
 - Correction/MAJ views design front et back

@@ -1,0 +1,132 @@
+{% extends 'backoffice/template.twig' %}
+
+{% block title %}
+    <title>Edition du Post</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col text-center">
+            <h1>Modifier le post</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="card-subtitle text-muted">
+                Créé le : {{ post.datefr }}<br>
+                par : {{ post.author }}
+            </p>
+        </div>    
+    </div>    
+    <form id="fullModifPostForm" method="POST" enctype="multipart/form-data" action="index.php?p=sendAdminPostFullModifForm&i={{ post.idpost }}">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="fullModifPostSelCat">Catégorie :</label>
+                <select class="form-control" name="fullModifPostSelCat" id="fullModifPostSelCat">
+                {% for pCat in catList %}
+                    <option value="{{ pCat.idcat }}" {% if pCat.idcat == post.idcat %}selected{% endif %}>{{ pCat.cattext }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>    
+        <div class="col">
+            <div class="form-group">
+                <label for="fullModifPostSelEtat">Etat :</label>
+                <select class="form-control" name="fullModifPostSelEtat" id="fullModifPostSelEtat">
+                {% for pState in stateList %}
+                    <option value="{{ pState.idstate }}" {% if pState.idstate == post.idstate %}selected{% endif %}>{{ pState.state }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="fullModifPostTitle">Titre :</label>
+                <input type="text" class="form-control" name="fullModifPostTitle" id="fullModifPostTitle" value="{{ post.title }}">
+            </div>
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="fullModifPostContent">Contenu :</label>
+                <textarea id="summernote" name="fullModifPostContent" class="form-control">{{ post.content|raw }}</textarea>
+            </div>    
+        </div>    
+    </div>    
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="fullModifPostImage">Changer le fichier image :</label>
+                        <input  type="file" class="form-control-file" name="fullModifPostImage" id="fullModifPostImage" value="{{ post.title }}">
+                    </div>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <p class="card-subtitle text-muted">
+                        Taille max : 1 Mo<br>
+                        Extension autorisée : jpg, jpeg, gif, png.<br>
+                        <span class="text-danger">Supprimera et Remplacera l'ancienne image</span>
+                    </p>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="fullModifPostChkbxSendMail" id="fullModifPostChkbxSendMail">
+                        <label class="form-check-label" for="fullModifPostChkbxSendMail">Informer l'utilisateur par eMail.</label>
+                    </div>
+                </div>    
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>    
+            </div>    
+        </div>    
+        <div class="col">
+            <p>Image Actuelle :</p>
+            <img src="public/img/post/{{ post.imagetop }}" class="img-thumbnail">
+        </div>    
+    </div>    
+    </form>
+    
+    
+    
+{% endblock content %}
+
+{% block csslib %}
+    <!-- Summernote CSS -->
+    <link href="vendor/summernote/dist/summernote-lite.css" rel="stylesheet" /> 
+{% endblock csslib %}
+
+{% block jslib %}
+    <!-- Summernote JS -->
+    <script src="vendor/summernote/dist/summernote-lite.js"></script>
+    <script src="vendor/summernote/dist/lang/summernote-fr-FR.js"></script>
+    <script>
+        $(document).ready(function() {
+                $('#summernote').summernote({
+                tabsize: 2,
+                height: 200,
+                lang: 'fr-FR',
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'table', 'hr']],
+                    ['misc', ['codeview', 'undo', 'redo']]
+                ]
+            });
+        });
+    </script>
+{% endblock jslib %}

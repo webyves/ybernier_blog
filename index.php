@@ -109,9 +109,28 @@ try {
             // BACK OFFICE
             case 'admin':
             case 'adminAddPost':
-            case 'adminPosts':
                 $controller = new StaticPageController();
                 $controller->showAdminPage($_GET['p']);
+                break;
+                
+            case 'adminPosts':
+                $controller = new PostController();
+                $controller->showAdminPostsPage();
+                break;
+            case 'sendAdminPostModifForm':    
+                $controller = new PostController();
+                $controller->modifPost($_POST);
+                break;
+            case 'adminEditPost':
+                $controller = new PostController();
+                $controller->showAdminEditPostPage($_GET['i']);
+                break;
+            case 'sendAdminPostFullModifForm':
+                $controller = new PostController();
+        // $debug = new StaticPageController();
+        // $debug->debugPage($_FILES);
+        
+                $controller->editPost($_POST, $_FILES, $_GET['i']);
                 break;
                 
             case 'adminCatPosts':
