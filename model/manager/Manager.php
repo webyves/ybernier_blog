@@ -17,6 +17,5 @@ Class Manager
         $db = new \PDO('mysql:host='.$GLOBALS['dbHost'].';dbname='.$GLOBALS['dbName'].';charset=utf8', $GLOBALS['dbUser'], $GLOBALS['dbUserPwd']);
         return $db;
     }
-    
 
 }

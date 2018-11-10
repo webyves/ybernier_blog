@@ -88,8 +88,4 @@ Class StaticPageController extends PageController
         }
     }    
     
-        
-    
-    
-    
 }
