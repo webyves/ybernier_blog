@@ -1,25 +1,26 @@
 <?php
-/***************************************************************** 
-file: UserController.php 
+/*****************************************************************
+file: UserController.php
 website User controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\UserManager;
 
-Class UserController extends PageController
+class UserController extends PageController
 {
-    /*********************************** 
-        Function to connect User 
+    /***********************************
+        Function to connect User
             Check if it's not blocked one
     ***********************************/
-    public function connect($email,$pwd)
+    public function connect($email, $pwd)
     {
         $Manager = new UserManager();
-        $user = $Manager->getUser("",$email);
+        $user = $Manager->getUser("", $email);
         
-        if ($user->getIdstate() == 2)
+        if ($user->getIdstate() == 2) {
             throw new \Exception('Vous ne pouvez vous connecter car vous n\'avez pas encore été validé par un administrateur.');
+        }
         
         if (!empty($user->getPassword())) {
             if (password_verify($pwd, $user->getPassword())) {
@@ -33,8 +34,8 @@ Class UserController extends PageController
         }
     }
     
-    /*********************************** 
-        SubFunction to connect User 
+    /***********************************
+        SubFunction to connect User
             Put User object in Session
     ***********************************/
     public function putUserSession($userObject)
@@ -42,8 +43,8 @@ Class UserController extends PageController
         $_SESSION['userObject'] = $userObject;
     }
 
-    /*********************************** 
-        SubFunction to connect User 
+    /***********************************
+        SubFunction to connect User
             Generate a cookie with crypted info for connexion
     ***********************************/
     public function generateUserCookie($userObject)
@@ -51,8 +52,8 @@ Class UserController extends PageController
         setcookie("userIdCookie", $userObject->getCookieid(), time()+129600); //expire 36h
     }
 
-    /*********************************** 
-        SubFunction for cookie User 
+    /***********************************
+        SubFunction for cookie User
             Destroy the cookie
     ***********************************/
     public function destroyUserCookie()
@@ -60,14 +61,14 @@ Class UserController extends PageController
         setcookie("userIdCookie", "", time()-1);
     }
 
-    /*********************************** 
+    /***********************************
         Function to connect User via cookie
     ***********************************/
     public function getCookieInfo()
     {
         if (isset($_COOKIE["userIdCookie"])) {
             $Manager = new UserManager();
-            $user = $Manager->getUser("","",$_COOKIE["userIdCookie"]);
+            $user = $Manager->getUser("", "", $_COOKIE["userIdCookie"]);
             if (null !== $user->getEmail()) {
                 $this->putUserSession($user);
                 $this->generateUserCookie($user);
@@ -81,47 +82,48 @@ Class UserController extends PageController
         }
     }
     
-    /*********************************** 
-        Function for user inscription 
+    /***********************************
+        Function for user inscription
             check possible error
             send correct infos to user manager
             send email to admin
     ***********************************/
-    public function inscription($post) 
+    public function inscription($post)
     {
         $this->checkCaptchaV2($post);
 
         $errorMessage = "";
         foreach ($_POST as $postKey => $postValue) {
             if (empty($postValue)) {
-                if (!empty($errorMessage))
-                   $errorMessage .= "<br>";
+                if (!empty($errorMessage)) {
+                    $errorMessage .= "<br>";
+                }
                 switch ($postKey) {
-                    case 'inscripFirstname' :
-                        $errorMessage .= "Veuillez saisir un Prénom"; 
+                    case 'inscripFirstname':
+                        $errorMessage .= "Veuillez saisir un Prénom";
                         break;
-                    case 'inscripLastname' :
-                        $errorMessage .= "Veuillez saisir un Nom"; 
+                    case 'inscripLastname':
+                        $errorMessage .= "Veuillez saisir un Nom";
                         break;
-                    case 'inscripEmail' :
-                        $errorMessage .= "Veuillez saisir un eMail"; 
+                    case 'inscripEmail':
+                        $errorMessage .= "Veuillez saisir un eMail";
                         break;
-                    case 'inscripPassword' :
-                        $errorMessage .= "Veuillez saisir un Mot de passe"; 
+                    case 'inscripPassword':
+                        $errorMessage .= "Veuillez saisir un Mot de passe";
                         break;
-                    case 'inscripPasswordVerif' :
-                        $errorMessage .= "Veuillez saisir la verification du mot de passe"; 
+                    case 'inscripPasswordVerif':
+                        $errorMessage .= "Veuillez saisir la verification du mot de passe";
                         break;
-                    default :     
-                        $errorMessage .= "Veuillez verifier vos champs."; 
+                    default:
+                        $errorMessage .= "Veuillez verifier vos champs.";
                         break;
-                    
                 }
             }
         }
         if ($post['inscripPassword'] != $post['inscripPasswordVerif']) {
-            if (!empty($errorMessage))
-               $errorMessage .= "<br>";
+            if (!empty($errorMessage)) {
+                $errorMessage .= "<br>";
+            }
             $errorMessage .= "La verification de password a échoué";
         }
         
@@ -135,14 +137,14 @@ Class UserController extends PageController
             $Manager = new UserManager();
             $Manager->addUser($userInfo);
             
-            $tabInfo = array( 
+            $tabInfo = array(
                     'fromFirstname' =>  "Administrateur",
                     'fromLastname' => "yBernier Blog",
                     'fromEmail' => $GLOBALS['adminEmail'],
                     'toEmail' => $GLOBALS['adminEmail'],
                     'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$post['inscripFirstname']." ".$post['inscripLastname']." ".$post['inscripEmail'],
                     'messageHtml' => "",
-                    'subject' => "[yBernier Blog] - Nouvelle Inscription"                         
+                    'subject' => "[yBernier Blog] - Nouvelle Inscription"
                 );
             $this->sendMail($tabInfo);
             
@@ -152,10 +154,10 @@ Class UserController extends PageController
         }
     }
 
-    /*********************************** 
+    /***********************************
         Function for Admin user List
     ***********************************/
-    public function showAdminUserList($messageTwigView = "") 
+    public function showAdminUserList($messageTwigView = "")
     {
         $authRole = array(1);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
@@ -168,10 +170,10 @@ Class UserController extends PageController
         echo $this->fTwig->render('backoffice/adminUsers'.$messageTwigView.'.twig', array('userList' => $userList, 'userRoleList' => $userRoleList, 'userStateList' => $userStateList));
     }
     
-    /*********************************** 
+    /***********************************
         Function for Admin user modification form
     ***********************************/
-    public function modifUser($post) 
+    public function modifUser($post)
     {
         $authRole = array(1);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
@@ -190,20 +192,18 @@ Class UserController extends PageController
                 
                 if (isset($post['userModalChkbxSendMail'])) {
                     $user = $Manager->getUser($post['userModalIdUser']);
-                    $emailInfo = array( 
+                    $emailInfo = array(
                             'fromFirstname' => "Administrateur",
                             'fromLastname' => "yBernier Blog",
                             'fromEmail' => $GLOBALS['adminEmail'],
-                            'toEmail' =>  $user->getEmail(), 
+                            'toEmail' =>  $user->getEmail(),
                             'messageTxt' => "Votre compte à bien été mis à jour : ".$user->getRole()." ".$user->getState(),
                             'messageHtml' => "",
-                            'subject' => "[yBernier Blog] - Mise à jour de votre compte"                         
+                            'subject' => "[yBernier Blog] - Mise à jour de votre compte"
                         );
                     $this->sendMail($emailInfo);
                 }
-                
                 $this->showAdminUserList('Confirm');
-                
             } else {
                 throw new \Exception('Valeure Incorrecte !');
             }
@@ -211,5 +211,4 @@ Class UserController extends PageController
             throw new \Exception('Utilisateur Incorrect !');
         }
     }
-    
 }

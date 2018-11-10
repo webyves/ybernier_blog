@@ -1,6 +1,6 @@
 <?php
-/***************************************************************** 
-file: index.php 
+/*****************************************************************
+file: index.php
 router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
@@ -10,14 +10,14 @@ use \yBernier\Blog\controller\UserController;
 use \yBernier\Blog\controller\CommentController;
 
 //Configuration file
-require ('config.php');
+require('config.php');
 
 //Autoload
-require ('Autoloader.php');
+require('Autoloader.php');
 Autoloader::register();
 
 //TWIG
-require_once ('vendor/autoload.php');
+require_once('vendor/autoload.php');
 $loader = new Twig_Loader_Filesystem('view');
 $twig = new Twig_Environment($loader, array(
     'cache' => false, // 'view/frontend/cache',
@@ -68,14 +68,14 @@ try {
                 $controller->showPage($_GET['p']);
                 break;
                 
-            case 'sendContactForm' :    
+            case 'sendContactForm':
                 $controller = new StaticPageController();
                 $controller->contact($_POST);
                 break;
-            case 'sendInscriptionForm' :    
+            case 'sendInscriptionForm':
                 $UserController->inscription($_POST);
                 break;
-            case 'sendCommentForm' :    
+            case 'sendCommentForm':
                 $CommentController = new CommentController();
                 $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
                 break;
@@ -99,7 +99,7 @@ try {
                 $controller = new PostController();
                 $controller->showAdminPostsPage();
                 break;
-            case 'sendAdminPostModifForm':    
+            case 'sendAdminPostModifForm':
                 $controller = new PostController();
                 $controller->modifPost($_POST);
                 break;
@@ -161,7 +161,7 @@ try {
         $postController = new PostController();
         $postController->listPosts();
     }
-} catch(Exception $e) {
+} catch (Exception $e) {
     $errorMessage = $e->getMessage();
     $controller = new StaticPageController();
     $controller->errorPage($errorMessage);

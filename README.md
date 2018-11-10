@@ -26,6 +26,10 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.110 - 10/11/2018 17h30
+- Nombreuses corrections pour passer Insight
+- nombreuses corrections pour PSR2 code
+
 v0.109 - 9/11/2018 11h30
 - Add Post Works
 

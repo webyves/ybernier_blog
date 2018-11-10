@@ -1,6 +1,6 @@
 <?php
-/***************************************************************** 
-file: config.php 
+/*****************************************************************
+file: config.php
 configuration file for the website.
 ******************************************************************/
 
@@ -12,7 +12,7 @@ configuration file for the website.
     $GLOBALS['dbName'] = "ybernier_blog";
 
 /*** Application version ***/
-    $GLOBALS['appVersion'] = "V0.109";
+    $GLOBALS['appVersion'] = "V0.110";
     
 /*** Administrator eMail ***/
     $GLOBALS['adminEmail'] = "webyves@hotmail.com";

@@ -1,11 +1,11 @@
 <?php
-/***************************************************************** 
-file: User.php 
+/*****************************************************************
+file: User.php
 Class entities for user
 ******************************************************************/
 namespace yBernier\Blog\model\entities;
 
-Class User
+class User
 {
     private $iduser;
     private $firstname;
@@ -20,9 +20,9 @@ Class User
     
     public function __construct($db_post)
     {
-        if(!empty($db_post))
+        if (!empty($db_post)) {
             $this->hydrate($db_post);
-       
+        }
     }
     
     public function hydrate($data)
@@ -137,5 +137,4 @@ Class User
     {
         $this->state = $value;
     }
-
 }
