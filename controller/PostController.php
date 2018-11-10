@@ -325,14 +325,10 @@ Class PostController extends PageController
         if (!in_array($extension_upload,$extensions_valides) )
             throw new \Exception('Extension invalide pour le fichier');
 
-        // $image_sizes = getimagesize($files['tmp_name']);
-        // if ($image_sizes[0] > $GLOBALS['maxwidth'] OR $image_sizes[1] > $GLOBALS['maxheight'])
-            // throw new \Exception('Dimension de l\'image Incorrectes');
         
         $nomFic = "imageTop".$idPost.".".$extension_upload;
         $nom = "public/img/post/".$nomFic;
-        // if(file_exists($nom))
-            // unlink($nom);
+
         $resultat = move_uploaded_file($files['tmp_name'], $nom);
         if (!$resultat)
             throw new \Exception('Le transfert a achoué');

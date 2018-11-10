@@ -76,9 +76,6 @@ Class CommentController extends PostController
         $CommentList = $Manager->getCommentList();
         $CommentStateList = $Manager->getStateList();
         
-        // $controller = new StaticPageController();
-        // $controller->debugPage($CommentList);
-        
         echo $this->fTwig->render('backoffice/adminComments'.$messageTwigView.'.twig', array('comments' => $CommentList, 'CommentStateList' => $CommentStateList));
 
     }    

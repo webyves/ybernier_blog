@@ -11,11 +11,6 @@ configuration file for the website.
     $GLOBALS['dbHost'] = "localhost";
     $GLOBALS['dbName'] = "ybernier_blog";
 
-    // $GLOBALS['dbUser'] = "ybernierog83";
-    // $GLOBALS['dbUserPwd'] = "kvZ13dlC";
-    // $GLOBALS['dbHost'] = "ybernierog83.mysql.db";
-    // $GLOBALS['dbName'] = "ybernierog83";
-
 /*** Application version ***/
     $GLOBALS['appVersion'] = "V0.109";
     
@@ -28,6 +23,3 @@ configuration file for the website.
     
 /*** MAX File Size for upload ***/
     $GLOBALS['maxFileSize'] = 1048576; //octets = 1Mo
-    // $GLOBALS['maxwidth'] = 800;
-    // $GLOBALS['maxheight'] = 600;
-
