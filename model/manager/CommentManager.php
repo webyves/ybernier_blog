@@ -1,20 +1,20 @@
 <?php
-/***************************************************************** 
-file: CommentManager.php 
+/*****************************************************************
+file: CommentManager.php
 model for comments
 ******************************************************************/
 namespace yBernier\Blog\model\manager;
 
 use \yBernier\Blog\model\entities\Comment;
 
-Class CommentManager extends Manager
+class CommentManager extends Manager
 {
-    /*********************************** 
+    /***********************************
         Function to get number of comment for 1 specific post
     ***********************************/
     public function getCommentNb($idPost)
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqComNb = '
             SELECT 
                 COUNT(C1.id_com) as nbpost
@@ -27,7 +27,7 @@ Class CommentManager extends Manager
                 C1.id_state = 1 AND 
                 (C1.id_com = C2.id_com OR C1.id_com_parent = C2.id_com) AND 
                 C1.id_post = :id_post';
-        $req = $db->prepare($reqComNb);
+        $req = $dbObject->prepare($reqComNb);
         $req->bindValue('id_post', $idPost, \PDO::PARAM_INT);
         $req->execute();
         $res = $req->fetch();
@@ -35,8 +35,8 @@ Class CommentManager extends Manager
         return $res['nbpost'];
     }
 
-    /*********************************** 
-        Function to get multiple comments 
+    /***********************************
+        Function to get multiple comments
         for 1 specific post or 1 specific comment
         Generate a specific Tab with parents and child comments
     ***********************************/
@@ -64,7 +64,7 @@ Class CommentManager extends Manager
         if (is_numeric($idPost) && $idPost > 0) {
             $reqPost .= " AND C.id_post = :id_post";
             $param[':id_post'] = $idPost;
-        } elseif (is_numeric($idComment) && $idComment > 0){
+        } elseif (is_numeric($idComment) && $idComment > 0) {
             $reqPost .= " AND C.id_com = :id_com";
             $param[':id_com'] = $idComment;
         } else {
@@ -72,8 +72,8 @@ Class CommentManager extends Manager
         }
         $reqPost .= " ORDER BY C.date DESC";
         
-        $db = $this->dbConnect();
-        $req = $db->prepare($reqPost);
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetchall();
         $tabcomchild = array();
@@ -81,13 +81,13 @@ Class CommentManager extends Manager
         foreach ($res as $res_post) {
             if (empty($res_post['idcomparent'])) {
                 $obj = new Comment($res_post);
-                array_push($tabcomparent,$obj);
+                array_push($tabcomparent, $obj);
             } else {
                 $obj = new Comment($res_post);
                 if (!isset($tabcomchild[$res_post['idcomparent']])) {
                     $tabcomchild[$res_post['idcomparent']][0] = $obj;
                 } else {
-                    array_push($tabcomchild[$res_post['idcomparent']],$obj);
+                    array_push($tabcomchild[$res_post['idcomparent']], $obj);
                 }
             }
         }
@@ -95,10 +95,10 @@ Class CommentManager extends Manager
         return $tab;
     }
     
-    /*********************************** 
+    /***********************************
         Function to Insert Comment in DB
     ***********************************/
-    public function addComment($text, $idUser, $idPost, $idComParent) 
+    public function addComment($text, $idUser, $idPost, $idComParent)
     {
         $param = array( ':text' => strip_tags($text),
                         ':id_post' => $idPost,
@@ -107,22 +107,22 @@ Class CommentManager extends Manager
                         ':id_state' => 2
         );
 
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = 'INSERT INTO yb_blog_comments
                         (text, date, id_post, id_user, id_com_parent, id_state) 
                         VALUES
                         (:text, NOW(), :id_post, :id_user, :id_com_parent, :id_state)';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->execute($param);
     }
     
     
-    /*********************************** 
-        Function to get All comments 
+    /***********************************
+        Function to get All comments
     ***********************************/
     public function getCommentList()
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
             SELECT 
                 C.id_com as idcom,
@@ -139,7 +139,7 @@ Class CommentManager extends Manager
             LEFT JOIN yb_blog_users as U ON (C.id_user = U.id_user)
             LEFT JOIN yb_blog_comment_state as CS ON (C.id_state = CS.id_state)
             ORDER BY C.id_post DESC, C.date DESC';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->execute();
         $res = $req->fetchall();
         $tabcomchild = array();
@@ -147,13 +147,13 @@ Class CommentManager extends Manager
         foreach ($res as $res_post) {
             if (empty($res_post['idcomparent'])) {
                 $obj = new Comment($res_post);
-                array_push($tabcomparent,$obj);
+                array_push($tabcomparent, $obj);
             } else {
                 $obj = new Comment($res_post);
                 if (!isset($tabcomchild[$res_post['idcomparent']])) {
                     $tabcomchild[$res_post['idcomparent']][0] = $obj;
                 } else {
-                    array_push($tabcomchild[$res_post['idcomparent']],$obj);
+                    array_push($tabcomchild[$res_post['idcomparent']], $obj);
                 }
             }
         }
@@ -161,25 +161,25 @@ Class CommentManager extends Manager
         return $tab;
     }
     
-    /*********************************** 
+    /***********************************
         Function to get all comment's States in DB
     ***********************************/
     public function getStateList()
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
                 SELECT 
                     CS.id_state as idstate,
                     CS.text as state
                 FROM yb_blog_comment_state as CS
                 ORDER BY CS.text';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->execute();
         $res = $req->fetchall();
         return $res;
     }
     
-    /*********************************** 
+    /***********************************
         Function to update comment in DB by id_com
     ***********************************/
     public function updateComment($tab)
@@ -191,7 +191,7 @@ Class CommentManager extends Manager
                 UPDATE yb_blog_comments  
                 SET ';
         
-        if (isset($tab['idstate'])){
+        if (isset($tab['idstate'])) {
             $reqPost .= "id_state = :id_state";
             $param[':id_state'] = (int)$tab['idstate'];
             $nbValToSet++;
@@ -199,15 +199,16 @@ Class CommentManager extends Manager
         
         $reqPost .= ' WHERE id_com = :id_com';
         
-        if ($nbValToSet < 1)
+        if ($nbValToSet < 1) {
             throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        }
                 
-        $db = $this->dbConnect();
-        $req = $db->prepare($reqPost);
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPost);
         $res = $req->execute($param);
         
-        if (!$res)
+        if (!$res) {
             throw new \Exception('Erreur lors de la mise à jour !!');
+        }
     }
-    
 }

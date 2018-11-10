@@ -1,32 +1,32 @@
 <?php
-/***************************************************************** 
-file: StaticPageController.php 
+/*****************************************************************
+file: StaticPageController.php
 website Static Page Render Controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\Manager;
 
-Class StaticPageController extends PageController
+class StaticPageController extends PageController
 {
-    /*********************************** 
-        Render Debug infos 
+    /***********************************
+        Render Debug infos
     ***********************************/
-    public function debugPage($varForDump, $varName='varName')
+    public function debugPage($varForDump, $varName = 'varName')
     {
         echo $this->fTwig->render('frontoffice/debug.twig', array('varName' => $varName, 'forDump' => $varForDump));
     }
 
-    /*********************************** 
-        Render Error Page 
+    /***********************************
+        Render Error Page
     ***********************************/
     public function errorPage($errorText)
     {
         echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
-    /*********************************** 
-        Generic Render Page 
+    /***********************************
+        Generic Render Page
     ***********************************/
     public function showPage($page = '')
     {
@@ -35,10 +35,10 @@ Class StaticPageController extends PageController
         } else {
             throw new \Exception('Page introuvable !');
         }
-    }    
+    }
     
-    /*********************************** 
-        Function For Contact Form treatment 
+    /***********************************
+        Function For Contact Form treatment
             CHECK CAPTCHA
             Make correct infos array
             Send to Manager for sending mail
@@ -48,23 +48,22 @@ Class StaticPageController extends PageController
     {
         $this->checkCaptchaV2($post);
 
-        $tabInfo = array( 
+        $tabInfo = array(
                         'fromFirstname' => $post['contactFirstname'],
                         'fromLastname' => $post['contactLastname'],
                         'fromEmail' => $post['contactEmail'],
                         'toEmail' => $GLOBALS['adminEmail'],
                         'messageTxt' => $post['contactMessage'],
                         'messageHtml' => '',
-                        'subject' => $post['contactSubject']                        
+                        'subject' => $post['contactSubject']
                     );
         $this->sendMail($tabInfo);
         
         echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
-
-    }    
+    }
     
-    /*********************************** 
-        Generic Render Admin Page 
+    /***********************************
+        Generic Render Admin Page
     ***********************************/
     public function showAdminPage($page = '')
     {
@@ -86,6 +85,5 @@ Class StaticPageController extends PageController
         } else {
             throw new \Exception('Page introuvable !');
         }
-    }    
-    
+    }
 }

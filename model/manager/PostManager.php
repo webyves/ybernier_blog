@@ -1,30 +1,30 @@
 <?php
-/***************************************************************** 
-file: PostManager.php 
+/*****************************************************************
+file: PostManager.php
 Class model for post
 ******************************************************************/
 namespace yBernier\Blog\model\manager;
 
 use \yBernier\Blog\model\entities\Post;
 
-Class PostManager extends Manager 
+class PostManager extends Manager
 {
 
-    /*********************************** 
+    /***********************************
         Function to get multiple post in DB
-        
-        $mode => sidebar (default) or classic list
-        $nbPosts => can restrict quantity
-        $idState => can specify state of post
-        $userId => can specify an author of post
-        $catId => can specify a category of post
+            $mode => sidebar (default) or classic list
+            $nbPosts => can restrict quantity
+            $idState => can specify state of post
+            $userId => can specify an author of post
+            $catId => can specify a category of post
     ***********************************/
     public function getPosts($mode = 'menu', $nbPosts = 50, $idState = 1, $userId = 'all', $catId = 'all')
     {
         $param = null;
-        $orderReq = "PC.text, "; 
-        if ($mode == 'full_list')
-            $orderReq=""; 
+        $orderReq = "PC.text, ";
+        if ($mode == 'full_list') {
+            $orderReq = "";
+        }
         
         $limitReq = "";
         if ($nbPosts != "all") {
@@ -33,42 +33,37 @@ Class PostManager extends Manager
         
         $whereReq = "";
         if ($idState != "all") {
-            if (!empty($whereReq))
+            if (!empty($whereReq)) {
                 $whereReq .= " AND ";
+            }
             $whereReq .= "P.id_state = :id_state";
             $param[':id_state'] = (int)$idState;
         }
         
         if ($userId != "all") {
-            if (!empty($whereReq))
+            if (!empty($whereReq)) {
                 $whereReq .= " AND ";
+            }
             $whereReq .= "P.id_user = :id_user";
             $param[':id_user'] = (int)$userId;
         }
         
         if ($catId != "all") {
-            if (!empty($whereReq))
+            if (!empty($whereReq)) {
                 $whereReq .= " AND ";
+            }
             $whereReq .= "P.id_cat = :id_cat";
             $param[':id_cat'] = (int)$catId;
         }
         
         $reqPostsList = 'SELECT 
                     P.id_post as idpost, 
-                    P.title, 
-                    P.content, 
+                    P.title, P.content, 
                     DATE_FORMAT(P.date, \'%d/%m/%Y à %Hh%i\') as datefr,
                     P.image_top as imagetop,
-                    
-                    P.id_state as idstate,
-                    PS.text as state,
-                    
-                    P.id_cat as idcat,
-                    PC.text as category,
-                    
-                    P.id_user as iduser,
-                    CONCAT(U.first_name, " ", U.last_name) as author,
-                    
+                    P.id_state as idstate, PS.text as state,
+                    P.id_cat as idcat, PC.text as category,
+                    P.id_user as iduser, CONCAT(U.first_name, " ", U.last_name) as author,
                     (SELECT COUNT(C1.id_com)
                     FROM yb_blog_comments as C1
                     INNER JOIN yb_blog_comments as C2 ON (
@@ -79,7 +74,6 @@ Class PostManager extends Manager
                         C1.id_state = 1 AND 
                         (C1.id_com = C2.id_com OR C1.id_com_parent = C2.id_com) AND 
                         C1.id_post = P.id_post) as nbcom
-                    
                 FROM yb_blog_posts as P
                 LEFT JOIN yb_blog_users as U ON (P.id_user = U.id_user)
                 LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
@@ -95,10 +89,8 @@ Class PostManager extends Manager
                 ORDER BY '.$orderReq.'P.date DESC 
                 '.$limitReq;
         
-        
-        $db = $this->dbConnect();
-                
-        $req = $db->prepare($reqPostsList);
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPostsList);
         $req->execute($param);
         $res = $req->fetchall();
 
@@ -106,15 +98,14 @@ Class PostManager extends Manager
         if ($mode == 'full_list') {
             foreach ($res as $res_post) {
                 $obj = new Post($res_post);
-                array_push($tab,$obj);
+                array_push($tab, $obj);
             }
         } elseif ($mode == 'menu') {
-            // for frontpage sidebar Menu
-            $n=0;
+            $nbCat = 0;
             foreach ($res as $res_post) {
-                $n++;
+                $nbCat++;
                 $obj = new Post($res_post);
-                $tab[$res_post['category']][$n] = $obj;
+                $tab[$res_post['category']][$nbCat] = $obj;
             }
         }
         if (empty($tab)) {
@@ -124,12 +115,12 @@ Class PostManager extends Manager
         }
     }
     
-    /*********************************** 
-        Function to get 1 specific post in DB  
+    /***********************************
+        Function to get 1 specific post in DB
     ***********************************/
     public function getPost($idPost)
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = 'SELECT 
                     P.id_post as idpost, 
                     P.title, 
@@ -145,7 +136,7 @@ Class PostManager extends Manager
                 LEFT JOIN yb_blog_users as U ON (P.id_user = U.id_user)
                 LEFT JOIN yb_blog_post_category as PC ON (P.id_cat = PC.id_cat)
                 WHERE P.id_post = :id_post';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->bindValue('id_post', $idPost, \PDO::PARAM_INT);
         $req->execute();
         $res = $req->fetch();
@@ -158,12 +149,12 @@ Class PostManager extends Manager
         }
     }
 
-    /*********************************** 
-        Function to get all categories post in DB  
+    /***********************************
+        Function to get all categories post in DB
     ***********************************/
     public function getCats()
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
                 SELECT 
                     PC.id_cat as idcat,
@@ -173,14 +164,14 @@ Class PostManager extends Manager
                 LEFT JOIN yb_blog_posts as P ON (P.id_cat = PC.id_cat)
                 GROUP BY PC.id_cat
                 ORDER BY PC.text';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->execute();
         $res = $req->fetchall();
         return $res;
     }
     
-    /*********************************** 
-        Function to update 1 category post in DB by id_cat 
+    /***********************************
+        Function to update 1 category post in DB by id_cat
     ***********************************/
     public function updateCat($tab)
     {
@@ -188,56 +179,62 @@ Class PostManager extends Manager
             ':id_cat' => $tab['idcat'],
             ':text' => $tab['text']
             );
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
                 UPDATE yb_blog_post_category  
                 SET text = :text
                 WHERE id_cat = :id_cat';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $res = $req->execute($param);
         
-        if (!$res)
+        if (!$res) {
             throw new \Exception('Erreur lors de la mise à jour !!');
+        }
     }
     
-    /*********************************** 
-        Function to add category post in DB 
+    /***********************************
+        Function to add category post in DB
     ***********************************/
     public function addCat($tab)
     {
         $param = array(
             ':text' => $tab['text']
             );
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
                 INSERT INTO yb_blog_post_category  
                 (text) VALUES (:text)';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $res = $req->execute($param);
         
-        if (!$res)
+        if (!$res) {
             throw new \Exception('Erreur lors de l\'ajout !!');
+        }
     }
     
-    /*********************************** 
-        Function to delete 1 category post in DB by id_cat 
+    /***********************************
+        Function to delete 1 category post in DB by id_cat
     ***********************************/
     public function deleteCat($idCat)
     {
         if (is_numeric($idCat) && $idCat > 0) {
             $param = array('idcat' => $idCat);
-            $db = $this->dbConnect();
+            $dbObject = $this->dbConnect();
             $reqPost = '
                     DELETE FROM yb_blog_post_category  
                     WHERE id_cat = :idcat';
-            $req = $db->prepare($reqPost);
+            $req = $dbObject->prepare($reqPost);
             $res = $req->execute($param);
+
+            if (!$res) {
+                throw new \Exception('Erreur lors de la suppression !!');
+            }
         } else {
             throw new \Exception('Erreur dans la categorie !!');
         }
     }
     
-    /*********************************** 
+    /***********************************
         Function to Change post's category
         $tab = array (
             'newcat' => 1,
@@ -271,32 +268,31 @@ Class PostManager extends Manager
             }
         }
         
-        $db = $this->dbConnect();
-        $req = $db->prepare($reqPost);
-        $res = $req->execute($param);
-        
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPost);
+        $req->execute($param);
     }
     
-    /*********************************** 
-        Function to get all State post in DB  
+    /***********************************
+        Function to get all State post in DB
     ***********************************/
     public function getStates()
     {
-        $db = $this->dbConnect();
+        $dbObject = $this->dbConnect();
         $reqPost = '
                 SELECT 
                     S.id_state as idstate,
                     S.text as state
                 FROM yb_blog_post_state as S
                 ORDER BY S.text';
-        $req = $db->prepare($reqPost);
+        $req = $dbObject->prepare($reqPost);
         $req->execute();
         $res = $req->fetchall();
         return $res;
     }
     
-    /*********************************** 
-        Function to Update post by id_post  
+    /***********************************
+        Function to Update post by id_post
         $tab = array(
             'id_post' => '',
             'title' => '',
@@ -316,31 +312,34 @@ Class PostManager extends Manager
                 UPDATE yb_blog_posts
                 SET ';
         
-        foreach($tab as $key => $value) {
+        foreach ($tab as $key => $value) {
             if (!empty($value) && $key != 'id_post') {
                 $param[$key] = $value;
-                if ($nbValToSet > 0)
+                if ($nbValToSet > 0) {
                     $reqPost .= ', ';
+                }
                 $reqPost .= $key.' = :'.$key;
                 $nbValToSet++;
             }
         }
 
-        $reqPost .=' WHERE id_post = :id_post'; 
+        $reqPost .=' WHERE id_post = :id_post';
         
-        if ($nbValToSet < 1)
+        if ($nbValToSet < 1) {
             throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        }
         
-        $db = $this->dbConnect();
-        $req = $db->prepare($reqPost);
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPost);
         $res = $req->execute($param);
         
-        if (!$res)
+        if (!$res) {
             throw new \Exception('Erreur lors de la mise à jour !!');
+        }
     }
 
-    /*********************************** 
-        Function to add a post  
+    /***********************************
+        Function to add a post
         $tab = array(
             'title' => '',
             'content' => '', // CAN BE NULL
@@ -356,39 +355,38 @@ Class PostManager extends Manager
         $reqCol = "";
         $reqVal = "";
         
-        foreach($tab as $key => $value) {
+        foreach ($tab as $key => $value) {
             if (!empty($value) && $key != 'id_post') {
-                
                 $param[$key] = $value;
                 
-                if (!empty($reqCol))
+                if (!empty($reqCol)) {
                     $reqCol .= ', ';
+                }
                 $reqCol .= $key;
                 
-                if (!empty($reqVal))
+                if (!empty($reqVal)) {
                     $reqVal .= ', ';
+                }
                 $reqVal .= ':'.$key;
-                
             }
         }
         
         if (!empty($reqCol)) {
-            $db = $this->dbConnect();
+            $dbObject = $this->dbConnect();
             $reqPost = '
                     INSERT INTO yb_blog_posts  
                     ('.$reqCol.', date) VALUES ('.$reqVal.', NOW())';
-            $req = $db->prepare($reqPost);
+            $req = $dbObject->prepare($reqPost);
             $res = $req->execute($param);
             
-            if (!$res)
+            if (!$res) {
                 throw new \Exception('Erreur lors l\'ajout du post !!');
+            }
             
-            $idNewPost = $db->lastInsertId();
+            $idNewPost = $dbObject->lastInsertId();
             return $idNewPost;
-            
         } else {
                 throw new \Exception('Aucune donnée à ajouter');
-        }            
+        }
     }
-    
 }

@@ -1,15 +1,14 @@
 <?php
-/***************************************************************** 
-file: PageController.php 
+/*****************************************************************
+file: PageController.php
 Mother Class for Controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\PostManager;
 
-Class PageController 
+class PageController
 {
-    
     protected $postList;
     protected $postListMenu;
     protected $fTwig;
@@ -41,18 +40,19 @@ Class PageController
     }
     
     
-    /*********************************** 
+    /***********************************
         Function to check access to page
             check if User Role is admin or redacteur by default
     ***********************************/
     public function checkAccessByRole($objUser, $idRole = array(1,2))
     {
-        if (!in_array($objUser->getIdrole(), $idRole))
+        if (!in_array($objUser->getIdrole(), $idRole)) {
             throw new \Exception('Utilisateur non autorisé !');
+        }
     }
 
 
-    /*********************************** 
+    /***********************************
         Function to check reCaptcha v2
     ***********************************/
     public function checkCaptchaV2($post)
@@ -60,27 +60,27 @@ Class PageController
         $secret = $GLOBALS['secretKey'];
         $response = $post['g-recaptcha-response'];
         $remoteip = $_SERVER['REMOTE_ADDR'];
-        $api_url = "https://www.google.com/recaptcha/api/siteverify?secret=" 
+        $api_url = "https://www.google.com/recaptcha/api/siteverify?secret="
             . $secret
             . "&response=" . $response
             . "&remoteip=" . $remoteip ;
         $decode = json_decode(file_get_contents($api_url), true);
         
-        if ($decode['success'] != true)
+        if ($decode['success'] != true) {
             throw new \Exception('Erreur d\'identification');
+        }
     }
 
-    /*********************************** 
-        Function for Sending eMail  
-        
-        $tabInfo = array( 
+    /***********************************
+        Function for Sending eMail
+        $tabInfo = array(
                 'fromFirstname' => "",  // empty is OK
                 'fromLastname' => "",   // empty is OK
                 'fromEmail' => "",
                 'toEmail' => "",
                 'messageTxt' => "",
                 'messageHtml' => "",    // empty is OK
-                'subject' => ""         // empty is OK                        
+                'subject' => ""         // empty is OK
             );
     ***********************************/
     public function sendMail($tabInfo)
@@ -90,7 +90,7 @@ Class PageController
             $fromName = htmlentities($tabInfo['fromFirstname']) . " " . htmlentities($tabInfo['fromLastname']);
         }
         $fromEmail = $tabInfo['fromEmail'];
-        $to = htmlentities($tabInfo['toEmail']);
+        $destEmail = htmlentities($tabInfo['toEmail']);
         $messageTxt = nl2br(htmlentities($tabInfo['messageTxt']));
         if (empty($tabInfo['messageHtml'])) {
             $messageHtml = $messageTxt;
@@ -104,7 +104,7 @@ Class PageController
         }
         $boundary = "-----=".md5(rand());
         
-        if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $to)) {
+        if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destEmail)) {
             $ligneStop = "\r\n";
         } else {
             $ligneStop = "\n";
@@ -126,7 +126,6 @@ Class PageController
         $message.= $ligneStop."--".$boundary."--".$ligneStop;
         $message.= $ligneStop."--".$boundary."--".$ligneStop;
 
-        mail($to,$subject,$message,$header);
-    }    
-    
+        mail($destEmail, $subject, $message, $header);
+    }
 }
