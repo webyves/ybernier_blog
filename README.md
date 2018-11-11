@@ -27,6 +27,9 @@ Blog dev pour cours OC
 
 # VERSION PATCH NOTES 
 
+v0.112 - 11/11/2018 16h
+- separation des categories de post dans leur propres fichiers
+
 v0.111 - 11/11/2018 14h45
 - Nombreuses corrections pour passer Insight
 - nouveau system login/logout

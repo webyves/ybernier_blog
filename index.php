@@ -6,6 +6,7 @@ router and access point for website
 use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\App;
 use \yBernier\Blog\controller\PostController;
+use \yBernier\Blog\controller\CatPostController;
 use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
 use \yBernier\Blog\controller\CommentController;
@@ -51,11 +52,7 @@ try {
     //Router
     if (isset($_GET['p'])) {
         switch ($_GET['p']) {
-            // FRONT OFFICE
-            case 'post':
-                $controller = new PostController($twig);
-                $controller->post($_GET['i']);
-                break;
+            // FRONT OFFICE BASIC PAGES
             case 'contact':
             case 'inscription':
             case 'mentions':
@@ -64,6 +61,7 @@ try {
                 $controller->showPage($_GET['p']);
                 break;
                 
+            // FRONT OFFICE FORM CALLBACK
             case 'sendContactForm':
                 $controller = new StaticPageController($twig);
                 $controller->contact($_POST);
@@ -76,6 +74,14 @@ try {
                 $CommentController = new CommentController($twig);
                 $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
                 break;
+                
+            // FRONT OFFICE 1 POST PAGE
+            case 'post':
+                $controller = new PostController($twig);
+                $controller->post($_GET['i']);
+                break;
+                
+            // LOGOUT
             case 'logout':
                 $controller = new UserController($twig);
                 $UserConnected =  $controller->logout(true);
@@ -84,12 +90,13 @@ try {
                 $postController->listPosts();
                 break;
                 
-            // BACK OFFICE
+            // BACK OFFICE HOME
             case 'admin':
                 $controller = new StaticPageController($twig);
                 $controller->showAdminPage($_GET['p']);
                 break;
                 
+            // BACK OFFICE POSTS
             case 'adminPosts':
                 $controller = new PostController($twig);
                 $controller->showAdminPostsPage();
@@ -107,6 +114,7 @@ try {
                 $controller->editPost($_POST, $_FILES, $_GET['i']);
                 break;
                 
+            // BACK OFFICE NEW POSTS
             case 'adminAddPost':
                 $controller = new PostController($twig);
                 $controller->showAdminAddPostPage();
@@ -116,23 +124,25 @@ try {
                 $controller->addPost($_POST, $_FILES);
                 break;
         
+            // BACK OFFICE CAT POSTS
             case 'adminCatPosts':
-                $controller = new PostController($twig);
+                $controller = new CatPostController($twig);
                 $controller->showAdminCatPostList();
                 break;
             case 'sendAdminCatAddForm':
-                $controller = new PostController($twig);
+                $controller = new CatPostController($twig);
                 $controller->newCat($_POST);
                 break;
             case 'sendAdminCatModifForm':
-                $controller = new PostController($twig);
+                $controller = new CatPostController($twig);
                 $controller->modifCat($_POST);
                 break;
             case 'sendAdminCatSupForm':
-                $controller = new PostController($twig);
+                $controller = new CatPostController($twig);
                 $controller->supCat($_POST);
                 break;
                 
+            // BACK OFFICE COMMENTS
             case 'adminComments':
                 $controller = new CommentController($twig);
                 $controller->showAdminCommentList();
@@ -142,6 +152,7 @@ try {
                 $controller->modifComment($_POST);
                 break;
                 
+            // BACK OFFICE USERS
             case 'adminUsers':
                 $controller = new UserController($twig);
                 $controller->showAdminUserList();
@@ -150,6 +161,7 @@ try {
                 $controller = new UserController($twig);
                 $controller->modifUser($_POST);
                 break;
+                
             default:
                 throw new Exception('Page invalide !');
                 break;
