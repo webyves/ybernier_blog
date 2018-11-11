@@ -149,129 +149,6 @@ class PostManager extends Manager
         }
     }
 
-    /***********************************
-        Function to get all categories post in DB
-    ***********************************/
-    public function getCats()
-    {
-        $dbObject = $this->dbConnect();
-        $reqPost = '
-                SELECT 
-                    PC.id_cat as idcat,
-                    PC.text as cattext,
-                    COUNT(P.id_post) as nbpost
-                FROM yb_blog_post_category as PC
-                LEFT JOIN yb_blog_posts as P ON (P.id_cat = PC.id_cat)
-                GROUP BY PC.id_cat
-                ORDER BY PC.text';
-        $req = $dbObject->prepare($reqPost);
-        $req->execute();
-        $res = $req->fetchall();
-        return $res;
-    }
-    
-    /***********************************
-        Function to update 1 category post in DB by id_cat
-    ***********************************/
-    public function updateCat($tab)
-    {
-        $param = array(
-            ':id_cat' => $tab['idcat'],
-            ':text' => $tab['text']
-            );
-        $dbObject = $this->dbConnect();
-        $reqPost = '
-                UPDATE yb_blog_post_category  
-                SET text = :text
-                WHERE id_cat = :id_cat';
-        $req = $dbObject->prepare($reqPost);
-        $res = $req->execute($param);
-        
-        if (!$res) {
-            throw new \Exception('Erreur lors de la mise à jour !!');
-        }
-    }
-    
-    /***********************************
-        Function to add category post in DB
-    ***********************************/
-    public function addCat($tab)
-    {
-        $param = array(
-            ':text' => $tab['text']
-            );
-        $dbObject = $this->dbConnect();
-        $reqPost = '
-                INSERT INTO yb_blog_post_category  
-                (text) VALUES (:text)';
-        $req = $dbObject->prepare($reqPost);
-        $res = $req->execute($param);
-        
-        if (!$res) {
-            throw new \Exception('Erreur lors de l\'ajout !!');
-        }
-    }
-    
-    /***********************************
-        Function to delete 1 category post in DB by id_cat
-    ***********************************/
-    public function deleteCat($idCat)
-    {
-        if (is_numeric($idCat) && $idCat > 0) {
-            $param = array('idcat' => $idCat);
-            $dbObject = $this->dbConnect();
-            $reqPost = '
-                    DELETE FROM yb_blog_post_category  
-                    WHERE id_cat = :idcat';
-            $req = $dbObject->prepare($reqPost);
-            $res = $req->execute($param);
-
-            if (!$res) {
-                throw new \Exception('Erreur lors de la suppression !!');
-            }
-        } else {
-            throw new \Exception('Erreur dans la categorie !!');
-        }
-    }
-    
-    /***********************************
-        Function to Change post's category
-        $tab = array (
-            'newcat' => 1,
-            'oldcat' => $post['catModifModalIdCat'],
-            'idpost' => 'all' // or one id_post
-            );
-    ***********************************/
-    public function changePostCat($tab)
-    {
-        if (is_numeric($tab['newcat']) && $tab['newcat'] > 0
-        && is_numeric($tab['oldcat']) && $tab['oldcat'] > 0) {
-            $param = array(
-                'newcat' => $tab['newcat'],
-                'oldcat' => $tab['oldcat']
-                );
-        } else {
-            throw new \Exception('Erreur dans les categories !!');
-        }
-        
-        $reqPost = '
-                UPDATE yb_blog_posts  
-                SET id_cat = :newcat
-                WHERE id_cat = :oldcat';
-                
-        if ($tab['idpost'] != 'all') {
-            if (is_numeric($tab['idpost']) && $tab['idpost'] > 0) {
-                $reqPost .= " AND id_post = :id_post";
-                $param['id_post'] = $tab['idpost'];
-            } else {
-                throw new \Exception('Erreur lors du transfert !!');
-            }
-        }
-        
-        $dbObject = $this->dbConnect();
-        $req = $dbObject->prepare($reqPost);
-        $req->execute($param);
-    }
     
     /***********************************
         Function to get all State post in DB
@@ -388,5 +265,44 @@ class PostManager extends Manager
         } else {
                 throw new \Exception('Aucune donnée à ajouter');
         }
+    }
+    
+    /***********************************
+        Function to Change post's category
+        $tab = array (
+            'newcat' => 1,
+            'oldcat' => $post['catModifModalIdCat'],
+            'idpost' => 'all' // or one id_post
+            );
+    ***********************************/
+    public function changePostCat($tab)
+    {
+        if (is_numeric($tab['newcat']) && $tab['newcat'] > 0
+        && is_numeric($tab['oldcat']) && $tab['oldcat'] > 0) {
+            $param = array(
+                'newcat' => $tab['newcat'],
+                'oldcat' => $tab['oldcat']
+                );
+        } else {
+            throw new \Exception('Erreur dans les categories !!');
+        }
+        
+        $reqPost = '
+                UPDATE yb_blog_posts  
+                SET id_cat = :newcat
+                WHERE id_cat = :oldcat';
+                
+        if ($tab['idpost'] != 'all') {
+            if (is_numeric($tab['idpost']) && $tab['idpost'] > 0) {
+                $reqPost .= " AND id_post = :id_post";
+                $param['id_post'] = $tab['idpost'];
+            } else {
+                throw new \Exception('Erreur lors du transfert !!');
+            }
+        }
+        
+        $dbObject = $this->dbConnect();
+        $req = $dbObject->prepare($reqPost);
+        $req->execute($param);
     }
 }

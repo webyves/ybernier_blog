@@ -6,9 +6,10 @@ website Post controller
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\App;
-use \yBernier\Blog\model\manager\UserManager;
 use \yBernier\Blog\model\manager\PostManager;
+use \yBernier\Blog\model\manager\CatPostManager;
 use \yBernier\Blog\model\manager\CommentManager;
+use \yBernier\Blog\model\manager\UserManager;
 
 class PostController extends PageController
 {
@@ -39,85 +40,6 @@ class PostController extends PageController
         echo $this->fTwig->render('frontoffice/postComments.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
     }
     
-    /***********************************
-        Function for Admin post categories List
-    ***********************************/
-    public function showAdminCatPostList($messageTwigView = "", $messageText = "")
-    {
-        $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-
-        $Manager = new PostManager();
-        $catList = $Manager->getCats();
-        
-        echo $this->fTwig->render('backoffice/adminCatPosts'.$messageTwigView.'.twig', array('catList' => $catList, 'messageText' => $messageText));
-    }
-    
-    /***********************************
-        Function for Admin Category add form
-    ***********************************/
-    public function newCat($post)
-    {
-        $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-        
-        if (empty(strip_tags($post['catAddModalText']))) {
-            $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
-        } else {
-            $tab = array (
-                'text' => strip_tags($post['catAddModalText'])
-                );
-            $Manager = new PostManager();
-            $Manager->addCat($tab);
-            $this->showAdminCatPostList('Confirm');
-        }
-    }
-    
-    /***********************************
-        Function for Admin Category modification form
-    ***********************************/
-    public function modifCat($post)
-    {
-        $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-        
-        if (!is_numeric($post['catModifModalIdCat']) || $post['catModifModalIdCat'] == 1) {
-            $this->showAdminCatPostList('Error', 'Modification Impossible sur cette catégorie');
-        } elseif (empty(strip_tags($post['catModifModalText']))) {
-            $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
-        } else {
-            $tab = array (
-                'idcat' => $post['catModifModalIdCat'],
-                'text' => strip_tags($post['catModifModalText'])
-                );
-            $Manager = new PostManager();
-            $Manager->updateCat($tab);
-            $this->showAdminCatPostList('Confirm');
-        }
-    }
-    
-    /***********************************
-        Function for Admin Category suppression form
-    ***********************************/
-    public function supCat($post)
-    {
-        $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-        
-        if (!is_numeric($post['catSupModalIdCat']) || $post['catSupModalIdCat'] == 1) {
-            $this->showAdminCatPostList('Error', 'Suppression Impossible sur cette catégorie');
-        } else {
-            $tab = array (
-                'newcat' => 1,
-                'oldcat' => $post['catSupModalIdCat'],
-                'idpost' => 'all'
-                );
-            $Manager = new PostManager();
-            $Manager->changePostCat($tab);
-            $Manager->deleteCat($post['catSupModalIdCat']);
-            $this->showAdminCatPostList('Confirm');
-        }
-    }
     
     /***********************************
         Function for Admin post
@@ -127,10 +49,12 @@ class PostController extends PageController
         $authRole = array(1,2);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
 
-        $Manager = new PostManager();
-        $postList = $Manager->getPosts('full_list', 'all', 'all');
-        $catList = $Manager->getCats();
-        $stateList = $Manager->getStates();
+        $PostManager = new PostManager();
+        $postList = $PostManager->getPosts('full_list', 'all', 'all');
+        $stateList = $PostManager->getStates();
+        
+        $CatPostManager = new CatPostManager();
+        $catList = $CatPostManager->getCats();
         
         echo $this->fTwig->render('backoffice/adminPosts'.$messageTwigView.'.twig', array('postList' => $postList, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
     }
@@ -144,10 +68,13 @@ class PostController extends PageController
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
         
         if (is_numeric($idPost) && $idPost > 0) {
-            $Manager = new PostManager();
-            $post = $Manager->getPost($idPost);
-            $catList = $Manager->getCats();
-            $stateList = $Manager->getStates();
+            $PostManager = new PostManager();
+            $post = $PostManager->getPost($idPost);
+            $stateList = $PostManager->getStates();
+            
+            $CatPostManager = new CatPostManager();
+            $catList = $CatPostManager->getCats();
+        
             echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
         } else {
             throw new \Exception('Erreur sur le post');
@@ -162,9 +89,11 @@ class PostController extends PageController
         $authRole = array(1,2);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
         
-        $Manager = new PostManager();
-        $catList = $Manager->getCats();
-        $stateList = $Manager->getStates();
+        $PostManager = new PostManager();
+        $stateList = $PostManager->getStates();
+        
+        $CatPostManager = new CatPostManager();
+        $catList = $CatPostManager->getCats();
         
         echo $this->fTwig->render('backoffice/adminAddPost'.$messageTwigView.'.twig', array('catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
     }
@@ -321,7 +250,6 @@ class PostController extends PageController
         if (!in_array($extension_upload, $extensions_valides)) {
             throw new \Exception('Extension invalide pour le fichier');
         }
-
         
         $nomFic = "imageTop".$idPost.".".$extension_upload;
         $nom = "public/img/post/".$nomFic;
