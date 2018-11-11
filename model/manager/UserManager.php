@@ -11,10 +11,12 @@ class UserManager extends Manager
 {
     /***********************************
         Function to get user in DB
-            can be form id, email, or cookie
+            can be from id, email, or cookie
+            return a user object (empty if logout or error)
     ***********************************/
     public function getUser($idUser = "", $email = "", $cookieid = "")
     {
+        $param = null;
         $reqPost = 'SELECT 
                     U.id_user as iduser,
                     U.first_name as firstname,
@@ -42,8 +44,6 @@ class UserManager extends Manager
         } elseif (!empty($cookieid)) {
             $reqPost .= "U.cookie_id = :cookie_id";
             $param = array(':cookie_id' => $cookieid);
-        } else {
-            throw new \Exception('ERROR GET USER');
         }
         
         $dbObject = $this->dbConnect();
