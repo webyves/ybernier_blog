@@ -35,6 +35,20 @@ class UserController extends PageController
     }
     
     /***********************************
+        Function to logout the User
+    ***********************************/
+    public function logout($destroyCookie = false)
+    {
+        $Manager = new UserManager();
+        $user = $Manager->getUser();
+        $this->putUserSession($user);
+        if ($destroyCookie) {
+            $this->destroyUserCookie();
+        }
+        return $user;
+    }
+    
+    /***********************************
         SubFunction to connect User
             Put User object in Session
     ***********************************/

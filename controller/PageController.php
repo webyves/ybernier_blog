@@ -6,7 +6,7 @@ Mother Class for Controller
 namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\model\manager\PostManager;
-use yBernier\Blog\model\entities\User;
+use \yBernier\Blog\model\entities\User;
 
 class PageController
 {
@@ -14,9 +14,9 @@ class PageController
     protected $postListMenu;
     protected $fTwig;
     
-    public function __construct()
+    public function __construct(\Twig_Environment $twig)
     {
-        $this->setFTwig();
+        $this->setFTwig($twig);
         $this->setPostList();
         $this->setPostListMenu();
     }
@@ -34,9 +34,8 @@ class PageController
         $this->postList = $postManager->getPosts('full_list');
     }
     
-    public function setFTwig()
+    public function setFTwig(\Twig_Environment $twig)
     {
-        global $twig;
         $this->fTwig = $twig;
     }
     

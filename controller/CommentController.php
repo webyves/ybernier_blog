@@ -21,7 +21,7 @@ class CommentController extends PostController
     public function addComment($post, $UserConnected, $idPost)
     {
         if (!is_numeric($idPost) || $idPost < 1) {
-            throw new Exception('Post introuvable !');
+            throw new \Exception('Post introuvable !');
         }
         
         $idComParent = null;
