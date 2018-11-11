@@ -5,6 +5,7 @@ website User controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\UserManager;
 
 class UserController extends PageController
@@ -154,8 +155,8 @@ class UserController extends PageController
             $tabInfo = array(
                     'fromFirstname' =>  "Administrateur",
                     'fromLastname' => "yBernier Blog",
-                    'fromEmail' => $GLOBALS['adminEmail'],
-                    'toEmail' => $GLOBALS['adminEmail'],
+                    'fromEmail' => App::ADMIN_EMAIL,
+                    'toEmail' => App::ADMIN_EMAIL,
                     'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$post['inscripFirstname']." ".$post['inscripLastname']." ".$post['inscripEmail'],
                     'messageHtml' => "",
                     'subject' => "[yBernier Blog] - Nouvelle Inscription"
@@ -209,7 +210,7 @@ class UserController extends PageController
                     $emailInfo = array(
                             'fromFirstname' => "Administrateur",
                             'fromLastname' => "yBernier Blog",
-                            'fromEmail' => $GLOBALS['adminEmail'],
+                            'fromEmail' => App::ADMIN_EMAIL,
                             'toEmail' =>  $user->getEmail(),
                             'messageTxt' => "Votre compte à bien été mis à jour : ".$user->getRole()." ".$user->getState(),
                             'messageHtml' => "",

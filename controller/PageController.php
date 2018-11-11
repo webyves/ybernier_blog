@@ -5,6 +5,7 @@ Mother Class for Controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\entities\User;
 
@@ -57,7 +58,7 @@ class PageController
     ***********************************/
     public function checkCaptchaV2($post)
     {
-        $secret = $GLOBALS['secretKey'];
+        $secret = APP::CAPTCHA_SECRET_KEY;
         $response = $post['g-recaptcha-response'];
         $remoteip = $_SERVER['REMOTE_ADDR'];
         $api_url = "https://www.google.com/recaptcha/api/siteverify?secret="

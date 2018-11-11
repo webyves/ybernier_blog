@@ -4,13 +4,11 @@ file: index.php
 router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
+use \yBernier\Blog\App;
 use \yBernier\Blog\controller\PostController;
 use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
 use \yBernier\Blog\controller\CommentController;
-
-//Configuration file
-require('config.php');
 
 //Autoload
 require('Autoloader.php');
@@ -20,12 +18,12 @@ Autoloader::register();
 require_once('vendor/autoload.php');
 $loader = new Twig_Loader_Filesystem('view');
 $twig = new Twig_Environment($loader, array(
-    'cache' => false, // 'view/frontend/cache',
+    'cache' => false, // 'view/cache',
     'debug' => true,
 ));
 $twig->addExtension(new Twig_Extension_Debug());
-$twig->addGlobal('appVersion', $GLOBALS["appVersion"]);
-$twig->addGlobal('captchaSiteKey', $GLOBALS["siteKey"]);
+$twig->addGlobal('appVersion', App::APP_VERSION);
+$twig->addGlobal('captchaSiteKey', App::CAPTCHA_SITE_KEY);
 
 //SESSION INIT
 session_start();

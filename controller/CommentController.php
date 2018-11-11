@@ -5,6 +5,7 @@ website Comment controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\CommentManager;
 use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\manager\UserManager;
@@ -50,8 +51,8 @@ class CommentController extends PostController
             $tabInfo = array(
                     'fromFirstname' =>  "Administrateur",
                     'fromLastname' => "yBernier Blog",
-                    'fromEmail' => $GLOBALS['adminEmail'],
-                    'toEmail' => $GLOBALS['adminEmail'],
+                    'fromEmail' => APP::ADMIN_EMAIL,
+                    'toEmail' => APP::ADMIN_EMAIL,
                     'messageTxt' => "Un nouveau commentaire viens d'etre ajouté pour le post ".$idPost.", merci de le lire avant de le valider.",
                     'messageHtml' => "",
                     'subject' => "[yBernier Blog] - Nouveau commentaire"
@@ -103,7 +104,7 @@ class CommentController extends PostController
                     $emailInfo = array(
                             'fromFirstname' => "Administrateur",
                             'fromLastname' => "yBernier Blog",
-                            'fromEmail' => $GLOBALS['adminEmail'],
+                            'fromEmail' => APP::ADMIN_EMAIL,
                             'toEmail' =>  $user->getEmail(),
                             'messageTxt' => "L'etat de votre commentaire viens d'etre mis à jour.",
                             'messageHtml' => "",
