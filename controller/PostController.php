@@ -5,6 +5,7 @@ website Post controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\UserManager;
 use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\manager\CommentManager;
@@ -194,7 +195,7 @@ class PostController extends PageController
                 $tabInfo = array(
                         'fromFirstname' =>  "Administrateur",
                         'fromLastname' => "yBernier Blog",
-                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'fromEmail' => App::ADMIN_EMAIL,
                         'toEmail' => $author->getEmail(),
                         'messageTxt' => "Votre post anciennement intitulé : \n"
                                         .$oldPost->getTitle().
@@ -249,7 +250,7 @@ class PostController extends PageController
                 $tabInfo = array(
                         'fromFirstname' =>  "Administrateur",
                         'fromLastname' => "yBernier Blog",
-                        'fromEmail' => $GLOBALS['adminEmail'],
+                        'fromEmail' => App::ADMIN_EMAIL,
                         'toEmail' => $author->getEmail(),
                         'messageTxt' => "Votre post anciennement intitulé : \n"
                                         .$oldPost->getTitle().
@@ -311,7 +312,7 @@ class PostController extends PageController
             throw new \Exception('Erreur lors de l\'envoie du fichier');
         }
         
-        if ($files['size'] > $GLOBALS['maxFileSize']) {
+        if ($files['size'] > APP::MAX_FILE_SIZE) {
             throw new \Exception('Le fichier a envoyer est trop Gros');
         }
         

@@ -6,14 +6,15 @@ Blog dev pour cours OC
 
 1) cloner le repository sur votre serveur
 2) executer le fichier SQL sur votre base de donnée pour l'importer
-3) Modifier le fichier config.php comme suit :
-    - $GLOBALS['dbUser'] = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
-    - $GLOBALS['dbUserPwd']= ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
-    - $GLOBALS['dbHost'] = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
-    - $GLOBALS['dbName'] = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
-    - $GLOBALS['adminEmail'] = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
-    - $GLOBALS['siteKey'] = "xxxxxx"; <- remplacer avec votre site Key de captcha google v2 entre les "
-    - $GLOBALS['secretKey'] = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
+3) Modifier le fichier App.php comme suit :
+    - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
+    - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
+    - const DB_USER = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
+    - const DB_USER_PWD = ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
+    - const ADMIN_EMAIL = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
+    - const CAPTCHA_SITE_KEY = "xxxxxx"; <- remplacer avec votre site Key de captcha google v2 entre les "
+    - const CAPTCHA_SECRET_KEY = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
+    - const MAX_FILE_SIZE = 1048576; <- remplacer le chiffre par la taille max en octets souhaitée pour vos images
 4) acceder au frontoffice par le fichier index.php
 5) acceder au backoffice identifiez vous sur le frontoffice avec les identifiant suivants : 
     - mail : admin@admin.com
@@ -25,6 +26,11 @@ Blog dev pour cours OC
 
 
 # VERSION PATCH NOTES 
+
+v0.111 - 11/11/2018 14h45
+- Nombreuses corrections pour passer Insight
+- nouveau system login/logout
+- suppression des variable global et $GLOBALS remplacer par une class App et de l'injection de dependance
 
 v0.110 - 10/11/2018 17h30
 - Nombreuses corrections pour passer Insight

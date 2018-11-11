@@ -5,6 +5,7 @@ website Static Page Render Controller
 ******************************************************************/
 namespace yBernier\Blog\controller;
 
+use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\Manager;
 
 class StaticPageController extends PageController
@@ -52,7 +53,7 @@ class StaticPageController extends PageController
                         'fromFirstname' => $post['contactFirstname'],
                         'fromLastname' => $post['contactLastname'],
                         'fromEmail' => $post['contactEmail'],
-                        'toEmail' => $GLOBALS['adminEmail'],
+                        'toEmail' => App::ADMIN_EMAIL,
                         'messageTxt' => $post['contactMessage'],
                         'messageHtml' => '',
                         'subject' => $post['contactSubject']
