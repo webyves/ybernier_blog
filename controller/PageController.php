@@ -67,7 +67,7 @@ class PageController
             . "&remoteip=" . $remoteip ;
         $decode = json_decode(file_get_contents($api_url), true);
         
-        if ($decode['success'] != true) {
+        if ($decode['success'] !== true) {
             throw new \Exception('Erreur d\'identification');
         }
     }

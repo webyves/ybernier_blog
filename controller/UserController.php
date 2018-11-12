@@ -108,7 +108,7 @@ class UserController extends PageController
         $this->checkCaptchaV2($post);
 
         $errorMessage = "";
-        foreach ($_POST as $postKey => $postValue) {
+        foreach ($post as $postKey => $postValue) {
             if (empty($postValue)) {
                 if (!empty($errorMessage)) {
                     $errorMessage .= "<br>";
