@@ -35,9 +35,8 @@ class CatPostManager extends Manager
         }
         if (empty($tab)) {
             throw new \Exception('Aucune Catégories disponibles');
-        } else {
-            return $tab;
         }
+        return $tab;
     }
     
     /***********************************
