@@ -22,17 +22,16 @@ class UserController extends PageController
         if ($user->getIdstate() == 2) {
             throw new \Exception('Vous ne pouvez vous connecter car vous n\'avez pas encore été validé par un administrateur.');
         }
-        
-        if (!empty($user->getPassword())) {
-            if (password_verify($pwd, $user->getPassword())) {
-                $this->putUserSession($user);
-                return $user;
-            } else {
-                throw new \Exception('Identification Incorrecte !');
-            }
-        } else {
+
+        if (empty($user->getPassword())) {
             throw new \Exception('Utilisateur Incorrect !');
         }
+        
+        if (!password_verify($pwd, $user->getPassword())) {
+            throw new \Exception('Identification Incorrecte !');
+        }
+        $this->putUserSession($user);
+        return $user;
     }
     
     /***********************************
