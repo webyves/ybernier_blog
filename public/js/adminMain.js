@@ -10,11 +10,10 @@ $(document).ready(function() {
         put value in modal
     ****************************************/
     $(".btn_action_mUser").on("click", function(){
-        var id_user = $(this).data("iduser");
-        $("#userModalIdUser").val(id_user);
+        $("#userModalIdUser").val($(this).data("iduser"));
         $("#userModalSelRole").val($(this).data("idrole"));
         $("#userModalSelEtat").val($(this).data("idstate"));
-        $("#divNameUserModal").html("<strong>" + $("#U_F_"+id_user).html() + " " + $("#U_L_"+id_user).html() + "</strong>");
+        $("#divNameUserModal").html("<strong>" + $("#U_F_" + $(this).data("iduser")).html() + " " + $("#U_L_" + $(this).data("iduser")).html() + "</strong>");
         $("#modifUserModal").modal("show");
     });
 
@@ -36,7 +35,7 @@ $(document).ready(function() {
     ****************************************/
     $(".btn_action_mCat").on("click", function(){
         $("#catModifModalIdCat").val($(this).data("idcat"));
-        $("#catModifModalText").val($("#C_T_"+$(this).data("idcat")).html());
+        $("#catModifModalText").val($("#C_T_" + $(this).data("idcat")).html());
         $("#divNameModifCatModal").html("<strong>" + $(this).data("idcat") + " : " + $("#C_T_"+$(this).data("idcat")).html() + "</strong>");
         $("#modifCatModal").modal("show");
     });
