@@ -10,6 +10,7 @@ use \yBernier\Blog\model\manager\PostManager;
 use \yBernier\Blog\model\manager\CatPostManager;
 use \yBernier\Blog\model\manager\CommentManager;
 use \yBernier\Blog\model\manager\UserManager;
+use \yBernier\Blog\model\entities\Post;
 
 class PostController extends PageController
 {
@@ -68,13 +69,13 @@ class PostController extends PageController
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
         
         if (is_numeric($idPost) && $idPost > 0) {
+            $CatPostManager = new CatPostManager();
+            $catList = $CatPostManager->getCats();
+        
             $PostManager = new PostManager();
             $post = $PostManager->getPost($idPost);
             $stateList = $PostManager->getStates();
             
-            $CatPostManager = new CatPostManager();
-            $catList = $CatPostManager->getCats();
-        
             echo $this->fTwig->render('backoffice/adminEditPost'.$messageTwigView.'.twig', array('post' => $post, 'catList' => $catList, 'stateList' => $stateList, 'messageText' => $messageText));
         } else {
             throw new \Exception('Erreur sur le post');
@@ -118,25 +119,7 @@ class PostController extends PageController
             
             if (isset($post['modifPostModalChkbxSendMail'])) {
                 $updPost = $postManager->getPost((int)$post['modifPostModalIdPost']);
-                $userManager = new UserManager();
-                $author = $userManager->getUser($updPost->getIduser());
-                
-                $tabInfo = array(
-                        'fromFirstname' =>  "Administrateur",
-                        'fromLastname' => "yBernier Blog",
-                        'fromEmail' => App::ADMIN_EMAIL,
-                        'toEmail' => $author->getEmail(),
-                        'messageTxt' => "Votre post anciennement intitulé : \n"
-                                        .$oldPost->getTitle().
-                                        "\n viens d'être mis à jour par : \n"
-                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
-                        'messageHtml' => "Votre post anciennement intitulé : <br>
-                                        <b>".$oldPost->getTitle()."</b><br>
-                                        viens d'être mis à jour par : <br>
-                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
-                        'subject' => "[yBernier Blog] - Mise à jour de votre post."
-                    );
-                $this->sendMail($tabInfo);
+                $this->sendMailModifPost($oldPost, $updPost);
             }
             $this->showAdminPostsPage('Confirm');
         } else {
@@ -151,7 +134,6 @@ class PostController extends PageController
     {
         $authRole = array(1,2);
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
-        
         
         if (is_numeric($idPost) && $idPost > 0) {
             $tab = array(
@@ -173,25 +155,7 @@ class PostController extends PageController
             
             if (isset($post['fullModifPostChkbxSendMail'])) {
                 $updPost = $postManager->getPost((int)$idPost);
-                $userManager = new UserManager();
-                $author = $userManager->getUser($updPost->getIduser());
-                
-                $tabInfo = array(
-                        'fromFirstname' =>  "Administrateur",
-                        'fromLastname' => "yBernier Blog",
-                        'fromEmail' => App::ADMIN_EMAIL,
-                        'toEmail' => $author->getEmail(),
-                        'messageTxt' => "Votre post anciennement intitulé : \n"
-                                        .$oldPost->getTitle().
-                                        "\n viens d'être mis à jour par : \n"
-                                        .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
-                        'messageHtml' => "Votre post anciennement intitulé : <br>
-                                        <b>".$oldPost->getTitle()."</b><br>
-                                        viens d'être mis à jour par : <br>
-                                        <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
-                        'subject' => "[yBernier Blog] - Mise à jour de votre post."
-                    );
-                $this-> sendMail($tabInfo);
+                $this->sendMailModifPost($oldPost, $updPost);
             }
             
             $this->showAdminEditPostPage((int)$idPost, 'Confirm');
@@ -200,6 +164,32 @@ class PostController extends PageController
         }
     }
 
+    /***********************************
+        Function for Admin Add new post
+    ***********************************/
+    protected function sendMailModifPost(Post $oldPost, Post $updPost)
+    {
+        $userManager = new UserManager();
+        $author = $userManager->getUser($updPost->getIduser());
+        
+        $tabInfo = array(
+                'fromFirstname' =>  "Administrateur",
+                'fromLastname' => "yBernier Blog",
+                'fromEmail' => App::ADMIN_EMAIL,
+                'toEmail' => $author->getEmail(),
+                'messageTxt' => "Votre post anciennement intitulé : \n"
+                                .$oldPost->getTitle().
+                                "\n viens d'être mis à jour par : \n"
+                                .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                'messageHtml' => "Votre post que vous aviez intitulé : <br>
+                                <b>".$oldPost->getTitle()."</b><br>
+                                viens d'être mis à jour par: <br>
+                                <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                'subject' => "[yBernier Blog] - Mise à jour de votre post."
+            );
+
+        $this-> sendMail($tabInfo);
+    }    
     /***********************************
         Function for Admin Add new post
     ***********************************/
