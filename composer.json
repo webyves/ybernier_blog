@@ -1,4 +1,8 @@
 {
+    "name": "ybernier/blog",
+    "license": "proprietary",
+    "description": "OpenClassRooms website P5",
+    "type": "project",
     "require": {
         "twig/twig": "^2.0",
         "components/jquery": "^3.3",
