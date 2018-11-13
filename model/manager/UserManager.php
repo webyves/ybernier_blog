@@ -91,7 +91,11 @@ class UserManager extends Manager
                         VALUES
                         (:first_name, :last_name, :email, :password, :cookie_id, :id_role, :id_state)';
         $req = $dbObject->prepare($reqPost);
-        $req->execute($param);
+        $res = $req->execute($param);
+        
+        if (!$res) {
+            throw new \Exception('Erreur lors de la creation de l\'utilisateur !!');
+        }
     }
 
     /***********************************
@@ -129,9 +133,8 @@ class UserManager extends Manager
 
         if (empty($tab)) {
             throw new \Exception('Aucun Utilisateurs !!');
-        } else {
-            return $tab;
         }
+        return $tab;
     }
     
     /***********************************

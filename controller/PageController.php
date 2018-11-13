@@ -58,6 +58,10 @@ class PageController
     ***********************************/
     public function checkCaptchaV2($post)
     {
+        if (!isset($post['g-recaptcha-response'])) {
+            throw new \Exception('Erreur d\'envoie de donnée');
+        }
+        
         $secret = APP::CAPTCHA_SECRET_KEY;
         $response = $post['g-recaptcha-response'];
         $remoteip = $_SERVER['REMOTE_ADDR'];

@@ -25,9 +25,26 @@ $twig = new Twig_Environment($loader, array(
 $twig->addExtension(new Twig_Extension_Debug());
 $twig->addGlobal('appVersion', App::APP_VERSION);
 $twig->addGlobal('captchaSiteKey', App::CAPTCHA_SITE_KEY);
+$twig->addGlobal('maxFileSizeTxt', round((App::MAX_FILE_SIZE / 1048576), 2, PHP_ROUND_HALF_DOWN) . " Mo");
 
 //SESSION INIT
 session_start();
+
+// Processing form data for passing
+$postData = $filesData = array();
+$getDataI = $getDataP = "";
+if (isset($_POST)) {
+    $postData = $_POST;
+}
+if (isset($_GET['p'])) {
+    $getDataP = $_GET['p'];
+}
+if (isset($_GET['i'])) {
+    $getDataI = $_GET['i'];
+}
+if (isset($_FILES)) {
+    $filesData = $_FILES;
+}
 
 try {
     // CONNEXION
@@ -35,9 +52,9 @@ try {
     if (isset($_SESSION['userObject']) && !is_null($_SESSION['userObject']->getEmail())) {
         $UserConnected =  $_SESSION['userObject'];
     } else {
-        if (isset($_POST['conexEmail']) && isset($_POST['conexInputPassword'])) {
-            $UserConnected = $UserController->connect($_POST['conexEmail'], $_POST['conexInputPassword']);
-            if (isset($_POST['conexChkbxRemember'])) {
+        if (isset($postData['conexEmail']) && isset($postData['conexInputPassword'])) {
+            $UserConnected = $UserController->connect($postData['conexEmail'], $postData['conexInputPassword']);
+            if (isset($postData['conexChkbxRemember'])) {
                 $UserController->generateUserCookie($UserConnected);
             }
         } elseif (!is_null($UserController->getCookieInfo())) {
@@ -50,35 +67,35 @@ try {
     $twig->addGlobal('userObject', $UserConnected);
     
     //Router
-    if (isset($_GET['p'])) {
-        switch ($_GET['p']) {
+    if (!empty($getDataP)) {
+        switch ($getDataP) {
             // FRONT OFFICE BASIC PAGES
             case 'contact':
             case 'inscription':
             case 'mentions':
             case 'confidentialite':
                 $controller = new StaticPageController($twig);
-                $controller->showPage($_GET['p']);
+                $controller->showPage($getDataP);
                 break;
                 
             // FRONT OFFICE FORM CALLBACK
             case 'sendContactForm':
                 $controller = new StaticPageController($twig);
-                $controller->contact($_POST);
+                $controller->contact($postData);
                 break;
             case 'sendInscriptionForm':
                 $controller = new UserController($twig);
-                $controller->inscription($_POST);
+                $controller->inscription($postData);
                 break;
             case 'sendCommentForm':
                 $CommentController = new CommentController($twig);
-                $CommentController->addComment($_POST, $UserConnected, $_GET['i']);
+                $CommentController->addComment($postData, $UserConnected, $getDataI);
                 break;
                 
             // FRONT OFFICE 1 POST PAGE
             case 'post':
                 $controller = new PostController($twig);
-                $controller->post($_GET['i']);
+                $controller->post($getDataI);
                 break;
                 
             // LOGOUT
@@ -93,7 +110,7 @@ try {
             // BACK OFFICE HOME
             case 'admin':
                 $controller = new StaticPageController($twig);
-                $controller->showAdminPage($_GET['p']);
+                $controller->showAdminPage($getDataP);
                 break;
                 
             // BACK OFFICE POSTS
@@ -103,15 +120,15 @@ try {
                 break;
             case 'sendAdminPostModifForm':
                 $controller = new PostController($twig);
-                $controller->modifPost($_POST);
+                $controller->modifPost($postData);
                 break;
             case 'adminEditPost':
                 $controller = new PostController($twig);
-                $controller->showAdminEditPostPage($_GET['i']);
+                $controller->showAdminEditPostPage($getDataI);
                 break;
             case 'sendAdminPostFullModifForm':
                 $controller = new PostController($twig);
-                $controller->editPost($_POST, $_FILES, $_GET['i']);
+                $controller->editPost($postData, $filesData, $getDataI);
                 break;
                 
             // BACK OFFICE NEW POSTS
@@ -121,7 +138,7 @@ try {
                 break;
             case 'sendAdminAddPostForm':
                 $controller = new PostController($twig);
-                $controller->addPost($_POST, $_FILES);
+                $controller->addPost($postData, $filesData);
                 break;
         
             // BACK OFFICE CAT POSTS
@@ -131,15 +148,15 @@ try {
                 break;
             case 'sendAdminCatAddForm':
                 $controller = new CatPostController($twig);
-                $controller->newCat($_POST);
+                $controller->newCat($postData);
                 break;
             case 'sendAdminCatModifForm':
                 $controller = new CatPostController($twig);
-                $controller->modifCat($_POST);
+                $controller->modifCat($postData);
                 break;
             case 'sendAdminCatSupForm':
                 $controller = new CatPostController($twig);
-                $controller->supCat($_POST);
+                $controller->supCat($postData);
                 break;
                 
             // BACK OFFICE COMMENTS
@@ -149,7 +166,7 @@ try {
                 break;
             case 'sendAdminCommentModifForm':
                 $controller = new CommentController($twig);
-                $controller->modifComment($_POST);
+                $controller->modifComment($postData);
                 break;
                 
             // BACK OFFICE USERS
@@ -159,7 +176,7 @@ try {
                 break;
             case 'sendAdminUserModifForm':
                 $controller = new UserController($twig);
-                $controller->modifUser($_POST);
+                $controller->modifUser($postData);
                 break;
                 
             default:
