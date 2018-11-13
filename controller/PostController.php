@@ -136,6 +136,9 @@ class PostController extends PageController
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
         
         if (is_numeric($idPost) && $idPost > 0) {
+            $postManager = new PostManager();
+            $oldPost = $postManager->getPost((int)$idPost);
+            
             $tab = array(
                 'id_post' => (int)$idPost,
                 'title' => strip_tags($post['fullModifPostTitle']),
@@ -145,12 +148,10 @@ class PostController extends PageController
                 );
                 
             if ($files['fullModifPostImage']['size']>0) {
-                $imageTop = $this->uploadImagePost($files['fullModifPostImage'], $idPost);
+                $imageTop = $this->uploadImagePost($files['fullModifPostImage'], $idPost, $oldPost->getImagetop());
                 $tab['image_top'] = $imageTop;
             }
             
-            $postManager = new PostManager();
-            $oldPost = $postManager->getPost((int)$idPost);
             $postManager->updatePost($tab);
             
             if (isset($post['fullModifPostChkbxSendMail'])) {
@@ -163,33 +164,6 @@ class PostController extends PageController
             throw new \Exception('Erreur sur le post');
         }
     }
-
-    /***********************************
-        Function for Admin Add new post
-    ***********************************/
-    protected function sendMailModifPost(Post $oldPost, Post $updPost)
-    {
-        $userManager = new UserManager();
-        $author = $userManager->getUser($updPost->getIduser());
-        
-        $tabInfo = array(
-                'fromFirstname' =>  "Administrateur",
-                'fromLastname' => "yBernier Blog",
-                'fromEmail' => App::ADMIN_EMAIL,
-                'toEmail' => $author->getEmail(),
-                'messageTxt' => "Votre post anciennement intitulé : \n"
-                                .$oldPost->getTitle().
-                                "\n viens d'être mis à jour par : \n"
-                                .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
-                'messageHtml' => "Votre post que vous aviez intitulé : <br>
-                                <b>".$oldPost->getTitle()."</b><br>
-                                viens d'être mis à jour par: <br>
-                                <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
-                'subject' => "[yBernier Blog] - Mise à jour de votre post."
-            );
-
-        $this-> sendMail($tabInfo);
-    }    
     /***********************************
         Function for Admin Add new post
     ***********************************/
@@ -221,11 +195,38 @@ class PostController extends PageController
         
         $this->showAdminEditPostPage($idNewPost, 'ConfirmAdd');
     }
+
+    /***********************************
+        Function for sending preprogrammed email for update post
+    ***********************************/
+    protected function sendMailModifPost(Post $oldPost, Post $updPost)
+    {
+        $userManager = new UserManager();
+        $author = $userManager->getUser($updPost->getIduser());
+        
+        $tabInfo = array(
+                'fromFirstname' =>  "Administrateur",
+                'fromLastname' => "yBernier Blog",
+                'fromEmail' => App::ADMIN_EMAIL,
+                'toEmail' => $author->getEmail(),
+                'messageTxt' => "Votre post anciennement intitulé : \n"
+                                .$oldPost->getTitle().
+                                "\n viens d'être mis à jour par : \n"
+                                .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                'messageHtml' => "Votre post que vous aviez intitulé : <br>
+                                <b>".$oldPost->getTitle()."</b><br>
+                                viens d'être mis à jour par: <br>
+                                <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                'subject' => "[yBernier Blog] - Mise à jour de votre post."
+            );
+
+        $this-> sendMail($tabInfo);
+    }    
     
     /***********************************
-        Function to check error on upload and sendback goog intel
+        Function to check error on upload and sendback good infos
     ***********************************/
-    protected function uploadImagePost($files, $idPost)
+    protected function uploadImagePost($files, $idPost, $oldImagetop = "default.jpg")
     {
         if ($files['error'] > 0) {
             throw new \Exception('Erreur lors de l\'envoie du fichier');
@@ -243,6 +244,12 @@ class PostController extends PageController
         
         $nomFic = "imageTop".$idPost.".".$extension_upload;
         $nom = "public/img/post/".$nomFic;
+        
+        if ($oldImagetop != "default.jpg" && $oldImagetop != $nomFic) {
+            if (file_exists("public/img/post/" . $oldImagetop)) {
+                unlink("public/img/post/" . $oldImagetop);
+            }
+        }
 
         $resultat = move_uploaded_file($files['tmp_name'], $nom);
         if (!$resultat) {

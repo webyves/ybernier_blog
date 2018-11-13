@@ -31,8 +31,14 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
+v0.113 - 12/11/2018 12h
+- Ajout mentions legales
+- Ajout politique confidentialité
+- correction upload et upload infos
+
 v0.112 - 11/11/2018 16h
 - separation des categories de post dans leur propres fichiers
+- quelques corrections de style de code
 
 v0.111 - 11/11/2018 14h45
 - Nombreuses corrections pour passer Insight

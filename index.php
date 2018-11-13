@@ -25,6 +25,7 @@ $twig = new Twig_Environment($loader, array(
 $twig->addExtension(new Twig_Extension_Debug());
 $twig->addGlobal('appVersion', App::APP_VERSION);
 $twig->addGlobal('captchaSiteKey', App::CAPTCHA_SITE_KEY);
+$twig->addGlobal('maxFileSizeTxt', round((App::MAX_FILE_SIZE / 1048576), 2, PHP_ROUND_HALF_DOWN) . " Mo");
 
 //SESSION INIT
 session_start();

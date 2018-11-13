@@ -8,7 +8,7 @@ namespace yBernier\Blog;
 class App
 {
     // Application version
-    const APP_VERSION = "V0.112";
+    const APP_VERSION = "V0.113";
     
     // Connexion to database
     const DB_HOST = "localhost";
