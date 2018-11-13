@@ -69,6 +69,12 @@ try {
     //Router
     if (!empty($getDataP)) {
         switch ($getDataP) {
+            // Error Pages
+            case 'erreur':
+                $controller = new StaticPageController($twig);
+                $controller->errorPage('', $getDataI);
+                break;
+                
             // FRONT OFFICE BASIC PAGES
             case 'contact':
             case 'inscription':

@@ -21,8 +21,29 @@ class StaticPageController extends PageController
     /***********************************
         Render Error Page
     ***********************************/
-    public function errorPage($errorText)
+    public function errorPage($errorText = '', $codeError = 0)
     {
+        switch ($codeError) {
+            case 400:
+                $errorText = '<strong>Erreur 400:</strong> <em>Bad Request</em><br>La syntaxe de la requête est mal formulée.';
+                break;
+            case 401:
+                $errorText = '<strong>Erreur 401:</strong> <em>Unhautorized</em><br>l\'utilisateur n\'a pas entré le bon mot de passe pour accéder au contenu.';
+                break;
+            case 403:
+                $errorText = '<strong>Erreur 403:</strong> <em>Forbidden</em><br>l\'accès au contenu est interdit.';
+                break;
+            case 404:
+                $errorText = '<strong>Erreur 404:</strong> <em>Not Found</em><br>le document n\'a pas été trouvé.';
+                break;
+            case 500:
+                $errorText = '<strong>Erreur 403:</strong> <em>Internal Server Error</em><br> le serveur a rencontré une erreur interne.';
+                break;
+            case 503:
+                $errorText = '<strong>Erreur 503:</strong> <em>Service Unvailable</em><br>le serveur ne peut pas répondre à cause d\'une surcharge de trafic.';
+                break;
+        }    
+        
         echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
@@ -31,11 +52,10 @@ class StaticPageController extends PageController
     ***********************************/
     public function showPage($page = '')
     {
-        if (!empty($page)) {
-            echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
-        } else {
+        if (empty($page)) { 
             throw new \Exception('Page introuvable !');
         }
+        echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
     }
     
     /***********************************

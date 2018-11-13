@@ -7,7 +7,7 @@
 {% block content %}
     <div class="alert alert-danger" role="alert">
         <h4 class="alert-heading">ERREUR !</h4>
-        <p>{{ errorText }}</p>
+        <p>{{ errorText|raw }}</p>
         <hr>
         <p class="mb-0"><a href="index.php">Retournez à l'accueil.</a></p>
     </div>
