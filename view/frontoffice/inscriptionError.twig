@@ -4,6 +4,6 @@
     <div class="alert alert-danger" role="alert">
         <h4 class="alert-heading">Erreur !</h4>
         <p>Une Erreur c'est produite :<br>
-        {{ errorMessage }}.</p>
+        {{ errorMessage|raw }}.</p>
     </div>
 {% endblock contentMessage %}

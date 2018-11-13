@@ -129,7 +129,7 @@ class UserController extends PageController
                         $errorMessage .= "Veuillez saisir la verification du mot de passe";
                         break;
                     default:
-                        $errorMessage .= "Veuillez verifier vos champs.";
+                        $errorMessage .= "Veuillez verifier vos champs";
                         break;
                 }
             }
@@ -141,14 +141,21 @@ class UserController extends PageController
             $errorMessage .= "La verification de password a échoué";
         }
         
+        $Manager = new UserManager();
+        $checkUser = $Manager->getUser("", strip_tags($post['inscripEmail']));
+        if (null !== $checkUser->getEmail()) {
+            $errorMessage = "<strong>Il existe déjà un utilisateur avec cet email.</strong><br>Veuillez choisir un autre eMail ou <a href='index.php?p=contact'>contacter un Administrateur</a>";
+        }
+        
+        $theView = "frontoffice/inscriptionError.twig";
+        $theViewParam = array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu);
         if (empty($errorMessage)) {
             $userInfo = array(
-                            'firstName' => $post['inscripFirstname'],
-                            'lastName' => $post['inscripLastname'],
-                            'eMail' => $post['inscripEmail'],
+                            'firstName' => strip_tags($post['inscripFirstname']),
+                            'lastName' => strip_tags($post['inscripLastname']),
+                            'eMail' => strip_tags($post['inscripEmail']),
                             'password' => $post['inscripPassword']
                 );
-            $Manager = new UserManager();
             $Manager->addUser($userInfo);
             
             $tabInfo = array(
@@ -156,16 +163,16 @@ class UserController extends PageController
                     'fromLastname' => "yBernier Blog",
                     'fromEmail' => App::ADMIN_EMAIL,
                     'toEmail' => App::ADMIN_EMAIL,
-                    'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$post['inscripFirstname']." ".$post['inscripLastname']." ".$post['inscripEmail'],
+                    'messageTxt' => "Nouvelle Inscription sur le blog, Merci de valider ".$userInfo['firstName']." ".$userInfo['lastName']." ".$userInfo['eMail'],
                     'messageHtml' => "",
                     'subject' => "[yBernier Blog] - Nouvelle Inscription"
                 );
             $this->sendMail($tabInfo);
-            
-            echo $this->fTwig->render('frontoffice/inscriptionConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
-        } else {
-            echo $this->fTwig->render('frontoffice/inscriptionError.twig', array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu));
+            $theView = "frontoffice/inscriptionConfirm.twig";
+            $theViewParam = array('postList' => $this->postList, 'postListMenu' => $this->postListMenu);
         }
+
+        echo $this->fTwig->render($theView, $theViewParam);
     }
 
     /***********************************

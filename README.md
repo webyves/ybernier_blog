@@ -35,6 +35,7 @@ v0.113 - 12/11/2018 12h
 - Ajout mentions legales
 - Ajout politique confidentialité
 - correction upload et upload infos
+- correction inscription plusieurs fois meme email.
 
 v0.112 - 11/11/2018 16h
 - separation des categories de post dans leur propres fichiers
