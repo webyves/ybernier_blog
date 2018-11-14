@@ -33,7 +33,7 @@ class App
     
 /********* END OF USERS PREFERENCES *********/
     
-    const APP_VERSION = "V0.113";   // Application version
+    const APP_VERSION = "V0.115";   // Application version
     private $fGet;                  // $_GET
     private $fGetP;                 // $_POST
     private $fGetI;                 // $_GET['i']

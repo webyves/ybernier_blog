@@ -31,13 +31,21 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
-v0.113 - 12/11/2018 12h
+v0.115 - 14/11/2018 16h
+- Encapsulation superglobals
+- MAJ App avec construct pour recup superglobals
+- Deplacer lancement de twig dans PageController
+
+v0.114 - 13/11/2018 16h
+- Ajout des htaccess et pages d'erreurs perso
+
+v0.113 - 13/11/2018 12h
 - Ajout mentions legales
 - Ajout politique confidentialité
 - correction upload et upload infos
 - correction inscription plusieurs fois meme email.
 
-v0.112 - 11/11/2018 16h
+v0.112 - 12/11/2018 16h
 - separation des categories de post dans leur propres fichiers
 - quelques corrections de style de code
 
