@@ -1,0 +1,18 @@
+ErrorDocument 400 /index.php?p=erreur&i=400
+ErrorDocument 401 /index.php?p=erreur&i=401
+ErrorDocument 403 /index.php?p=erreur&i=403
+ErrorDocument 404 /index.php?p=erreur&i=404
+ErrorDocument 500 /index.php?p=erreur&i=500
+ErrorDocument 503 /index.php?p=erreur&i=503
+
+<FilesMatch App.php>
+Deny from all
+</FilesMatch>
+
+<FilesMatch Autoloader.php>
+Deny from all
+</FilesMatch>
+
+<FilesMatch README.md>
+Deny from all
+</FilesMatch>
