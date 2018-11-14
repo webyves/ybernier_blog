@@ -59,7 +59,8 @@ class CommentController extends PostController
                 );
             $this-> sendMail($tabInfo);
             
-            
+            $this->setPostListMenu();
+            $this->setPostList();
             echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
         } else {
             $this->post($idPost);

@@ -19,6 +19,8 @@ class PostController extends PageController
     ***********************************/
     public function listPosts()
     {
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/listPosts.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }
 
@@ -38,6 +40,8 @@ class PostController extends PageController
         $nbcom = $commentManager->getCommentNb($idPost);
         $comments = $commentManager->getComments($idPost);
 
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/postComments.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
     }
     

@@ -44,6 +44,8 @@ class StaticPageController extends PageController
                 break;
         }    
         
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
@@ -55,6 +57,7 @@ class StaticPageController extends PageController
         if (empty($page)) { 
             throw new \Exception('Page introuvable !');
         }
+        $this->setPostListMenu();
         echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
     }
     
@@ -80,6 +83,8 @@ class StaticPageController extends PageController
                     );
         $this->sendMail($tabInfo);
         
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }
     

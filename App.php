@@ -1,7 +1,8 @@
 <?php
 /*****************************************************************
 file: App.php
-Class for Application informations and methods
+Class for Application informations
+and methods for passing form data and encapsulation
 ******************************************************************/
 namespace yBernier\Blog;
 
@@ -9,8 +10,10 @@ use \yBernier\Blog\model\entities\User;
 
 class App
 {
-    // Application version
-    const APP_VERSION = "V0.113";
+/*****************************************************************
+                USERS PREFERENCES
+        CAN BE MODIFIED MANUALLY AT INSTALLATION
+******************************************************************/
     
     // Connexion to database
     const DB_HOST = "localhost";
@@ -27,14 +30,17 @@ class App
     
     // MAX File Size for upload in octects
     const MAX_FILE_SIZE = 1048576; // 1Mo
-
-    private $fGet;
-    private $fGetP;
-    private $fGetI;
-    private $fPost;
-    private $fFiles;
-    private $fSession;
-    private $fCookies;
+    
+/********* END OF USERS PREFERENCES *********/
+    
+    const APP_VERSION = "V0.113";   // Application version
+    private $fGet;                  // $_GET
+    private $fGetP;                 // $_POST
+    private $fGetI;                 // $_GET['i']
+    private $fPost;                 // $_GET['p']
+    private $fFiles;                // $_FILES
+    private $fSession;              // $_SESSION
+    private $fCookies;              // $_COOKIES
     private $connectedUser;
     
     public function __construct()
@@ -116,5 +122,4 @@ class App
     public function getConnectedUser() {
         return $this->connectedUser;
     }
-    
 }

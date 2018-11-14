@@ -13,8 +13,6 @@ class PageController
 {
     protected $fTwig;
     protected $fApp;
-    
-    // NEED CHANGE TO NOT ALWAYS GET THAT
     protected $postListMenu;
     protected $postList;
     
@@ -23,10 +21,8 @@ class PageController
     {
         $this->fApp = $App;
         $this->setFTwig();
-        
-        // NEED CHANGE TO NOT ALWAYS GET THAT
-        $this->setPostList();
-        $this->setPostListMenu();
+        $this->postListMenu = '';
+        $this->postList = '';
     }
     
     /* SET FUNCTION PARTS */
@@ -46,7 +42,6 @@ class PageController
         $this->fTwig = $twig;
     }
     
-    /* NEED CHANGE PARTS TO NOT ALWAYS GET THAT */
     public function setPostListMenu()
     {
         $postManager = new PostManager();

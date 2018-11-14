@@ -148,6 +148,7 @@ class UserController extends PageController
         }
         
         $theView = "frontoffice/inscriptionError.twig";
+        $this->setPostListMenu();
         $theViewParam = array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu);
         if (empty($errorMessage)) {
             $userInfo = array(
@@ -169,6 +170,7 @@ class UserController extends PageController
                 );
             $this->sendMail($tabInfo);
             $theView = "frontoffice/inscriptionConfirm.twig";
+            $this->setPostList();
             $theViewParam = array('postList' => $this->postList, 'postListMenu' => $this->postListMenu);
         }
 
