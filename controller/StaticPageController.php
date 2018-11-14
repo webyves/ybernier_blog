@@ -90,8 +90,6 @@ class StaticPageController extends PageController
     {
         switch ($page) {
             case 'admin':
-            case 'adminAddPost':
-            case 'adminPosts':
                 $authRole = array(1,2);
                 break;
             default:
@@ -101,10 +99,9 @@ class StaticPageController extends PageController
         
         $this->checkAccessByRole($_SESSION['userObject'], $authRole);
         
-        if (!empty($page)) {
-            echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
-        } else {
+        if (empty($page)) {
             throw new \Exception('Page introuvable !');
         }
+        echo $this->fTwig->render('backoffice/'.$page.'.twig', array());
     }
 }
