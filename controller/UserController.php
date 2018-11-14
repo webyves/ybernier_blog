@@ -181,7 +181,7 @@ class UserController extends PageController
     public function showAdminUserList($messageTwigView = "")
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
         $Manager = new UserManager();
         $userList = $Manager->getUsers();
@@ -197,7 +197,7 @@ class UserController extends PageController
     public function modifUser($post)
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (is_numeric($post['userModalIdUser']) && $post['userModalIdUser'] > 0) {
             if (is_numeric($post['userModalSelRole']) && $post['userModalSelRole'] > 0 &&

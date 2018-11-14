@@ -16,7 +16,7 @@ class CatPostController extends PostController
     public function showAdminCatPostList($messageTwigView = "", $messageText = "")
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
         $Manager = new CatPostManager();
         $catList = $Manager->getCats();
@@ -30,7 +30,7 @@ class CatPostController extends PostController
     public function newCat($post)
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (empty(strip_tags($post['catAddModalText']))) {
             $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
@@ -50,7 +50,7 @@ class CatPostController extends PostController
     public function modifCat($post)
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (!is_numeric($post['catModifModalIdCat']) || $post['catModifModalIdCat'] == 1) {
             $this->showAdminCatPostList('Error', 'Modification Impossible sur cette catégorie');
@@ -73,7 +73,7 @@ class CatPostController extends PostController
     public function supCat($post)
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (!is_numeric($post['catSupModalIdCat']) || $post['catSupModalIdCat'] == 1) {
             $this->showAdminCatPostList('Error', 'Suppression Impossible sur cette catégorie');

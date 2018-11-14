@@ -97,7 +97,7 @@ class StaticPageController extends PageController
                 break;
         }
         
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (empty($page)) {
             throw new \Exception('Page introuvable !');

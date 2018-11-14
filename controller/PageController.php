@@ -11,18 +11,42 @@ use \yBernier\Blog\model\entities\User;
 
 class PageController
 {
-    protected $postList;
-    protected $postListMenu;
     protected $fTwig;
+    protected $fApp;
     
-    public function __construct(\Twig_Environment $twig)
+    // NEED CHANGE TO NOT ALWAYS GET THAT
+    protected $postListMenu;
+    protected $postList;
+    
+    
+    public function __construct(App $App)
     {
-        $this->setFTwig($twig);
+        $this->fApp = $App;
+        $this->setFTwig();
+        
+        // NEED CHANGE TO NOT ALWAYS GET THAT
         $this->setPostList();
         $this->setPostListMenu();
     }
     
     /* SET FUNCTION PARTS */
+    public function setFTwig()
+    {
+        $loader = new \Twig_Loader_Filesystem('view');
+        $twig = new \Twig_Environment($loader, array(
+            'cache' => false, // 'view/cache',
+            'debug' => true,
+        ));
+        $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addGlobal('appVersion', App::APP_VERSION);
+        $twig->addGlobal('captchaSiteKey', App::CAPTCHA_SITE_KEY);
+        $twig->addGlobal('maxFileSizeTxt', round((App::MAX_FILE_SIZE / 1048576), 2, PHP_ROUND_HALF_DOWN) . " Mo");
+        $twig->addGlobal('userObject', $this->fApp->getConnectedUser());
+
+        $this->fTwig = $twig;
+    }
+    
+    /* NEED CHANGE PARTS TO NOT ALWAYS GET THAT */
     public function setPostListMenu()
     {
         $postManager = new PostManager();
@@ -33,11 +57,6 @@ class PageController
     {
         $postManager = new PostManager();
         $this->postList = $postManager->getPosts('full_list');
-    }
-    
-    public function setFTwig(\Twig_Environment $twig)
-    {
-        $this->fTwig = $twig;
     }
     
     
