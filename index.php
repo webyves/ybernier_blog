@@ -38,11 +38,8 @@ try {
             if (isset($postData['conexChkbxRemember'])) {
                 $UserController->generateUserCookie($UserConnected);
             }
-        } elseif (!is_null($UserController->getCookieInfo())) {
-            $UserConnected = $UserController->getCookieInfo();
-            $UserController->generateUserCookie($UserConnected);
         } else {
-            $UserConnected = $UserController->logout();
+            $UserConnected = $UserController->getCookieInfo();
         }
     }
     $App->setConnectedUser($UserConnected);
@@ -88,7 +85,7 @@ try {
             // LOGOUT
             case 'logout':
                 $controller = new UserController($App);
-                $UserConnected =  $controller->logout(true);
+                $UserConnected = $controller->logout(true);
                 $App->setConnectedUser($UserConnected);
                 $postController = new PostController($App);
                 $postController->listPosts();

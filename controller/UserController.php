@@ -80,20 +80,17 @@ class UserController extends PageController
     ***********************************/
     public function getCookieInfo()
     {
-        if (isset($_COOKIE["userIdCookie"])) {
+        if (!empty($this->fApp->getFCookieUser())) {
             $Manager = new UserManager();
-            $user = $Manager->getUser("", "", $_COOKIE["userIdCookie"]);
+            $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
             if (null !== $user->getEmail()) {
                 $this->putUserSession($user);
                 $this->generateUserCookie($user);
                 return $user;
-            } else {
-                $this->destroyUserCookie();
-                return null;
             }
-        } else {
-            return null;
         }
+        $user = $this->logout(true);
+        return $user;
     }
     
     /***********************************

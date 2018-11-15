@@ -40,7 +40,8 @@ class App
     private $fPost;                 // $_GET['p']
     private $fFiles;                // $_FILES
     private $fSession;              // $_SESSION
-    private $fCookies;              // $_COOKIES
+    private $fCookie;              // $_COOKIE
+    private $fCookieUser;           // $_COOKIE['userIdCookie']
     private $connectedUser;
     
     public function __construct()
@@ -54,11 +55,11 @@ class App
     {
         $this->connectedUser = $value;
     }
-    
+        
     private function setEncapsSuperglobals()
     {
         $sessionData = $cookiesData = $getData = $postData = $filesData = array();
-        $getDataI = $getDataP = "";
+        $getDataI = $getDataP = $cookiesDataUser = "";
         if (isset($_POST)) {
             $postData = $_POST;
         }
@@ -77,8 +78,11 @@ class App
         if (isset($_SESSION)) {
             $sessionData = $_SESSION;
         }
-        if (isset($_COOKIES)) {
-            $cookiesData = $_COOKIES;
+        if (isset($_COOKIE)) {
+            $cookiesData = $_COOKIE;
+            if (isset($_COOKIE['userIdCookie'])) {
+                $cookiesDataUser = $_COOKIE['userIdCookie'];
+            }
         }
 
         $this->fGet = $getData;
@@ -87,7 +91,8 @@ class App
         $this->fPost = $postData;
         $this->fFiles = $filesData;
         $this->fSession = $sessionData;
-        $this->fCookies = $cookiesData;
+        $this->fCookie = $cookiesData;
+        $this->fCookieUser = $cookiesDataUser;
     }
         
     /* GET PARTS */
@@ -115,8 +120,12 @@ class App
         return $this->fSession;
     }
     
-    public function getFCookies() {
-        return $this->fCookies;
+    public function getFCookie() {
+        return $this->fCookie;
+    }
+    
+    public function getFCookieUser() {
+        return $this->fCookieUser;
     }
     
     public function getConnectedUser() {
