@@ -27,8 +27,9 @@ class PostController extends PageController
     /***********************************
         Render 1 specific post
     ***********************************/
-    public function post($idPost)
+    public function post()
     {
+        $idPost = $this->fApp->getFGetI();
         if (!is_numeric($idPost) || $idPost < 1) {
             throw new \Exception('Post introuvable !');
         }
@@ -67,8 +68,9 @@ class PostController extends PageController
     /***********************************
         Function for Admin Edit post
     ***********************************/
-    public function showAdminEditPostPage($idPost, $messageTwigView = "", $messageText = "")
+    public function showAdminEditPostPage($messageTwigView = "", $messageText = "")
     {
+        $idPost = $this->fApp->getFGetI();
         $authRole = array(1,2);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
@@ -106,8 +108,9 @@ class PostController extends PageController
     /***********************************
         Function for Admin Fast Edit post
     ***********************************/
-    public function modifPost($post)
+    public function modifPost()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1,2);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
@@ -134,8 +137,11 @@ class PostController extends PageController
     /***********************************
         Function for Admin Full Edit post
     ***********************************/
-    public function editPost($post, $files, $idPost)
+    public function editPost()
     {
+        $post = $this->fApp->getFPost();
+        $files = $this->fApp->getFFiles();
+        $idPost = $this->fApp->getFGetI();
         $authRole = array(1,2);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
@@ -163,7 +169,7 @@ class PostController extends PageController
                 $this->sendMailModifPost($oldPost, $updPost);
             }
             
-            $this->showAdminEditPostPage((int)$idPost, 'Confirm');
+            $this->showAdminEditPostPage('Confirm');
         } else {
             throw new \Exception('Erreur sur le post');
         }
@@ -171,8 +177,10 @@ class PostController extends PageController
     /***********************************
         Function for Admin Add new post
     ***********************************/
-    public function addPost($post, $files)
+    public function addPost()
     {
+        $post = $this->fApp->getFPost();
+        $files = $this->fApp->getFFiles();
         $authRole = array(1,2);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 

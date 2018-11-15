@@ -99,8 +99,9 @@ class UserController extends PageController
             send correct infos to user manager
             send email to admin
     ***********************************/
-    public function inscription($post)
+    public function inscription()
     {
+        $post = $this->fApp->getFPost();
         $this->checkCaptchaV2($post);
 
         $errorMessage = "";
@@ -193,8 +194,9 @@ class UserController extends PageController
     /***********************************
         Function for Admin user modification form
     ***********************************/
-    public function modifUser($post)
+    public function modifUser()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         

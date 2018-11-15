@@ -33,7 +33,7 @@ class App
     
 /********* END OF USERS PREFERENCES *********/
     
-    const APP_VERSION = "V0.115";   // Application version
+    const APP_VERSION = "V0.116";   // Application version
     private $fGet;                  // $_GET
     private $fGetP;                 // $_POST
     private $fGetI;                 // $_GET['i']
@@ -59,7 +59,8 @@ class App
     private function setEncapsSuperglobals()
     {
         $sessionData = $cookiesData = $getData = $postData = $filesData = array();
-        $getDataI = $getDataP = $cookiesDataUser = "";
+        $getDataI = 0;
+        $getDataP = $cookiesDataUser = "";
         if (isset($_POST)) {
             $postData = $_POST;
         }

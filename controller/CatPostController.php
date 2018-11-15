@@ -27,8 +27,9 @@ class CatPostController extends PostController
     /***********************************
         Function for Admin Category add form
     ***********************************/
-    public function newCat($post)
+    public function newCat()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
@@ -47,8 +48,9 @@ class CatPostController extends PostController
     /***********************************
         Function for Admin Category modification form
     ***********************************/
-    public function modifCat($post)
+    public function modifCat()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
@@ -70,8 +72,9 @@ class CatPostController extends PostController
     /***********************************
         Function for Admin Category suppression form
     ***********************************/
-    public function supCat($post)
+    public function supCat()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         

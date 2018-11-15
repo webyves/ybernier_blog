@@ -31,6 +31,10 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
+v0.116 - 14/11/2018 12h
+- Encapsulation superglobals suite
+- retirer tous les parametres de fonction car $App injecté partout
+
 v0.115 - 14/11/2018 16h
 - Encapsulation superglobals
 - MAJ App avec construct pour recup superglobals

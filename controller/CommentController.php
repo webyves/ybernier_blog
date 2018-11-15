@@ -19,8 +19,10 @@ class CommentController extends PostController
             send correct infos to comment manager
             send email to administrator
     ***********************************/
-    public function addComment($post, $idPost)
+    public function addComment()
     {
+        $post = $this->fApp->getFPost();
+        $idPost = $this->fApp->getFGetI();
         if (!is_numeric($idPost) || $idPost < 1) {
             throw new \Exception('Post introuvable !');
         }
@@ -85,8 +87,9 @@ class CommentController extends PostController
     /***********************************
         Function for update comment
     ***********************************/
-    public function modifComment($post)
+    public function modifComment()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1,2);
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         

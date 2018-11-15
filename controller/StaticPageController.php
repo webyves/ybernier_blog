@@ -21,8 +21,9 @@ class StaticPageController extends PageController
     /***********************************
         Render Error Page
     ***********************************/
-    public function errorPage($errorText = '', $codeError = 0)
+    public function errorPage($errorText = '')
     {
+        $codeError = $this->fApp->getFGetI();
         switch ($codeError) {
             case 400:
                 $errorText = '<strong>Erreur 400:</strong> <em>Bad Request</em><br>La syntaxe de la requête est mal formulée.';
@@ -52,8 +53,9 @@ class StaticPageController extends PageController
     /***********************************
         Generic Render Page
     ***********************************/
-    public function showPage($page = '')
+    public function showPage()
     {
+        $page = $this->fApp->getFGetP();
         if (empty($page)) { 
             throw new \Exception('Page introuvable !');
         }
@@ -68,8 +70,9 @@ class StaticPageController extends PageController
             Send to Manager for sending mail
             Render Confirmation Page
     ***********************************/
-    public function contact($post)
+    public function contact()
     {
+        $post = $this->fApp->getFPost();
         $this->checkCaptchaV2($post);
 
         $tabInfo = array(
@@ -91,8 +94,9 @@ class StaticPageController extends PageController
     /***********************************
         Generic Render Admin Page
     ***********************************/
-    public function showAdminPage($page = '')
+    public function showAdminPage()
     {
+        $page = $this->fApp->getFGetP();
         switch ($page) {
             case 'admin':
                 $authRole = array(1,2);

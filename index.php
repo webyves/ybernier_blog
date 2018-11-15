@@ -19,15 +19,13 @@ require_once('vendor/autoload.php');
 //SESSION INIT
 session_start();
 
-// Processing form data for passing
-$App = new App();
-$postData = $App->getFPost();
-$filesData = $App->getFFiles();
-$getDataI = $App->getFGetI();
-$getDataP = $App->getFGetP();
-$sessionData = $App->getFSession();
-
 try {
+    $App = new App();
+    $postData = $App->getFPost();
+    $filesData = $App->getFFiles();
+    $getDataI = $App->getFGetI();
+    $getDataP = $App->getFGetP();
+    $sessionData = $App->getFSession();
     // CONNEXION
     $UserController = new UserController($App);
     if (isset($sessionData['userObject']) && !is_null($sessionData['userObject']->getEmail())) {
@@ -50,7 +48,7 @@ try {
             // Error Pages
             case 'erreur':
                 $controller = new StaticPageController($App);
-                $controller->errorPage('', $getDataI);
+                $controller->errorPage('');
                 break;
                 
             // FRONT OFFICE BASIC PAGES
@@ -59,27 +57,27 @@ try {
             case 'mentions':
             case 'confidentialite':
                 $controller = new StaticPageController($App);
-                $controller->showPage($getDataP);
+                $controller->showPage();
                 break;
                 
-            // FRONT OFFICE FORM CALLBACK
+            // FRONT OFFICE FORM RETURN
             case 'sendContactForm':
                 $controller = new StaticPageController($App);
-                $controller->contact($postData);
+                $controller->contact();
                 break;
             case 'sendInscriptionForm':
                 $controller = new UserController($App);
-                $controller->inscription($postData);
+                $controller->inscription();
                 break;
             case 'sendCommentForm':
                 $CommentController = new CommentController($App);
-                $CommentController->addComment($postData, $getDataI);
+                $CommentController->addComment();
                 break;
                 
             // FRONT OFFICE 1 POST PAGE
             case 'post':
                 $controller = new PostController($App);
-                $controller->post($getDataI);
+                $controller->post();
                 break;
                 
             // LOGOUT
@@ -94,7 +92,7 @@ try {
             // BACK OFFICE HOME
             case 'admin':
                 $controller = new StaticPageController($App);
-                $controller->showAdminPage($getDataP);
+                $controller->showAdminPage();
                 break;
                 
             // BACK OFFICE POSTS
@@ -104,15 +102,15 @@ try {
                 break;
             case 'sendAdminPostModifForm':
                 $controller = new PostController($App);
-                $controller->modifPost($postData);
+                $controller->modifPost();
                 break;
             case 'adminEditPost':
                 $controller = new PostController($App);
-                $controller->showAdminEditPostPage($getDataI);
+                $controller->showAdminEditPostPage();
                 break;
             case 'sendAdminPostFullModifForm':
                 $controller = new PostController($App);
-                $controller->editPost($postData, $filesData, $getDataI);
+                $controller->editPost();
                 break;
                 
             // BACK OFFICE NEW POSTS
@@ -122,7 +120,7 @@ try {
                 break;
             case 'sendAdminAddPostForm':
                 $controller = new PostController($App);
-                $controller->addPost($postData, $filesData);
+                $controller->addPost();
                 break;
         
             // BACK OFFICE CAT POSTS
@@ -132,15 +130,15 @@ try {
                 break;
             case 'sendAdminCatAddForm':
                 $controller = new CatPostController($App);
-                $controller->newCat($postData);
+                $controller->newCat();
                 break;
             case 'sendAdminCatModifForm':
                 $controller = new CatPostController($App);
-                $controller->modifCat($postData);
+                $controller->modifCat();
                 break;
             case 'sendAdminCatSupForm':
                 $controller = new CatPostController($App);
-                $controller->supCat($postData);
+                $controller->supCat();
                 break;
                 
             // BACK OFFICE COMMENTS
@@ -150,7 +148,7 @@ try {
                 break;
             case 'sendAdminCommentModifForm':
                 $controller = new CommentController($App);
-                $controller->modifComment($postData);
+                $controller->modifComment();
                 break;
                 
             // BACK OFFICE USERS
@@ -160,7 +158,7 @@ try {
                 break;
             case 'sendAdminUserModifForm':
                 $controller = new UserController($App);
-                $controller->modifUser($postData);
+                $controller->modifUser();
                 break;
                 
             default:
