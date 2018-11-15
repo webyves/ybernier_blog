@@ -48,7 +48,7 @@ class App
     {
         $this->setEncapsSuperglobals();
         $this->connectedUser = new User('');
-    }    
+    }
     
     /* SET PARTS */
     public function setConnectedUser(User $value)
@@ -97,39 +97,48 @@ class App
     }
         
     /* GET PARTS */
-    public function getFGet() {
+    public function getFGet()
+    {
         return $this->fGet;
     }
     
-    public function getFGetI() {
+    public function getFGetI()
+    {
         return $this->fGetI;
     }
     
-    public function getFGetP() {
+    public function getFGetP()
+    {
         return $this->fGetP;
     }
     
-    public function getFPost() {
+    public function getFPost()
+    {
         return $this->fPost;
     }
     
-    public function getFFiles() {
+    public function getFFiles()
+    {
         return $this->fFiles;
     }
     
-    public function getFSession() {
+    public function getFSession()
+    {
         return $this->fSession;
     }
     
-    public function getFCookie() {
+    public function getFCookie()
+    {
         return $this->fCookie;
     }
     
-    public function getFCookieUser() {
+    public function getFCookieUser()
+    {
         return $this->fCookieUser;
     }
     
-    public function getConnectedUser() {
+    public function getConnectedUser()
+    {
         return $this->connectedUser;
     }
 }

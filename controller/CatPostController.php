@@ -36,7 +36,7 @@ class CatPostController extends PostController
         if (empty(strip_tags($post['catAddModalText']))) {
             $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
         } else {
-            $tab = array (
+            $tab = array(
                 'text' => strip_tags($post['catAddModalText'])
                 );
             $Manager = new CatPostManager();
@@ -59,7 +59,7 @@ class CatPostController extends PostController
         } elseif (empty(strip_tags($post['catModifModalText']))) {
             $this->showAdminCatPostList('Error', 'Le texte de la catégorie ne peu pas etre vide');
         } else {
-            $tab = array (
+            $tab = array(
                 'idcat' => $post['catModifModalIdCat'],
                 'text' => strip_tags($post['catModifModalText'])
                 );
@@ -81,7 +81,7 @@ class CatPostController extends PostController
         if (!is_numeric($post['catSupModalIdCat']) || $post['catSupModalIdCat'] == 1) {
             $this->showAdminCatPostList('Error', 'Suppression Impossible sur cette catégorie');
         } else {
-            $tab = array (
+            $tab = array(
                 'newcat' => 1,
                 'oldcat' => $post['catSupModalIdCat'],
                 'idpost' => 'all'

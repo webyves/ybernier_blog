@@ -43,7 +43,7 @@ class StaticPageController extends PageController
             case 503:
                 $errorText = '<strong>Erreur 503:</strong> <em>Service Unvailable</em><br>le serveur ne peut pas répondre à cause d\'une surcharge de trafic.';
                 break;
-        }    
+        }
         
         $this->setPostListMenu();
         $this->setPostList();
@@ -56,7 +56,7 @@ class StaticPageController extends PageController
     public function showPage()
     {
         $page = $this->fApp->getFGetP();
-        if (empty($page)) { 
+        if (empty($page)) {
             throw new \Exception('Page introuvable !');
         }
         $this->setPostListMenu();

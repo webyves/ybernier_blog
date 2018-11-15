@@ -233,7 +233,7 @@ class PostController extends PageController
             );
 
         $this-> sendMail($tabInfo);
-    }    
+    }
     
     /***********************************
         Function to check error on upload and sendback good infos
