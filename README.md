@@ -2,9 +2,8 @@
 Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # Code Quality tests
-- Sensiolabs SymfonyInsight : [![SymfonyInsight](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768/small.svg)](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768)
-- Codacy : [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8aba3650df0441139de993e3d9ea2a0a)](https://www.codacy.com/app/webyves/ybernier_blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=webyves/ybernier_blog&amp;utm_campaign=Badge_Grade)
-
+- [![SymfonyInsight](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768/small.svg)](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768)
+- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8aba3650df0441139de993e3d9ea2a0a)](https://www.codacy.com/app/webyves/ybernier_blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=webyves/ybernier_blog&amp;utm_campaign=Badge_Grade)
 
 # INSTALLATION NOTES
 
