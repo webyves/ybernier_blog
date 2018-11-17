@@ -9,12 +9,12 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 1) cloner le repository sur votre serveur
 2) executer le fichier SQL sur votre base de donnée pour l'importer
-3) Modifier le fichier App.php comme suit :
+3) Modifier le fichier AppConfig.php comme suit :
     - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
     - const DB_USER = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
     - const DB_USER_PWD = ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
-    - const ADMIN_EMAIL = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
+    - const ADMIN_EMAIL = "admin@admin.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
     - const CAPTCHA_SITE_KEY = "xxxxxx"; <- remplacer avec votre site Key de captcha google v2 entre les "
     - const CAPTCHA_SECRET_KEY = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
     - const MAX_FILE_SIZE = 1048576; <- remplacer le chiffre par la taille max en octets souhaitée pour vos images
@@ -30,7 +30,11 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
-v0.116 - 14/11/2018 12h
+v0.117 - 17/11/2018 12h
+- Les parametres de configuration sont a nouveau separés dans un fichier AppConfig
+- Creation de la class Routeur et suppression des routes dans l'index
+
+v0.116 - 15/11/2018 12h
 - Encapsulation superglobals suite
 - retirer tous les parametres de fonction car $App injecté partout
 

@@ -5,11 +5,9 @@ router and access point for website
 ******************************************************************/
 use \yBernier\Blog\Autoloader;
 use \yBernier\Blog\App;
-use \yBernier\Blog\controller\PostController;
-use \yBernier\Blog\controller\CatPostController;
+use \yBernier\Blog\Router;
 use \yBernier\Blog\controller\StaticPageController;
 use \yBernier\Blog\controller\UserController;
-use \yBernier\Blog\controller\CommentController;
 
 //Autoload
 require_once('Autoloader.php');
@@ -22,9 +20,6 @@ session_start();
 try {
     $App = new App();
     $postData = $App->getFPost();
-    $filesData = $App->getFFiles();
-    $getDataI = $App->getFGetI();
-    $getDataP = $App->getFGetP();
     $sessionData = $App->getFSession();
     // CONNEXION
     $UserController = new UserController($App);
@@ -41,134 +36,8 @@ try {
         }
     }
     $App->setConnectedUser($UserConnected);
-    
-    //Router
-    if (!empty($getDataP)) {
-        switch ($getDataP) {
-            // Error Pages
-            case 'erreur':
-                $controller = new StaticPageController($App);
-                $controller->errorPage('');
-                break;
-                
-            // FRONT OFFICE BASIC PAGES
-            case 'contact':
-            case 'inscription':
-            case 'mentions':
-            case 'confidentialite':
-                $controller = new StaticPageController($App);
-                $controller->showPage();
-                break;
-                
-            // FRONT OFFICE FORM RETURN
-            case 'sendContactForm':
-                $controller = new StaticPageController($App);
-                $controller->contact();
-                break;
-            case 'sendInscriptionForm':
-                $controller = new UserController($App);
-                $controller->inscription();
-                break;
-            case 'sendCommentForm':
-                $CommentController = new CommentController($App);
-                $CommentController->addComment();
-                break;
-                
-            // FRONT OFFICE 1 POST PAGE
-            case 'post':
-                $controller = new PostController($App);
-                $controller->post();
-                break;
-                
-            // LOGOUT
-            case 'logout':
-                $controller = new UserController($App);
-                $UserConnected = $controller->logout(true);
-                $App->setConnectedUser($UserConnected);
-                $postController = new PostController($App);
-                $postController->listPosts();
-                break;
-                
-            // BACK OFFICE HOME
-            case 'admin':
-                $controller = new StaticPageController($App);
-                $controller->showAdminPage();
-                break;
-                
-            // BACK OFFICE POSTS
-            case 'adminPosts':
-                $controller = new PostController($App);
-                $controller->showAdminPostsPage();
-                break;
-            case 'sendAdminPostModifForm':
-                $controller = new PostController($App);
-                $controller->modifPost();
-                break;
-            case 'adminEditPost':
-                $controller = new PostController($App);
-                $controller->showAdminEditPostPage();
-                break;
-            case 'sendAdminPostFullModifForm':
-                $controller = new PostController($App);
-                $controller->editPost();
-                break;
-                
-            // BACK OFFICE NEW POSTS
-            case 'adminAddPost':
-                $controller = new PostController($App);
-                $controller->showAdminAddPostPage();
-                break;
-            case 'sendAdminAddPostForm':
-                $controller = new PostController($App);
-                $controller->addPost();
-                break;
-        
-            // BACK OFFICE CAT POSTS
-            case 'adminCatPosts':
-                $controller = new CatPostController($App);
-                $controller->showAdminCatPostList();
-                break;
-            case 'sendAdminCatAddForm':
-                $controller = new CatPostController($App);
-                $controller->newCat();
-                break;
-            case 'sendAdminCatModifForm':
-                $controller = new CatPostController($App);
-                $controller->modifCat();
-                break;
-            case 'sendAdminCatSupForm':
-                $controller = new CatPostController($App);
-                $controller->supCat();
-                break;
-                
-            // BACK OFFICE COMMENTS
-            case 'adminComments':
-                $controller = new CommentController($App);
-                $controller->showAdminCommentList();
-                break;
-            case 'sendAdminCommentModifForm':
-                $controller = new CommentController($App);
-                $controller->modifComment();
-                break;
-                
-            // BACK OFFICE USERS
-            case 'adminUsers':
-                $controller = new UserController($App);
-                $controller->showAdminUserList();
-                break;
-            case 'sendAdminUserModifForm':
-                $controller = new UserController($App);
-                $controller->modifUser();
-                break;
-                
-            default:
-                throw new Exception('Page invalide !');
-                break;
-        }
-    } else {
-        $postController = new PostController($App);
-        $postController->listPosts();
-    }
+    $router = new Router();
+    $router->goRoad($App);
 } catch (Exception $e) {
     $errorMessage = $e->getMessage();
     $controller = new StaticPageController($App);
