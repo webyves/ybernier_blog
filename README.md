@@ -30,6 +30,11 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
+v0.200 - 17/11/2018 16h
+- Modification du system login/logout tranferé dans App
+- Fin encapsulation
+- Fin V0.1xx (Frontoffice & Backoffice version Alpha)
+
 v0.117 - 17/11/2018 12h
 - Les parametres de configuration sont a nouveau separés dans un fichier AppConfig
 - Creation de la class Routeur et suppression des routes dans l'index
@@ -106,6 +111,7 @@ v0.101 - 3/11/2018 16h
 - Debut de l'admin.
 - Caneva de pages admin
 - MAJ Views routeur et Twig pour pages admin
+- Fin V0.0xx (FontOffice only)
 
 v0.018 - 3/11/2018 12h
 - Correction possible erreur id post

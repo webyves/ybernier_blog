@@ -30,5 +30,5 @@ class AppConfig
     
 /********* END OF USERS PREFERENCES *********/
     
-    const APP_VERSION = "V0.117";   // Application version
+    const APP_VERSION = "V0.200";   // Application version
 }
