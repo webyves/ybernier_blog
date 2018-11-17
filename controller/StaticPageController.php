@@ -21,8 +21,9 @@ class StaticPageController extends PageController
     /***********************************
         Render Error Page
     ***********************************/
-    public function errorPage($errorText = '', $codeError = 0)
+    public function errorPage($errorText = '')
     {
+        $codeError = $this->fApp->getFGetI();
         switch ($codeError) {
             case 400:
                 $errorText = '<strong>Erreur 400:</strong> <em>Bad Request</em><br>La syntaxe de la requête est mal formulée.';
@@ -42,19 +43,23 @@ class StaticPageController extends PageController
             case 503:
                 $errorText = '<strong>Erreur 503:</strong> <em>Service Unvailable</em><br>le serveur ne peut pas répondre à cause d\'une surcharge de trafic.';
                 break;
-        }    
+        }
         
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
     /***********************************
         Generic Render Page
     ***********************************/
-    public function showPage($page = '')
+    public function showPage()
     {
-        if (empty($page)) { 
+        $page = $this->fApp->getFGetP();
+        if (empty($page)) {
             throw new \Exception('Page introuvable !');
         }
+        $this->setPostListMenu();
         echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
     }
     
@@ -65,8 +70,9 @@ class StaticPageController extends PageController
             Send to Manager for sending mail
             Render Confirmation Page
     ***********************************/
-    public function contact($post)
+    public function contact()
     {
+        $post = $this->fApp->getFPost();
         $this->checkCaptchaV2($post);
 
         $tabInfo = array(
@@ -80,14 +86,17 @@ class StaticPageController extends PageController
                     );
         $this->sendMail($tabInfo);
         
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/contactConfirm.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }
     
     /***********************************
         Generic Render Admin Page
     ***********************************/
-    public function showAdminPage($page = '')
+    public function showAdminPage()
     {
+        $page = $this->fApp->getFGetP();
         switch ($page) {
             case 'admin':
                 $authRole = array(1,2);
@@ -97,7 +106,7 @@ class StaticPageController extends PageController
                 break;
         }
         
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (empty($page)) {
             throw new \Exception('Page introuvable !');

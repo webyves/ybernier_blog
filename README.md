@@ -2,20 +2,19 @@
 Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # Code Quality tests
-- Sensiolabs SymfonyInsight : [![SymfonyInsight](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768/small.svg)](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768)
-- Codacy : [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8aba3650df0441139de993e3d9ea2a0a)](https://www.codacy.com/app/webyves/ybernier_blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=webyves/ybernier_blog&amp;utm_campaign=Badge_Grade)
-
+- [![SymfonyInsight](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768/small.svg)](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768)
+- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8aba3650df0441139de993e3d9ea2a0a)](https://www.codacy.com/app/webyves/ybernier_blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=webyves/ybernier_blog&amp;utm_campaign=Badge_Grade)
 
 # INSTALLATION NOTES
 
 1) cloner le repository sur votre serveur
 2) executer le fichier SQL sur votre base de donnée pour l'importer
-3) Modifier le fichier App.php comme suit :
+3) Modifier le fichier AppConfig.php comme suit :
     - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
     - const DB_USER = "root"; <- remplacer si bessoin votre identifiant de connexion a votre base de donnée entre les "
     - const DB_USER_PWD = ""; <- inserer votre mot de passe de connexion a votre base de donnée entre les "
-    - const ADMIN_EMAIL = "webyves@hotmail.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
+    - const ADMIN_EMAIL = "admin@admin.com"; <- remplacer avec l'adresse mail de votre administrateur entre les "
     - const CAPTCHA_SITE_KEY = "xxxxxx"; <- remplacer avec votre site Key de captcha google v2 entre les "
     - const CAPTCHA_SECRET_KEY = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
     - const MAX_FILE_SIZE = 1048576; <- remplacer le chiffre par la taille max en octets souhaitée pour vos images
@@ -31,13 +30,34 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
-v0.113 - 12/11/2018 12h
+v0.200 - 17/11/2018 16h
+- Modification du system login/logout tranferé dans App
+- Fin encapsulation
+- Fin V0.1xx (Frontoffice & Backoffice version Alpha)
+
+v0.117 - 17/11/2018 12h
+- Les parametres de configuration sont a nouveau separés dans un fichier AppConfig
+- Creation de la class Routeur et suppression des routes dans l'index
+
+v0.116 - 15/11/2018 12h
+- Encapsulation superglobals suite
+- retirer tous les parametres de fonction car $App injecté partout
+
+v0.115 - 14/11/2018 16h
+- Encapsulation superglobals
+- MAJ App avec construct pour recup superglobals
+- Deplacer lancement de twig dans PageController
+
+v0.114 - 13/11/2018 16h
+- Ajout des htaccess et pages d'erreurs perso
+
+v0.113 - 13/11/2018 12h
 - Ajout mentions legales
 - Ajout politique confidentialité
 - correction upload et upload infos
 - correction inscription plusieurs fois meme email.
 
-v0.112 - 11/11/2018 16h
+v0.112 - 12/11/2018 16h
 - separation des categories de post dans leur propres fichiers
 - quelques corrections de style de code
 
@@ -91,6 +111,7 @@ v0.101 - 3/11/2018 16h
 - Debut de l'admin.
 - Caneva de pages admin
 - MAJ Views routeur et Twig pour pages admin
+- Fin V0.0xx (FontOffice only)
 
 v0.018 - 3/11/2018 12h
 - Correction possible erreur id post

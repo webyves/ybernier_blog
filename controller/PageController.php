@@ -11,18 +11,37 @@ use \yBernier\Blog\model\entities\User;
 
 class PageController
 {
-    protected $postList;
-    protected $postListMenu;
     protected $fTwig;
+    protected $fApp;
+    protected $postListMenu;
+    protected $postList;
     
-    public function __construct(\Twig_Environment $twig)
+    
+    public function __construct(App $App)
     {
-        $this->setFTwig($twig);
-        $this->setPostList();
-        $this->setPostListMenu();
+        $this->fApp = $App;
+        $this->setFTwig();
+        $this->postListMenu = '';
+        $this->postList = '';
     }
     
     /* SET FUNCTION PARTS */
+    public function setFTwig()
+    {
+        $loader = new \Twig_Loader_Filesystem('view');
+        $twig = new \Twig_Environment($loader, array(
+            'cache' => false, // 'view/cache',
+            'debug' => true,
+        ));
+        $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addGlobal('appVersion', App::APP_VERSION);
+        $twig->addGlobal('captchaSiteKey', App::CAPTCHA_SITE_KEY);
+        $twig->addGlobal('maxFileSizeTxt', round((App::MAX_FILE_SIZE / 1048576), 2, PHP_ROUND_HALF_DOWN) . " Mo");
+        $twig->addGlobal('userObject', $this->fApp->getConnectedUser());
+
+        $this->fTwig = $twig;
+    }
+    
     public function setPostListMenu()
     {
         $postManager = new PostManager();
@@ -33,11 +52,6 @@ class PageController
     {
         $postManager = new PostManager();
         $this->postList = $postManager->getPosts('full_list');
-    }
-    
-    public function setFTwig(\Twig_Environment $twig)
-    {
-        $this->fTwig = $twig;
     }
     
     
@@ -64,7 +78,7 @@ class PageController
         
         $secret = APP::CAPTCHA_SECRET_KEY;
         $response = $post['g-recaptcha-response'];
-        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $remoteip = $this->fApp->getFServerRemAddr();
         $api_url = "https://www.google.com/recaptcha/api/siteverify?secret="
             . $secret
             . "&response=" . $response

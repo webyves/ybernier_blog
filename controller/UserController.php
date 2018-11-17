@@ -30,70 +30,25 @@ class UserController extends PageController
         if (!password_verify($pwd, $user->getPassword())) {
             throw new \Exception('Identification Incorrecte !');
         }
-        $this->putUserSession($user);
         return $user;
     }
     
-    /***********************************
-        Function to logout the User
-    ***********************************/
-    public function logout($destroyCookie = false)
-    {
-        $Manager = new UserManager();
-        $user = $Manager->getUser();
-        $this->putUserSession($user);
-        if ($destroyCookie) {
-            $this->destroyUserCookie();
-        }
-        return $user;
-    }
-    
-    /***********************************
-        SubFunction to connect User
-            Put User object in Session
-    ***********************************/
-    public function putUserSession($userObject)
-    {
-        $_SESSION['userObject'] = $userObject;
-    }
-
-    /***********************************
-        SubFunction to connect User
-            Generate a cookie with crypted info for connexion
-    ***********************************/
-    public function generateUserCookie($userObject)
-    {
-        setcookie("userIdCookie", $userObject->getCookieid(), time()+129600); //expire 36h
-    }
-
-    /***********************************
-        SubFunction for cookie User
-            Destroy the cookie
-    ***********************************/
-    public function destroyUserCookie()
-    {
-        setcookie("userIdCookie", "", time()-1);
-    }
-
     /***********************************
         Function to connect User via cookie
     ***********************************/
     public function getCookieInfo()
     {
-        if (isset($_COOKIE["userIdCookie"])) {
+        if (!empty($this->fApp->getFCookieUser())) {
             $Manager = new UserManager();
-            $user = $Manager->getUser("", "", $_COOKIE["userIdCookie"]);
+            $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
             if (null !== $user->getEmail()) {
-                $this->putUserSession($user);
-                $this->generateUserCookie($user);
+                $this->fApp->generateUserCookie($user);
                 return $user;
-            } else {
-                $this->destroyUserCookie();
-                return null;
             }
-        } else {
-            return null;
         }
+        $user = new User('');
+        $this->fApp->logoutUser();
+        return $user;
     }
     
     /***********************************
@@ -102,8 +57,9 @@ class UserController extends PageController
             send correct infos to user manager
             send email to admin
     ***********************************/
-    public function inscription($post)
+    public function inscription()
     {
+        $post = $this->fApp->getFPost();
         $this->checkCaptchaV2($post);
 
         $errorMessage = "";
@@ -148,6 +104,7 @@ class UserController extends PageController
         }
         
         $theView = "frontoffice/inscriptionError.twig";
+        $this->setPostListMenu();
         $theViewParam = array('errorMessage' => $errorMessage, 'postListMenu' => $this->postListMenu);
         if (empty($errorMessage)) {
             $userInfo = array(
@@ -169,6 +126,7 @@ class UserController extends PageController
                 );
             $this->sendMail($tabInfo);
             $theView = "frontoffice/inscriptionConfirm.twig";
+            $this->setPostList();
             $theViewParam = array('postList' => $this->postList, 'postListMenu' => $this->postListMenu);
         }
 
@@ -181,7 +139,7 @@ class UserController extends PageController
     public function showAdminUserList($messageTwigView = "")
     {
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
         $Manager = new UserManager();
         $userList = $Manager->getUsers();
@@ -194,10 +152,11 @@ class UserController extends PageController
     /***********************************
         Function for Admin user modification form
     ***********************************/
-    public function modifUser($post)
+    public function modifUser()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (is_numeric($post['userModalIdUser']) && $post['userModalIdUser'] > 0) {
             if (is_numeric($post['userModalSelRole']) && $post['userModalSelRole'] > 0 &&

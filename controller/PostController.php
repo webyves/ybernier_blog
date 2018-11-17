@@ -19,14 +19,17 @@ class PostController extends PageController
     ***********************************/
     public function listPosts()
     {
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/listPosts.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }
 
     /***********************************
         Render 1 specific post
     ***********************************/
-    public function post($idPost)
+    public function post()
     {
+        $idPost = $this->fApp->getFGetI();
         if (!is_numeric($idPost) || $idPost < 1) {
             throw new \Exception('Post introuvable !');
         }
@@ -38,6 +41,8 @@ class PostController extends PageController
         $nbcom = $commentManager->getCommentNb($idPost);
         $comments = $commentManager->getComments($idPost);
 
+        $this->setPostListMenu();
+        $this->setPostList();
         echo $this->fTwig->render('frontoffice/postComments.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
     }
     
@@ -48,7 +53,7 @@ class PostController extends PageController
     public function showAdminPostsPage($messageTwigView = "", $messageText = "")
     {
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
         $PostManager = new PostManager();
         $postList = $PostManager->getPosts('full_list', 'all', 'all');
@@ -63,10 +68,11 @@ class PostController extends PageController
     /***********************************
         Function for Admin Edit post
     ***********************************/
-    public function showAdminEditPostPage($idPost, $messageTwigView = "", $messageText = "")
+    public function showAdminEditPostPage($messageTwigView = "", $messageText = "")
     {
+        $idPost = $this->fApp->getFGetI();
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (is_numeric($idPost) && $idPost > 0) {
             $CatPostManager = new CatPostManager();
@@ -88,7 +94,7 @@ class PostController extends PageController
     public function showAdminAddPostPage($messageTwigView = "", $messageText = "")
     {
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         $PostManager = new PostManager();
         $stateList = $PostManager->getStates();
@@ -102,10 +108,11 @@ class PostController extends PageController
     /***********************************
         Function for Admin Fast Edit post
     ***********************************/
-    public function modifPost($post)
+    public function modifPost()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
         if (is_numeric($post['modifPostModalIdPost']) && $post['modifPostModalIdPost'] > 0) {
             $tab = array(
@@ -130,10 +137,13 @@ class PostController extends PageController
     /***********************************
         Function for Admin Full Edit post
     ***********************************/
-    public function editPost($post, $files, $idPost)
+    public function editPost()
     {
+        $post = $this->fApp->getFPost();
+        $files = $this->fApp->getFFiles();
+        $idPost = $this->fApp->getFGetI();
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (is_numeric($idPost) && $idPost > 0) {
             $postManager = new PostManager();
@@ -159,7 +169,7 @@ class PostController extends PageController
                 $this->sendMailModifPost($oldPost, $updPost);
             }
             
-            $this->showAdminEditPostPage((int)$idPost, 'Confirm');
+            $this->showAdminEditPostPage('Confirm');
         } else {
             throw new \Exception('Erreur sur le post');
         }
@@ -167,10 +177,12 @@ class PostController extends PageController
     /***********************************
         Function for Admin Add new post
     ***********************************/
-    public function addPost($post, $files)
+    public function addPost()
     {
+        $post = $this->fApp->getFPost();
+        $files = $this->fApp->getFFiles();
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
 
 
         $tab = array(
@@ -179,7 +191,7 @@ class PostController extends PageController
             'id_state' => (int)$post['addPostSelEtat'],
             'id_cat' => (int)$post['addPostSelCat'],
             'image_top' => 'default.jpg',
-            'id_user' => $_SESSION['userObject']->getIduser()
+            'id_user' => $this->fApp->getConnectedUser()->getIduser()
             );
         $postManager = new PostManager();
         $idNewPost = $postManager->addPost($tab);
@@ -212,16 +224,16 @@ class PostController extends PageController
                 'messageTxt' => "Votre post anciennement intitulé : \n"
                                 .$oldPost->getTitle().
                                 "\n viens d'être mis à jour par : \n"
-                                .$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname(),
+                                .$this->fApp->getConnectedUser()->getFirstname()." ".$this->fApp->getConnectedUser()->getLastname(),
                 'messageHtml' => "Votre post que vous aviez intitulé : <br>
                                 <b>".$oldPost->getTitle()."</b><br>
                                 viens d'être mis à jour par: <br>
-                                <b>".$_SESSION['userObject']->getFirstname()." ".$_SESSION['userObject']->getLastname()."</b>",
+                                <b>".$this->fApp->getConnectedUser()->getFirstname()." ".$this->fApp->getConnectedUser()->getLastname()."</b>",
                 'subject' => "[yBernier Blog] - Mise à jour de votre post."
             );
 
         $this-> sendMail($tabInfo);
-    }    
+    }
     
     /***********************************
         Function to check error on upload and sendback good infos

@@ -19,8 +19,10 @@ class CommentController extends PostController
             send correct infos to comment manager
             send email to administrator
     ***********************************/
-    public function addComment($post, $UserConnected, $idPost)
+    public function addComment()
     {
+        $post = $this->fApp->getFPost();
+        $idPost = $this->fApp->getFGetI();
         if (!is_numeric($idPost) || $idPost < 1) {
             throw new \Exception('Post introuvable !');
         }
@@ -41,7 +43,7 @@ class CommentController extends PostController
         
         if (!empty($textCom)) {
             $commentManager = new CommentManager();
-            $commentManager->addComment($textCom, $UserConnected->getIduser(), $idPost, $idComParent);
+            $commentManager->addComment($textCom, $this->fApp->getConnectedUser()->getIduser(), $idPost, $idComParent);
             $nbcom = $commentManager->getCommentNb($idPost);
             $comments = $commentManager->getComments($idPost);
             
@@ -59,7 +61,8 @@ class CommentController extends PostController
                 );
             $this-> sendMail($tabInfo);
             
-            
+            $this->setPostListMenu();
+            $this->setPostList();
             echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
         } else {
             $this->post($idPost);
@@ -72,7 +75,7 @@ class CommentController extends PostController
     public function showAdminCommentList($messageTwigView = "")
     {
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         $Manager = new CommentManager();
         $CommentList = $Manager->getCommentList();
@@ -84,10 +87,11 @@ class CommentController extends PostController
     /***********************************
         Function for update comment
     ***********************************/
-    public function modifComment($post)
+    public function modifComment()
     {
+        $post = $this->fApp->getFPost();
         $authRole = array(1,2);
-        $this->checkAccessByRole($_SESSION['userObject'], $authRole);
+        $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (is_numeric($post['commentModalIdCom']) && $post['commentModalIdCom'] > 0) {
             if (is_numeric($post['commentModalSelEtat']) && $post['commentModalSelEtat'] > 0) {
