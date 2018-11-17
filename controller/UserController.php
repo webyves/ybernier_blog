@@ -30,51 +30,9 @@ class UserController extends PageController
         if (!password_verify($pwd, $user->getPassword())) {
             throw new \Exception('Identification Incorrecte !');
         }
-        $this->putUserSession($user);
         return $user;
     }
     
-    /***********************************
-        Function to logout the User
-    ***********************************/
-    public function logout($destroyCookie = false)
-    {
-        $Manager = new UserManager();
-        $user = $Manager->getUser();
-        $this->putUserSession($user);
-        if ($destroyCookie) {
-            $this->destroyUserCookie();
-        }
-        return $user;
-    }
-    
-    /***********************************
-        SubFunction to connect User
-            Put User object in Session
-    ***********************************/
-    public function putUserSession($userObject)
-    {
-        $_SESSION['userObject'] = $userObject;
-    }
-
-    /***********************************
-        SubFunction to connect User
-            Generate a cookie with crypted info for connexion
-    ***********************************/
-    public function generateUserCookie($userObject)
-    {
-        setcookie("userIdCookie", $userObject->getCookieid(), time()+129600); //expire 36h
-    }
-
-    /***********************************
-        SubFunction for cookie User
-            Destroy the cookie
-    ***********************************/
-    public function destroyUserCookie()
-    {
-        setcookie("userIdCookie", "", time()-1);
-    }
-
     /***********************************
         Function to connect User via cookie
     ***********************************/
@@ -84,12 +42,12 @@ class UserController extends PageController
             $Manager = new UserManager();
             $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
             if (null !== $user->getEmail()) {
-                $this->putUserSession($user);
-                $this->generateUserCookie($user);
+                $this->fApp->generateUserCookie($user);
                 return $user;
             }
         }
-        $user = $this->logout(true);
+        $user = new User('');
+        $this->fApp->logoutUser();
         return $user;
     }
     

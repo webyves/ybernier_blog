@@ -49,6 +49,9 @@ class Router
         'sendAdminUserModifForm' => array('controller' => 'UserController', 'method' => 'modifUser')
     );
     
+    /***********************************
+        Function to Send Good Controller and Method
+    ***********************************/
     public function goRoad(App $App)
     {
         if (isset(self::ROADS_MAP[$App->getFGetP()])) {
@@ -59,9 +62,7 @@ class Router
         } else {
             if ($App->getFGetP() == 'logout') {
                 // LOGOUT SPECIAL CASE
-                $controller = new \yBernier\Blog\controller\UserController($App);
-                $UserConnected = $controller->logout(true);
-                $App->setConnectedUser($UserConnected);
+                $App->logoutUser();
             }
             $postController = new \yBernier\Blog\controller\PostController($App);
             $postController->listPosts();

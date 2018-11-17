@@ -78,7 +78,7 @@ class PageController
         
         $secret = APP::CAPTCHA_SECRET_KEY;
         $response = $post['g-recaptcha-response'];
-        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $remoteip = $this->fApp->getFServerRemAddr();
         $api_url = "https://www.google.com/recaptcha/api/siteverify?secret="
             . $secret
             . "&response=" . $response
