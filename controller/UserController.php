@@ -7,6 +7,7 @@ namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\UserManager;
+use \yBernier\Blog\model\entities\User;
 
 class UserController extends PageController
 {
