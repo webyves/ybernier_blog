@@ -83,23 +83,23 @@ class CatPostManager extends Manager
     
     /***********************************
         Function to delete 1 category post in DB by id_cat
+        can't delete '1:generale' category (the only one must survive everythings) 
     ***********************************/
     public function deleteCat($idCat)
     {
-        if (is_numeric($idCat) && $idCat > 0) {
-            $param = array('idcat' => $idCat);
-            $dbObject = $this->dbConnect();
-            $reqPost = '
-                    DELETE FROM yb_blog_post_category  
-                    WHERE id_cat = :idcat';
-            $req = $dbObject->prepare($reqPost);
-            $res = $req->execute($param);
-
-            if (!$res) {
-                throw new \Exception('Erreur lors de la suppression !!');
-            }
-        } else {
+        if (!is_numeric($idCat) || $idCat < 2) {
             throw new \Exception('Erreur dans la categorie !!');
+        }
+        $param = array('idcat' => $idCat);
+        $dbObject = $this->dbConnect();
+        $reqPost = '
+                DELETE FROM yb_blog_post_category  
+                WHERE id_cat = :idcat';
+        $req = $dbObject->prepare($reqPost);
+        $res = $req->execute($param);
+
+        if (!$res) {
+            throw new \Exception('Erreur lors de la suppression !!');
         }
     }
 }

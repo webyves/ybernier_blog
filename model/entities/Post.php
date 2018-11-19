@@ -254,12 +254,11 @@ class Post
 
         if ($LongTxtBrutWoHtml > $nbreCar) {
             $texte .= ' [......]';
-            $texte =  str_replace('</p> [......]', '... </p>', $texte);
-            $texte =  str_replace('</ul> [......]', '... </ul>', $texte);
-            $texte =  str_replace('</div> [......]', '... </div>', $texte);
+            $texte =  str_replace('</p> [......]', ' [...]</p>', $texte);
+            $texte =  str_replace('</ul> [......]', ' [...]</ul>', $texte);
+            $texte =  str_replace('</div> [......]', ' [...]</div>', $texte);
         }
 
-        $texte = $texte . " [...]";
         return $texte;
     }
 }

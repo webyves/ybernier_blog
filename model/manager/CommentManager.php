@@ -211,4 +211,27 @@ class CommentManager extends Manager
             throw new \Exception('Erreur lors de la mise à jour !!');
         }
     }
+    
+    /***********************************
+        Function to delete a comment in DB by id_com
+        NOT USED FOR ETHICAL REASON (use update with id_state = 2 instead)
+        JUST HERE FOR EXERCICE
+    ***********************************/
+    public function deleteComment($idcom)
+    {
+        if (!is_numeric($idcom) || $idcom < 1) {
+            throw new \Exception('Erreur dans identification du commentaire !!');
+        }
+        $param = array('idcom' => $idcom);
+        $dbObject = $this->dbConnect();
+        $reqPost = '
+                DELETE FROM yb_blog_comments  
+                WHERE id_com = :idcom';
+        $req = $dbObject->prepare($reqPost);
+        $res = $req->execute($param);
+
+        if (!$res) {
+            throw new \Exception('Erreur lors de la suppression !!');
+        }
+    }
 }
