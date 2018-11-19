@@ -21,7 +21,7 @@ class UserController extends PageController
         $user = $Manager->getUser("", $email);
         
         if ($user->getIdstate() == 2) {
-            throw new \Exception('Vous ne pouvez vous connecter car vous n\'avez pas encore été validé par un administrateur.');
+            throw new \Exception('Vous ne pouvez vous connecter car votre compte n\'est pas validé par un administrateur.');
         }
 
         if (empty($user->getPassword())) {
@@ -42,6 +42,9 @@ class UserController extends PageController
         if (!empty($this->fApp->getFCookieUser())) {
             $Manager = new UserManager();
             $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
+            if ($user->getIdstate() == 2) {
+                throw new \Exception('Vous ne pouvez vous connecter car votre compte n\'est pas validé par un administrateur.');
+            }
             if (null !== $user->getEmail()) {
                 $this->fApp->generateUserCookie($user);
                 return $user;
