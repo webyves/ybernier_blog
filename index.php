@@ -22,7 +22,8 @@ try {
     $router = new Router();
     $router->goRoad($App);
 } catch (Exception $e) {
+    $AppWoLogin = new App(false);
     $errorMessage = $e->getMessage();
-    $controller = new StaticPageController($App);
+    $controller = new StaticPageController($AppWoLogin);
     $controller->errorPage($errorMessage);
 }

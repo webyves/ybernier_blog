@@ -23,10 +23,15 @@ class App extends AppConfig
     private $fServerRemAddr;        // $_SERVER['REMOTE_ADDR']
     private $connectedUser;
     
-    public function __construct()
+    public function __construct($withLogin = true)
     {
         $this->intializeEncapsSuperglobals();
-        $this->loginUser();
+        
+        // $withLogin = false ONLY when catch exception 
+        // for generate a correct render view if exception is in loginUser method
+        if ($withLogin) {
+            $this->loginUser();
+        }
     }
     
     /* SET PARTS */
@@ -156,7 +161,6 @@ class App extends AppConfig
         Function to Try to connect user if is not in session
     ***********************************/
     public function loginUser() {
-        // CONNEXION
         if (is_null($this->getConnectedUser()->getEmail())) {
             $postData = $this->getFPost();
             $UserController = new UserController($this);
