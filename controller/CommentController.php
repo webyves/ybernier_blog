@@ -27,6 +27,12 @@ class CommentController extends PostController
             throw new \Exception('Post introuvable !');
         }
         
+        $postManager = new PostManager();
+        $postObject = $postManager->getPost($idPost);
+        if ($postObject->getIdstate() == 2) {
+            throw new \Exception('Post Bloqué aucun commentaire possible !');
+        }
+        
         $idComParent = null;
         $textCom = "";
         
@@ -47,8 +53,6 @@ class CommentController extends PostController
             $nbcom = $commentManager->getCommentNb($idPost);
             $comments = $commentManager->getComments($idPost);
             
-            $postManager = new PostManager();
-            $post = $postManager->getPost($idPost);
             
             $tabInfo = array(
                     'fromFirstname' =>  "Administrateur",
@@ -63,9 +67,9 @@ class CommentController extends PostController
             
             $this->setPostListMenu();
             $this->setPostList();
-            echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
+            echo $this->fTwig->render('frontoffice/postCommentsConfirm.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $postObject, 'postListMenu' => $this->postListMenu));
         } else {
-            $this->post($idPost);
+            $this->showPost();
         }
     }
     

@@ -27,7 +27,7 @@ class PostController extends PageController
     /***********************************
         Render 1 specific post
     ***********************************/
-    public function post()
+    public function showPost()
     {
         $idPost = $this->fApp->getFGetI();
         if (!is_numeric($idPost) || $idPost < 1) {

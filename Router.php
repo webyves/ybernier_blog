@@ -23,7 +23,7 @@ class Router
         'inscription' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         'sendInscriptionForm' => array('controller' => 'StaticPageController', 'method' => 'inscription'),
         // FRONT OFFICE 1 POST PAGE
-        'post' => array('controller' => 'PostController', 'method' => 'post'),
+        'post' => array('controller' => 'PostController', 'method' => 'showPost'),
         // FRONT OFFICE SEND A COMMENT FORM RETURN
         'sendCommentForm' => array('controller' => 'CommentController', 'method' => 'addComment'),
         // BACK OFFICE HOME
