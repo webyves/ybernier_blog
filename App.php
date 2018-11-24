@@ -23,6 +23,7 @@ class App extends AppConfig
     private $fServer;               // $_SERVER
     private $fServerRemAddr;        // $_SERVER['REMOTE_ADDR']
     private $connectedUser;
+    private $errorMessage;
     
     public function __construct()
     {
@@ -114,6 +115,11 @@ class App extends AppConfig
         $this->fCookieUser = $value;
     }
         
+    public function setErrorMessage($value)
+    {
+        $this->errorMessage = $value;
+    }
+        
     /* GET PARTS */
     public function getFGet()
     {
@@ -168,6 +174,11 @@ class App extends AppConfig
     public function getConnectedUser()
     {
         return $this->connectedUser;
+    }
+    
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
     }
     
     /***********************************
