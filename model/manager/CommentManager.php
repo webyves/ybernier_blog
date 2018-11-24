@@ -180,12 +180,12 @@ class CommentManager extends Manager
     }
     
     /***********************************
-        Function to update comment in DB by id_com
+        Function to update comment in DB by id_com or id_user
     ***********************************/
     public function updateComment($tab)
     {
-        $nbValToSet = 0;
-        $param = array(':id_com' => $tab['idcom']);
+        $nbValToSet = $nbValWhere = 0;
+        $param = array();
 
         $reqPost = '
                 UPDATE yb_blog_comments  
@@ -197,10 +197,22 @@ class CommentManager extends Manager
             $nbValToSet++;
         }
         
-        $reqPost .= ' WHERE id_com = :id_com';
-        
         if ($nbValToSet < 1) {
             throw new \Exception('Aucune Valeur pour la mise à jour !!');
+        }
+        
+        if (isset($tab['idcom'])) {
+            $reqPost .= ' WHERE id_com = :id_com';
+            $param[':id_com'] = (int)$tab['idcom'];
+            $nbValWhere++;
+        } elseif (isset($tab['iduser'])) {
+            $reqPost .= ' WHERE id_user = :id_user';
+            $param[':id_user'] = (int)$tab['iduser'];
+            $nbValWhere++;
+        }
+        
+        if ($nbValWhere < 1) {
+            throw new \Exception('Erreur lors de la mise à jour !!');
         }
                 
         $dbObject = $this->dbConnect();

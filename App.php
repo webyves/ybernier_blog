@@ -6,6 +6,7 @@ and methods for passing form data and encapsulation
 ******************************************************************/
 namespace yBernier\Blog;
 
+use \yBernier\Blog\Router;
 use \yBernier\Blog\controller\UserController;
 use \yBernier\Blog\model\entities\User;
 
@@ -23,39 +24,26 @@ class App extends AppConfig
     private $fServerRemAddr;        // $_SERVER['REMOTE_ADDR']
     private $connectedUser;
     
-    public function __construct($withLogin = true)
+    public function __construct()
     {
         $this->intializeEncapsSuperglobals();
-        
-        // $withLogin = false ONLY when catch exception 
-        // for generate a correct render view if exception is in loginUser method
-        if ($withLogin) {
-            $this->loginUser();
-        }
     }
     
-    /* SET PARTS */
-    private function setConnectedUser(User $value)
-    {
-        $this->connectedUser = $value;
-        $this->putUserSession($value);
-    }
-        
-    private function setFCookieUser($value)
-    {
-        $this->fCookieUser = $value;
-    }
-    
+    /* INITIALISATION */
     private function intializeEncapsSuperglobals()
     {
         $sessionData = $cookiesData = $getData = $postData = $filesData = $serverData = array();
         $getDataI = 0;
         $getDataP = $cookiesDataUser = $serverDataRemAddr = "";
-        $UserConnected = new User('');
+        $UserConnected = null;
 
+        // POST
         if (isset($_POST)) {
             $postData = $_POST;
         }
+        $this->fPost = $postData;
+        
+        // GET
         if (isset($_GET)) {
             $getData = $_GET;
             if (isset($getData['p'])) {
@@ -65,40 +53,65 @@ class App extends AppConfig
                 $getDataI = (int)$getData['i'];
             }
         }
+        $this->fGet = $getData;
+        $this->fGetP = $getDataP;
+        $this->fGetI = $getDataI;
+        
+        // FILES
         if (isset($_FILES)) {
             $filesData = $_FILES;
         }
-        if (isset($_SESSION)) {
-            $sessionData = $_SESSION;
-            if (isset($sessionData['userObject'])) {
-                $UserConnected = $sessionData['userObject'];
-            }
-        }
-        if (isset($_COOKIE)) {
-            $cookiesData = $_COOKIE;
-            if (isset($cookiesData['userIdCookie'])) {
-                $cookiesDataUser = $cookiesData['userIdCookie'];
-            }
-        }
+        $this->fFiles = $filesData;
+        
+        // SERVER
         if (isset($_SERVER)) {
             $serverData = $_SERVER;
             if (isset($serverData['REMOTE_ADDR'])) {
                 $serverDataRemAddr = $serverData['REMOTE_ADDR'];
             }
         }
-
-        $this->fGet = $getData;
-        $this->fGetP = $getDataP;
-        $this->fGetI = $getDataI;
-        $this->fPost = $postData;
-        $this->fFiles = $filesData;
-        $this->fSession = $sessionData;
-        $this->fCookie = $cookiesData;
         $this->fServer = $serverData;
         $this->fServerRemAddr = $serverDataRemAddr;
+
+        // SESSION
+        if (isset($_SESSION)) {
+            $sessionData = $_SESSION;
+            if (isset($sessionData['userObject'])) {
+                $UserConnected = $sessionData['userObject'];
+            }
+        }
+        $this->fSession = $sessionData;
         
+        // COOKIE
+        if (isset($_COOKIE)) {
+            $cookiesData = $_COOKIE;
+            if (isset($cookiesData['userIdCookie'])) {
+                $cookiesDataUser = $cookiesData['userIdCookie'];
+            }
+        }
+        $this->fCookie = $cookiesData;
         $this->setFCookieUser($cookiesDataUser);
+        
+        // USER (check cookie & put in session)
+        if (is_null($UserConnected) && !empty($cookiesDataUser)) {
+            $UserController = new UserController($this);
+            $UserConnected = $UserController->getCookieInfo();
+        }
         $this->setConnectedUser($UserConnected);
+    }
+    
+    /* SET PARTS */
+    public function setConnectedUser($value)
+    {
+        $this->connectedUser = $value;
+        if (!is_null($value)) {
+            $this->putUserSession($value);
+        }
+    }
+        
+    public function setFCookieUser($value)
+    {
+        $this->fCookieUser = $value;
     }
         
     /* GET PARTS */
@@ -158,33 +171,12 @@ class App extends AppConfig
     }
     
     /***********************************
-        Function to Try to connect user if is not in session
+        Function to redirect on a page.
     ***********************************/
-    public function loginUser() {
-        if (is_null($this->getConnectedUser()->getEmail())) {
-            $postData = $this->getFPost();
-            $UserController = new UserController($this);
-            if (isset($postData['conexEmail']) && isset($postData['conexInputPassword'])) {
-                $UserConnected = $UserController->connect($postData['conexEmail'], $postData['conexInputPassword']);
-                if (isset($postData['conexChkbxRemember'])) {
-                    $this->generateUserCookie($UserConnected);
-                }
-            } else {
-                $UserConnected = $UserController->getCookieInfo();
-            }
-            $this->setConnectedUser($UserConnected);
-        }
-    }
-    
-    /***********************************
-        Function to logout user 
-        and erase it from App Session & Cookie
-    ***********************************/
-    public function logoutUser()
+    public function redirect($controllerName, $methodName)
     {
-        $User = new User('');
-        $this->setConnectedUser($User);
-        $this->destroyUserCookie();
+        $router = new Router();
+        $router->goRoad($this, $controllerName, $methodName);
     }
     
     /***********************************
@@ -193,6 +185,14 @@ class App extends AppConfig
     private function putUserSession(User $user)
     {
         $_SESSION['userObject'] = $user;
+    }
+    
+    /***********************************
+        Function to Destroy Session
+    ***********************************/
+    public function destroyUserSession()
+    {
+        session_destroy();
     }
     
     /***********************************

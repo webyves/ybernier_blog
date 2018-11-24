@@ -13,13 +13,16 @@ class Router
     const ROADS_MAP = array(
         // Error Pages
         'erreur' => array('controller' => 'StaticPageController', 'method' => 'errorPage'),
+        // Login / Logout
+        'connexion' => array('controller' => 'UserController', 'method' => 'connexion'),
+        'logout' => array('controller' => 'UserController', 'method' => 'deconnexion'),
         // FRONT OFFICE INFORMATIONS PAGES
         'mentions' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         'confidentialite' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         // FRONT OFFICE CONTACT
         'contact' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         'sendContactForm' => array('controller' => 'StaticPageController', 'method' => 'contact'),
-        // FRONT OFFICE INSCRIPTION
+        // FRONT OFFICE INSCRIPTION/CONNEXION
         'inscription' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         'sendInscriptionForm' => array('controller' => 'StaticPageController', 'method' => 'inscription'),
         // FRONT OFFICE 1 POST PAGE
@@ -52,18 +55,18 @@ class Router
     /***********************************
         Function to Send Good Controller and Method
     ***********************************/
-    public function goRoad(App $App)
+    public function goRoad(App $App, $controllerName = null, $methodName = null)
     {
-        if (isset(self::ROADS_MAP[$App->getFGetP()])) {
-            $controller = '\yBernier\Blog\controller\\' . self::ROADS_MAP[$App->getFGetP()]['controller'];
-            $method = self::ROADS_MAP[$App->getFGetP()]['method'];
+        if ($controllerName !== null && $methodName !== null) {
+            $controller = '\yBernier\Blog\controller\\' . $controllerName;
             $road = new $controller($App);
-            $road->$method();
+            $road->$methodName();
+        } elseif (isset(self::ROADS_MAP[$App->getFGetP()])) {
+                $controller = '\yBernier\Blog\controller\\' . self::ROADS_MAP[$App->getFGetP()]['controller'];
+                $method = self::ROADS_MAP[$App->getFGetP()]['method'];
+                $road = new $controller($App);
+                $road->$method();
         } else {
-            if ($App->getFGetP() == 'logout') {
-                // LOGOUT SPECIAL CASE
-                $App->logoutUser();
-            }
             $postController = new \yBernier\Blog\controller\PostController($App);
             $postController->listPosts();
         }

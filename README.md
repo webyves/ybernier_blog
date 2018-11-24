@@ -30,6 +30,11 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
+v0.201 - 24/11/2018 17h
+- Modification du system login/logout tranferé dans UserController
+- Nouvelles routes pour login/logout
+- Nouvelles fonctionalités pour App (redirect destroysession ...)
+
 v0.200 - 17/11/2018 16h
 - Modification du system login/logout tranferé dans App
 - Fin encapsulation

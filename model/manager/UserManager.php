@@ -50,8 +50,10 @@ class UserManager extends Manager
         $req = $dbObject->prepare($reqPost);
         $req->execute($param);
         $res = $req->fetch();
+        if (empty($res)) {
+            return null;
+        }
         $obj = new User($res);
-
         return $obj;
     }
     
