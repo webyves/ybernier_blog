@@ -11,9 +11,9 @@ Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
 # INSTALLATION NOTES
 
 1) Cloner le repository sur votre serveur
-2) Importer le fichier SQL de votre choix sur votre base de donnée
+2) Importer le fichier SQL de votre choix sur votre base de donnée MySQL :
     - DB_MySQL_Install.sql est une base de donnée vierge (1 seul post et 2 utilisateurs)
-    - DB_MySQL_Demo.sql est une base de donnée avec un jeu de demo (plusieurs post utilisateurs et commentaires)
+    - DB_MySQL_Demo.sql est une base de donnée avec un jeu de demo (plusieurs posts, utilisateurs, et commentaires)
 3) Modifier le fichier AppConfig.php comme suit :
     - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
