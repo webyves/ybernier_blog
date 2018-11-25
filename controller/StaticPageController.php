@@ -21,8 +21,11 @@ class StaticPageController extends PageController
     /***********************************
         Render Error Page
     ***********************************/
-    public function errorPage($errorText = '')
+    public function errorPage()
     {
+        $errorText = $this->fApp->getErrorMessage();
+        
+        //override for htaccess classic error
         $codeError = $this->fApp->getFGetI();
         switch ($codeError) {
             case 400:

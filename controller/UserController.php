@@ -7,10 +7,38 @@ namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\UserManager;
-use \yBernier\Blog\model\entities\User;
 
 class UserController extends PageController
 {
+    /***********************************
+        Function to connect User by form
+    ***********************************/
+    public function connexion()
+    {
+        $post = $this->fApp->getFPost();
+        if (!empty($post['conexEmail']) && !empty($post['conexInputPassword'])) {
+            $UserConnected = $this->connect($post['conexEmail'], $post['conexInputPassword']);
+            if (isset($post['conexChkbxRemember'])) {
+                $this->fApp->generateUserCookie($UserConnected);
+            }
+        } else {
+            throw new \Exception('Les informations envoyées sont incompletes');
+        }
+        $this->fApp->setConnectedUser($UserConnected);
+        $this->fApp->redirect('PostController', 'listPosts');
+    }
+    
+    /***********************************
+        Function to disconnect User
+    ***********************************/
+    public function deconnexion()
+    {
+        $this->fApp->setConnectedUser(null);
+        $this->fApp->destroyUserCookie();
+        $this->fApp->destroyUserSession();
+        $this->fApp->redirect('PostController', 'listPosts');
+    }
+    
     /***********************************
         Function to connect User
             Check if it's not blocked one
@@ -19,15 +47,14 @@ class UserController extends PageController
     {
         $Manager = new UserManager();
         $user = $Manager->getUser("", $email);
+        if (is_null($user)) {
+            throw new \Exception('Erreur d\'identification');
+        }
         
         if ($user->getIdstate() == 2) {
             throw new \Exception('Vous ne pouvez vous connecter car votre compte n\'est pas validé par un administrateur.');
         }
 
-        if (empty($user->getPassword())) {
-            throw new \Exception('Utilisateur Incorrect !');
-        }
-        
         if (!password_verify($pwd, $user->getPassword())) {
             throw new \Exception('Identification Incorrecte !');
         }
@@ -39,19 +66,19 @@ class UserController extends PageController
     ***********************************/
     public function getCookieInfo()
     {
-        if (!empty($this->fApp->getFCookieUser())) {
-            $Manager = new UserManager();
-            $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
-            if ($user->getIdstate() == 2) {
-                throw new \Exception('Vous ne pouvez vous connecter car votre compte n\'est pas validé par un administrateur.');
-            }
-            if (null !== $user->getEmail()) {
-                $this->fApp->generateUserCookie($user);
-                return $user;
-            }
+        $Manager = new UserManager();
+        $user = $Manager->getUser("", "", $this->fApp->getFCookieUser());
+        
+        if (is_null($user)) {
+            $this->fApp->destroyUserCookie();
+            throw new \Exception('Erreur de cookie');
         }
-        $user = new User('');
-        $this->fApp->logoutUser();
+        
+        if ($user->getIdstate() == 2) {
+            $this->fApp->destroyUserCookie();
+            throw new \Exception('Vous ne pouvez vous connecter car votre compte n\'est pas validé par un administrateur.');
+        }
+        
         return $user;
     }
     

@@ -29,6 +29,4 @@ class AppConfig
     const MAX_FILE_SIZE = 1048576; // 1Mo
     
 /********* END OF USERS PREFERENCES *********/
-    
-    const APP_VERSION = "V0.200";   // Application version
 }
