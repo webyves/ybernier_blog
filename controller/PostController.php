@@ -206,7 +206,8 @@ class PostController extends PageController
             $postManager->updatePost($imageTab);
         }
         
-        $this->showAdminEditPostPage($idNewPost, 'ConfirmAdd');
+        $this->fApp->setFGetI($idNewPost);
+        $this->showAdminEditPostPage('ConfirmAdd');
     }
 
     /***********************************

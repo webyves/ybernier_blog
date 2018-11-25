@@ -127,6 +127,11 @@ class App extends AppConfig
         $this->fGetP = $value;
     }
         
+    public function setFGetI($value)
+    {
+        $this->fGetI = $value;
+    }
+        
     /* GET PARTS */
     public function getFGet()
     {
