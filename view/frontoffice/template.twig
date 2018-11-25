@@ -92,10 +92,11 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar ml-auto">
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link active" href="index.php">Accueil <span class="sr-only">(current)</span></a>
-                        <a class="nav-item nav-link" href="index.php?p=contact">Contact</a>
+                        <a class="nav-item nav-link {{ accueilActive }}" href="index.php">Accueil <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link {{ listPostsActive }}" href="index.php?p=listPosts">Liste des posts</a>
+                        <a class="nav-item nav-link {{ contactActive }}" href="index.php?p=contact">Contact</a>
                         {% if userObject.idrole in [1,2] %}
-                            <a class="nav-item nav-link" href="index.php?p=admin">Admin</a>
+                            <a class="nav-item nav-link {{ adminActive }}" href="index.php?p=admin">Admin</a>
                         {% endif %}
                         <a class="nav-item nav-link" href="#"  data-toggle="modal" data-target="#{{ textLoginTarget }}">
                             {{ textLoginBtn|raw }} {{ userObject.firstname }} {{ userObject.lastname }}
@@ -130,8 +131,8 @@
             </div>
             <div class="navbar ml-auto">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="index.php?p=mentions">Mentions legales</a>
-                    <a class="nav-item nav-link" href="index.php?p=confidentialite">Politiques de confidentialités</a>
+                    <a class="nav-item nav-link {{ mentionsActive }}" href="index.php?p=mentions">Mentions legales</a>
+                    <a class="nav-item nav-link {{ confidentialiteActive }}" href="index.php?p=confidentialite">Politiques de confidentialités</a>
                     {% block footmenu %}{% endblock footmenu %}
                 </div>
             </div>

@@ -25,7 +25,8 @@ class Router
         // FRONT OFFICE INSCRIPTION/CONNEXION
         'inscription' => array('controller' => 'StaticPageController', 'method' => 'showPage'),
         'sendInscriptionForm' => array('controller' => 'StaticPageController', 'method' => 'inscription'),
-        // FRONT OFFICE 1 POST PAGE
+        // FRONT OFFICE POST PAGE
+        'listPosts' => array('controller' => 'PostController', 'method' => 'listPosts'),
         'post' => array('controller' => 'PostController', 'method' => 'showPost'),
         // FRONT OFFICE SEND A COMMENT FORM RETURN
         'sendCommentForm' => array('controller' => 'CommentController', 'method' => 'addComment'),
@@ -67,8 +68,9 @@ class Router
                 $road = new $controller($App);
                 $road->$method();
         } else {
-            $postController = new \yBernier\Blog\controller\PostController($App);
-            $postController->listPosts();
+            $App->setFGetP('accueil');
+            $postController = new \yBernier\Blog\controller\StaticPageController($App);
+            $postController->showPage();
         }
     }
 }

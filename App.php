@@ -12,7 +12,7 @@ use \yBernier\Blog\model\entities\User;
 
 class App extends AppConfig
 {
-    const APP_VERSION = "V0.201";   // Application version
+    const APP_VERSION = "V0.202";   // Application version
     
     private $fGet;                  // $_GET
     private $fGetP;                 // $_POST
@@ -120,6 +120,11 @@ class App extends AppConfig
     public function setErrorMessage($value)
     {
         $this->errorMessage = $value;
+    }
+        
+    public function setFGetP($value)
+    {
+        $this->fGetP = $value;
     }
         
     /* GET PARTS */
