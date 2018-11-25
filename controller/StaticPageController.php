@@ -49,7 +49,6 @@ class StaticPageController extends PageController
         }
         
         $this->setPostListMenu();
-        $this->setPostList();
         echo $this->fTwig->render('frontoffice/error.twig', array('errorText' => $errorText, 'postListMenu' => $this->postListMenu));
     }
 
@@ -63,6 +62,8 @@ class StaticPageController extends PageController
             throw new \Exception('Page introuvable !');
         }
         $this->setPostListMenu();
+        $this->fTwig->addGlobal($page . 'Active', 'active');
+
         echo $this->fTwig->render('frontoffice/'.$page.'.twig', array('postListMenu' => $this->postListMenu));
     }
     
@@ -108,7 +109,7 @@ class StaticPageController extends PageController
                 $authRole = array(-1);
                 break;
         }
-        
+        $this->fTwig->addGlobal($page . 'Active', 'active');
         $this->checkAccessByRole($this->fApp->getConnectedUser(), $authRole);
         
         if (empty($page)) {

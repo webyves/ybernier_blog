@@ -1,14 +1,17 @@
 # ybernier_blog
-Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
+Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
+- Liens vers le site hebergé : http://blog.ybernier.fr
+- Liens vers le repository Git : https://github.com/webyves/ybernier_blog
 
 # Code Quality tests
 - [![SymfonyInsight](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768/small.svg)](https://insight.symfony.com/projects/3e7f60d1-cc71-470c-9fb4-965c84f0a768)
 - [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8aba3650df0441139de993e3d9ea2a0a)](https://www.codacy.com/app/webyves/ybernier_blog?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=webyves/ybernier_blog&amp;utm_campaign=Badge_Grade)
+- Derniere analyse Codacy : https://app.codacy.com/project/webyves/ybernier_blog/dashboard?branchId=9669015
 
 # INSTALLATION NOTES
 
-1) cloner le repository sur votre serveur
-2) executer le fichier SQL sur votre base de donnée pour l'importer
+1) Cloner le repository sur votre serveur
+2) Importer le fichier SQL sur votre base de donnée
 3) Modifier le fichier AppConfig.php comme suit :
     - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
@@ -19,16 +22,21 @@ Projet 5 : Dev PHP Blog pour le cours OpenClassRooms DA PHP/symfony
     - const CAPTCHA_SECRET_KEY = "xxxx"; <- remplacer avec votre secret Key de captcha google v2 entre les "
     - const MAX_FILE_SIZE = 1048576; <- remplacer le chiffre par la taille max en octets souhaitée pour vos images
 4) acceder au frontoffice par le fichier index.php
-5) acceder au backoffice identifiez vous sur le frontoffice avec les identifiant suivants : 
+5) acceder au backoffice identifiez vous sur le frontoffice avec les identifiant suivants et cliquez sur Admin dans le menu : 
     - mail : admin@admin.com
     - pwd : Admin_Demo
-6) Conseil : 
-- Créez vous un compte que vous validerez via le backoffice 
-- puis bloqué le compte admin@admin.com
+6) Conseils : 
+- Créez vous un compte que vous validerez via le backoffice avec le compte admin@admin.com
+- donnez vous les droits administrateurs puis bloquer le compte admin@admin.com
 - pour creer votre captache google v2 rendez vous ici : https://www.google.com/recaptcha/admin
 
 
 # VERSION PATCH NOTES 
+
+v0.202 - 24/11/2018 12h
+- Correction des views et amelioration du responsive sur l'admin
+- Nouvelle page d'accueil et nouvelles routes
+- Menu Active Class
 
 v0.201 - 24/11/2018 17h
 - Modification du system login/logout tranferé dans UserController

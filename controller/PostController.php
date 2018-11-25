@@ -21,6 +21,8 @@ class PostController extends PageController
     {
         $this->setPostListMenu();
         $this->setPostList();
+        $this->fTwig->addGlobal('listPostsActive', 'active');
+
         echo $this->fTwig->render('frontoffice/listPosts.twig', array('postList' => $this->postList, 'postListMenu' => $this->postListMenu));
     }
 
@@ -42,7 +44,6 @@ class PostController extends PageController
         $comments = $commentManager->getComments($idPost);
 
         $this->setPostListMenu();
-        $this->setPostList();
         echo $this->fTwig->render('frontoffice/postComments.twig', array('nbcom' => $nbcom, 'comments' => $comments, 'post' => $post, 'postListMenu' => $this->postListMenu));
     }
     
