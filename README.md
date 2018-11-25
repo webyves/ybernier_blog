@@ -11,7 +11,9 @@ Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
 # INSTALLATION NOTES
 
 1) Cloner le repository sur votre serveur
-2) Importer le fichier SQL sur votre base de donnée
+2) Importer le fichier SQL de votre choix sur votre base de donnée
+    - DB_MySQL_Install.sql est une base de donnée vierge (1 seul post et 2 utilisateurs)
+    - DB_MySQL_Demo.sql est une base de donnée avec un jeu de demo (plusieurs post utilisateurs et commentaires)
 3) Modifier le fichier AppConfig.php comme suit :
     - const DB_HOST = "localhost"; <- remplacer si bessoin l'addresse de connexion a votre base de donnée entre les "
     - const DB_NAME = "ybernier_blog"; <- remplacer si bessoin le nom de votre base de donnée entre les "
@@ -26,9 +28,9 @@ Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
     - mail : admin@admin.com
     - pwd : Admin_Demo
 6) Conseils : 
-- Créez vous un compte que vous validerez via le backoffice avec le compte admin@admin.com
-- donnez vous les droits administrateurs puis bloquer le compte admin@admin.com
-- pour creer votre captache google v2 rendez vous ici : https://www.google.com/recaptcha/admin
+    - Créez vous un compte que vous validerez via le backoffice avec le compte admin@admin.com
+    - donnez vous les droits administrateurs puis bloquer le compte admin@admin.com
+    - pour creer votre captache google v2 rendez vous ici : https://www.google.com/recaptcha/admin
 
 
 # VERSION PATCH NOTES 
