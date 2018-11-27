@@ -47,10 +47,10 @@ class PageController
         $this->postListMenu = $postManager->getPosts();
     }
     
-    public function setPostList()
+    public function setPostList($mode = 'full_list', $nbPosts = 50, $idState = 1)
     {
         $postManager = new PostManager();
-        $this->postList = $postManager->getPosts('full_list');
+        $this->postList = $postManager->getPosts($mode, $nbPosts, $idState);
     }
     
     
