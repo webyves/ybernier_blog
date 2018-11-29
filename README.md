@@ -35,8 +35,9 @@ Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
-v0.203 - 29/11/2018 12h
+v0.203 - 29/11/2018 12h30
 - Correction des views et amelioration page admin comment
+- ajout fonction pour bloquer com & post en meme temps que le User
 
 v0.202 - 24/11/2018 12h
 - Correction des views et amelioration du responsive sur l'admin

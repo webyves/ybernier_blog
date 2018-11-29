@@ -7,6 +7,8 @@ namespace yBernier\Blog\controller;
 
 use \yBernier\Blog\App;
 use \yBernier\Blog\model\manager\UserManager;
+use \yBernier\Blog\model\manager\PostManager;
+use \yBernier\Blog\model\manager\CommentManager;
 
 class UserController extends PageController
 {
@@ -192,17 +194,33 @@ class UserController extends PageController
         if (is_numeric($post['userModalIdUser']) && $post['userModalIdUser'] > 0) {
             if (is_numeric($post['userModalSelRole']) && $post['userModalSelRole'] > 0 &&
             is_numeric($post['userModalSelEtat']) && $post['userModalSelEtat'] > 0) {
-                $Manager = new UserManager();
-
+                $userManager = new UserManager();
                 $tab = array (
                     'iduser' => $post['userModalIdUser'],
                     'idstate' => $post['userModalSelEtat'],
                     'idrole' => $post['userModalSelRole']
                     );
-                $Manager->updateUser($tab);
+                $userManager->updateUser($tab);
+                
+                if (isset($post['userModalChkbxUpdPostState']) && $post['userModalSelEtat'] == 2) {
+                    $postManager = new PostManager();
+                    $tab = array (
+                        'id_user' => $post['userModalIdUser'],
+                        'id_state' => $post['userModalSelEtat']
+                        );
+                    $postManager->updatePost($tab);
+                }
+                if (isset($post['userModalChkbxUpdComState']) && $post['userModalSelEtat'] == 2) {
+                    $commentManager = new CommentManager();
+                    $tab = array (
+                        'iduser' => $post['userModalIdUser'],
+                        'idstate' => $post['userModalSelEtat']
+                        );
+                    $commentManager->updateComment($tab);
+                }
                 
                 if (isset($post['userModalChkbxSendMail'])) {
-                    $user = $Manager->getUser($post['userModalIdUser']);
+                    $user = $userManager->getUser($post['userModalIdUser']);
                     $emailInfo = array(
                             'fromFirstname' => "Administrateur",
                             'fromLastname' => "yBernier Blog",
