@@ -184,6 +184,7 @@ class PostManager extends Manager
         Function to Update post by id_post
         $tab = array(
             'id_post' => '',
+            'id_user' => '',
             'title' => '',
             'content' => '',
             'image_top' => '',
@@ -194,15 +195,15 @@ class PostManager extends Manager
     public function updatePost($tab)
     {
         
-        $param = array(':id_post' => $tab['id_post']);
-        $nbValToSet = 0;
+        $nbValToSet = $nbValWhere = 0;
+        $param = array();
         
         $reqPost = '
                 UPDATE yb_blog_posts
                 SET ';
         
         foreach ($tab as $key => $value) {
-            if (!empty($value) && $key != 'id_post') {
+            if (!empty($value) && $key != 'id_post' && $key != 'id_user') {
                 $param[$key] = $value;
                 if ($nbValToSet > 0) {
                     $reqPost .= ', ';
@@ -211,12 +212,23 @@ class PostManager extends Manager
                 $nbValToSet++;
             }
         }
-
-        $reqPost .=' WHERE id_post = :id_post';
-        
         if ($nbValToSet < 1) {
             throw new \Exception('Aucune Valeur pour la mise à jour !!');
         }
+
+        if (isset($tab['id_post'])) {
+            $param[':id_post'] = $tab['id_post'];
+            $reqPost .=' WHERE id_post = :id_post';
+            $nbValWhere++;
+        } elseif (isset($tab['id_user'])) {
+            $param[':id_user'] = $tab['id_user'];
+            $reqPost .=' WHERE id_user = :id_user';
+            $nbValWhere++;
+        }
+        if ($nbValWhere < 1) {
+            throw new \Exception('Erreur lors de la mise à jour !!');
+        }
+        
         
         $dbObject = $this->dbConnect();
         $req = $dbObject->prepare($reqPost);
