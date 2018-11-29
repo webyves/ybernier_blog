@@ -14,8 +14,8 @@ $(document).ready(function() {
         $("#userModalSelRole").val($(this).data("idrole"));
         $("#userModalSelEtat").val($(this).data("idstate"));
         $("#divNameUserModal").html("<strong>" + $("#U_F_" + $(this).data("iduser")).html() + " " + $("#U_L_" + $(this).data("iduser")).html() + "</strong>");
-        $('#userModalChkbxUpdPostState').prop("checked", false);
-        $('#userModalChkbxUpdComState').prop("checked", false);
+        $("#userModalChkbxUpdPostState").prop("checked", false);
+        $("#userModalChkbxUpdComState").prop("checked", false);
         if ($("#userModalSelEtat").val() === 2) {
             $("#userModalUpdPostCom").removeClass("d-none");
         } else {
@@ -33,8 +33,8 @@ $(document).ready(function() {
             $("#userModalUpdPostCom").removeClass("d-none");
         } else {
             $("#userModalUpdPostCom").addClass("d-none");
-            $('#userModalChkbxUpdPostState').prop("checked", false);
-            $('#userModalChkbxUpdComState').prop("checked", false);
+            $("#userModalChkbxUpdPostState").prop("checked", false);
+            $("#userModalChkbxUpdComState").prop("checked", false);
         }
     });
 
