@@ -84,8 +84,9 @@ class CommentController extends PostController
         $Manager = new CommentManager();
         $CommentList = $Manager->getCommentList();
         $CommentStateList = $Manager->getStateList();
+        $this->setPostList('by_id', 'all', 'all');
         
-        echo $this->fTwig->render('backoffice/adminComments'.$messageTwigView.'.twig', array('comments' => $CommentList, 'CommentStateList' => $CommentStateList));
+        echo $this->fTwig->render('backoffice/adminComments'.$messageTwigView.'.twig', array('comments' => $CommentList, 'CommentStateList' => $CommentStateList, 'postlist' => $this->postList));
     }
 
     /***********************************

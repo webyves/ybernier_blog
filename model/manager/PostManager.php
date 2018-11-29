@@ -25,6 +25,9 @@ class PostManager extends Manager
         if ($mode == 'full_list') {
             $orderReq = "";
         }
+        if ($mode == 'by_id') {
+            $orderReq = "P.id_post, ";
+        }
         
         $limitReq = "";
         if ($nbPosts != "all") {
@@ -91,7 +94,11 @@ class PostManager extends Manager
         
         $dbObject = $this->dbConnect();
         $req = $dbObject->prepare($reqPostsList);
-        $req->execute($param);
+        if ($param !== null) {
+            $req->execute($param);
+        } else {
+            $req->execute();
+        }
         $res = $req->fetchall();
 
         $tab = array();
@@ -99,6 +106,11 @@ class PostManager extends Manager
             foreach ($res as $res_post) {
                 $obj = new Post($res_post);
                 array_push($tab, $obj);
+            }
+        } elseif ($mode == 'by_id') {
+            foreach ($res as $res_post) {
+                $obj = new Post($res_post);
+                $tab[$res_post['idpost']] = $obj;
             }
         } elseif ($mode == 'menu') {
             $nbCat = 0;
