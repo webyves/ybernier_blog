@@ -12,7 +12,7 @@ use \yBernier\Blog\model\entities\User;
 
 class App extends AppConfig
 {
-    const APP_VERSION = "V0.202";   // Application version
+    const APP_VERSION = "V0.203";   // Application version
     
     private $fGet;                  // $_GET
     private $fGetP;                 // $_POST

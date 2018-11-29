@@ -35,6 +35,9 @@ Projet 5 : Dev PHP Blog pour le parcours OpenClassRooms DA PHP/symfony
 
 # VERSION PATCH NOTES 
 
+v0.203 - 29/11/2018 12h
+- Correction des views et amelioration page admin comment
+
 v0.202 - 24/11/2018 12h
 - Correction des views et amelioration du responsive sur l'admin
 - Nouvelle page d'accueil et nouvelles routes
